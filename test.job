@@ -12,7 +12,7 @@ mvaInputFile test_mvaIn.root
 mvaOutputFile Signal_xmutau_Wlnu_mvaOut.root
 CutOnMVAScorePlane 1
 ###############
-lumiWtList xsec=0.029654 intLumi=300000 nevents=100000
+lumiWtList xsec=0.0029654 intLumi=300000 nevents=100000
 histFile  test_hist.root
 maxEvent -1
 ###############
