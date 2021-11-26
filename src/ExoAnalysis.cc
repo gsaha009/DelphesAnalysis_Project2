@@ -142,11 +142,6 @@ void ExoAnalysis::bookHistograms()
   new TH1D("Electron1Phi","Phi of 1st Electron", 40, 0.0, 3.3);
   new TH1D("Electron2Phi","Phi of 2nd Electron", 40, 0.0, 3.3);
 
-  new TH1D("lep1Pt", "Leading lepton p_{T} (GeV)", 50, 0., 200.);
-  new TH1D("lep2Pt", "Subleading lepton p_{T} (GeV)", 50, 0., 200.);
-  new TH1D("lep1Eta", "Leading lepton #eta", 25, -2.5, 2.5);
-  new TH1D("lep2Eta", "Subleading lepton #eta", 25, -2.5, 2.5);
-  
   new TH1D("Tauh1Pt",  "pT of 1st Tauh",  40, 0.0, 500.0);
   new TH1D("Tauh1Eta", "Eta of 1st Tauh", 40, 0.0, 5.0);
   new TH1D("Tauh1Phi", "Phi of 1st Tauh", 40, 0.0, 3.3);
@@ -275,13 +270,17 @@ void ExoAnalysis::bookHistograms()
   new TH1D("DEta_lightJet2Jet4", "#Delta #eta(jet_{2}, jet_{4})", 40, 0.0, 5.0);
   new TH1D("DEta_lightJet3Jet4", "#Delta #eta(jet_{3}, jet_{4})", 40, 0.0, 5.0);
 
+  new TH1D("XlepPt",  "#chi lepton p_{T} (GeV)", 50, 0., 200.);
+  new TH1D("WlepPt",  "W#pm lepton p_{T} (GeV)", 50, 0., 200.);
+  new TH1D("XlepEta", "#chi lepton #eta",        25, -2.5, 2.5);
+  new TH1D("WlepEta", "W#pm lepton #eta",        25, -2.5, 2.5);
+  
   new TH1D("MT", "Transverse mass (GeV)", 40, 0.0, 200.0);  
   new TH1D("DR_leadLightJet_Chi", "DR leadLightJet_Chi", 40, 0., 5.0);
   new TH1D("DPhi_leadLightJet_Chi", "DPhi leadLightJet_Chi", 40, 0.0, 3.3);
   new TH1D("DR_minimum_allJets", "minimum #DeltaR_{all jets}", 40, 0, 5.0);
   new TH1D("DR_maximum_allJets", "maximum #DeltaR_{all jets}", 40, 0, 5.0);
   new TH1D("IM_minimum_lightJets", "minimum InvMass_{light jets}", 40, 0, 500.0);
-
   
   new TH1D("DR_mu1tauh1", "#DeltaR(#mu_{1}, #tauh_{1})", 40, 0.0, 5.0);
   new TH1D("Deltaphi_mu1tauh1", "#Delta #phi(#mu_{1}, #tauh_{1})", 40, 0.0, 3.3);
@@ -289,12 +288,16 @@ void ExoAnalysis::bookHistograms()
   new TH1D("Deltaphi_mu2tauh1", "#Delta #phi(#mu_{2}, #tauh_{1})", 40, 0.0, 3.3);
 
   new TH1D ("MT_X", "m_{T} (GeV)", 100, 0, 200);
-  new TH1D ("InvM_coln_muTauh_GS", "Collinear mass of #mu and #tau_{h} (GeV)", 100, 0, 200);
-  new TH1D ("InvM_coln_lep1Tauh_GS", "Collinear mass of leading-lepton and #tau_{h} (GeV)", 100, 0, 200);
-  new TH1D ("InvM_coln_lep2Tauh_GS", "Collinear mass of subleading-lepton and #tau_{h} (GeV)", 100, 0, 200);
-  new TH1D ("InvM_coln_muTauh_IC", "Collinear mass of #mu and #tau_{h} (GeV)", 100, 0, 200);
-  new TH1D ("InvM_coln_lep1Tauh_IC", "Collinear mass of leading-lepton and #tau_{h} (GeV)", 100, 0, 200);
-  new TH1D ("InvM_coln_lep2Tauh_IC", "Collinear mass of subleading-lepton and #tau_{h} (GeV)", 100, 0, 200);
+  new TH1D ("HT_Jets", "H_{T} (GeV)", 300, 0, 600);
+  new TH1D ("InvM_coln_XlepTauh_GS", "Collinear mass of #chi lepton and #tau_{h} (GeV)", 100, 0, 200);
+  new TH1D ("InvM_coln_WlepTauh_GS", "Collinear mass of W#pm lepton and #tau_{h} (GeV)", 100, 0, 200);
+  new TH1D ("InvM_coln_XlepTauh_IC", "Collinear mass of #chi lepton and #tau_{h} (GeV)", 100, 0, 200);
+  new TH1D ("InvM_coln_WlepTauh_IC", "Collinear mass of W#pm lepton and #tau_{h} (GeV)", 100, 0, 200);
+  new TH1D ("InvM_coln_XlepTauh_IC_MuMu",  "Collinear mass of #chi lepton and #tau_{h} (GeV)", 100, 0, 200);
+  new TH1D ("InvM_coln_WlepTauh_IC_MuMu",  "Collinear mass of W#pm lepton and #tau_{h} (GeV)", 100, 0, 200);
+  new TH1D ("InvM_coln_XlepTauh_IC_EleMu", "Collinear mass of #chi lepton and #tau_{h} (GeV)", 100, 0, 200);
+  new TH1D ("InvM_coln_WlepTauh_IC_EleMu", "Collinear mass of W#pm lepton and #tau_{h} (GeV)", 100, 0, 200);
+
   
   histf->cd();
   histf->ls();
@@ -405,392 +408,498 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
        MuonColl.push_back(mu);
      }
     std::sort(std::begin(MuonColl), std::end(MuonColl), PtComparator<Muon>()); 
+    
+    
+    /* ********************************** Electron Selection **************************** */     
+    for (TObject *_el: *BrElec){
+      const Electron& ele = dynamic_cast<const Electron&> (*_el);
+      AnaUtil::fillHist1D("ElectronCutFlow", 0, evWt);
+      
+      if (ele.PT <= 20) continue;
+      AnaUtil::fillHist1D("ElectronCutFlow", 1, evWt);
+      if (std::abs(ele.Eta) >= 2.5) continue;
+      AnaUtil::fillHist1D("ElectronCutFlow", 2, evWt);
+      ElectronColl.push_back(ele);
+    }
+    std::sort(std::begin(ElectronColl), std::end(ElectronColl), PtComparator<Electron>());
+    
+    /* ********************************** Photon Selection *********************************** */
+    for (TObject *_ph: *BrPhoton){
+      const Photon& ph = dynamic_cast<const Photon&> (*_ph);
+      AnaUtil::fillHist1D("PhotonCutFlow", 0, evWt);
+      
+      if (ph.PT <= 20) continue;
+      AnaUtil::fillHist1D("PhotonCutFlow", 1, evWt);
+      if (std::abs(ph.Eta) >= 2.4) continue;
+      AnaUtil::fillHist1D("PhotonCutFlow", 2, evWt);
+    }
+    std::sort(std::begin(PhotonColl), std::end(PhotonColl), PtComparator<Photon>());
+    
+    /* ********************************** Jet Selection ************************************ */
+    for (TObject *_j: *BrJet){
+      const Jet& jet = dynamic_cast<const Jet&> (*_j);
+      AnaUtil::fillHist1D("JetCutFlow", 0, evWt);
+      
+      if (jet.PT <= 30) continue;
+      AnaUtil::fillHist1D("JetCutFlow", 1, evWt);
+      if (std::abs(jet.Eta) >= 2.5) continue;
+      AnaUtil::fillHist1D("JetCutFlow", 2, evWt);
+      if (!(jetLeptonCleaning(jet, MuonColl, ElectronColl, 0.4))) continue;
+      AnaUtil::fillHist1D("JetCutFlow", 3, evWt);
+      if (!(jetTauhCleaning(jet, TauhColl, 0.4))) continue;
+      AnaUtil::fillHist1D("JetCutFlow", 4, evWt);
+      JetColl.push_back(jet);
+    }
+    std::sort(std::begin(JetColl), std::end(JetColl), PtComparator<Jet>());
+    
+    /* ********************************** Tau Selection ************************************ */
+    //int iTauh = 0;
+    for (TObject *_tau: *BrJet){
+      const Jet& tauj = dynamic_cast<const Jet&> (*_tau);
+      if (tauj.TauTag == 0) continue;
+      AnaUtil::fillHist1D("TauhCutFlow", 0, evWt);
+      if (tauj.PT <= 20) continue;
+      AnaUtil::fillHist1D("TauhCutFlow", 1, evWt);
+      if (std::abs(tauj.Eta) >= 2.4) continue;
+      AnaUtil::fillHist1D("TauhCutFlow", 2, evWt);
+      TauhColl.push_back(tauj);
+    }
+    std::sort(std::begin(TauhColl), std::end(TauhColl), PtComparator<Jet>());
+    
+    /* ************************************************************************************ */
+    for (auto &jet : JetColl)
+      (jet.BTag == 1 && std::fabs(jet.Eta) < 2.5) ? BJetColl.push_back(jet) : lightJetColl.push_back(jet);
+    
+    int nGoodMuon     = MuonColl.size();
+    int nGoodEle      = ElectronColl.size();
+    int nGoodPhoton   = PhotonColl.size();
+    int nGoodTauh     = TauhColl.size();
+    int nGoodJet      = JetColl.size();
+    int nGoodlJet     = lightJetColl.size();
+    int nGoodBJet     = BJetColl.size();
+    
+    // -------------- Pre-selections ---------------- //
+    if (nGoodMuon + nGoodEle + nGoodTauh + nGoodJet == 0) continue;
+    AnaUtil::fillHist1D("evtCutFlow", 1, evWt);
+    AnaUtil::fillHist1D("evtCutFlowWt", 1, lumiWt);
+    
+    if (nGoodMuon + nGoodEle != 2) continue;
+    AnaUtil::fillHist1D("evtCutFlow", 2, evWt);
+    AnaUtil::fillHist1D("evtCutFlowWt", 2, lumiWt);
+    
+    if (nGoodMuon < 1) continue;
+    AnaUtil::fillHist1D("evtCutFlow", 3, evWt);
+    AnaUtil::fillHist1D("evtCutFlowWt", 3, lumiWt);
+    
+    if (nGoodTauh != 1) continue;
+    AnaUtil::fillHist1D("evtCutFlow", 4, evWt);
+    AnaUtil::fillHist1D("evtCutFlowWt", 4, lumiWt);     
+
+    bool has2ndBjet = (nGoodBJet > 1 && BJetColl[1].PT > 30) ? true : false;
      
-         
-     /* ********************************** Electron Selection **************************** */     
-     for (TObject *_el: *BrElec){
-       const Electron& ele = dynamic_cast<const Electron&> (*_el);
-       AnaUtil::fillHist1D("ElectronCutFlow", 0, evWt);
-       
-       if (ele.PT <= 20) continue;
-       AnaUtil::fillHist1D("ElectronCutFlow", 1, evWt);
-       if (std::abs(ele.Eta) >= 2.5) continue;
-       AnaUtil::fillHist1D("ElectronCutFlow", 2, evWt);
-       ElectronColl.push_back(ele);
-     }
-     std::sort(std::begin(ElectronColl), std::end(ElectronColl), PtComparator<Electron>());
+    if (nGoodlJet < 1) continue;
+    AnaUtil::fillHist1D("evtCutFlow", 5, evWt);
+    AnaUtil::fillHist1D("evtCutFlowWt", 5, lumiWt);
      
-     /* ********************************** Photon Selection *********************************** */
-     for (TObject *_ph: *BrPhoton){
-       const Photon& ph = dynamic_cast<const Photon&> (*_ph);
-       AnaUtil::fillHist1D("PhotonCutFlow", 0, evWt);
-       
-       if (ph.PT <= 20) continue;
-       AnaUtil::fillHist1D("PhotonCutFlow", 1, evWt);
-       if (std::abs(ph.Eta) >= 2.4) continue;
-       AnaUtil::fillHist1D("PhotonCutFlow", 2, evWt);
-     }
-     std::sort(std::begin(PhotonColl), std::end(PhotonColl), PtComparator<Photon>());
+    if (nGoodBJet < 1 || has2ndBjet) continue;
+    AnaUtil::fillHist1D("evtCutFlow", 6, evWt);
+    AnaUtil::fillHist1D("evtCutFlowWt", 6, lumiWt);
+
+    std::vector<ZCandidate> ZCandList;
+    if (nGoodMuon >= 2) ZSelector(MuonColl, ZCandList);
+    if (nGoodEle  >= 2) ZSelector(ElectronColl, ZCandList);
+    if (ZCandList.size() > 0 && ZCandList[0].massDiff < 15) continue;
+    AnaUtil::fillHist1D("evtCutFlow", 7, evWt);
+    AnaUtil::fillHist1D("evtCutFlowWt", 7, lumiWt);
+    // ---------------------------------------------- //
+   
+
+    // ------------- Basic histogramming ------------- //
+    AnaUtil::fillHist1D("nGoodMuon", nGoodMuon);
+    AnaUtil::fillHist1D("nGoodElectron", nGoodEle);
+    AnaUtil::fillHist1D("nGoodLepton", (nGoodMuon + nGoodEle)); 
+    AnaUtil::fillHist1D("nGoodPhoton", nGoodPhoton);
+    AnaUtil::fillHist1D("nGoodTauh", nGoodTauh);
+    AnaUtil::fillHist1D("nGoodJet", nGoodJet);
+    AnaUtil::fillHist1D("nGoodBJet", nGoodBJet); 
+    AnaUtil::fillHist1D("nGoodlJet", nGoodlJet);
+     
+    AnaUtil::fillHist1D("Tauh1Pt", TauhColl[0].PT, 1);
+    AnaUtil::fillHist1D("Tauh1Eta", TauhColl[0].Eta, 1);
+    AnaUtil::fillHist1D("Tauh1Phi", TauhColl[0].Phi, 1);
+
+    // ---- Packing electrons and muons in one container ----- //
+    std::vector<LeptonCand>LepColl;
+    if (nGoodMuon > 0) packLeptons <Muon>     (MuonColl,     LepColl);
+    if (nGoodEle  > 0) packLeptons <Electron> (ElectronColl, LepColl);
+    //sorting lepton candidates                                       
+    std::sort(std::begin(LepColl), std::end(LepColl), PtComparator<LeptonCand>()); 
+
+    bool MuMu  = (LepColl[0].Flavour == 1 && LepColl[1].Flavour == 1) ? true : false;
+    bool EleMu = (MuMu) ? false : true;
+
+    TLorentzVector XLepP4;
+    TLorentzVector WLepP4;
+    if (MuMu) {
+      // Plan to build a tagger to select muon coming from X
+      XLepP4 = LepColl[1].P4;
+      WLepP4 = LepColl[0].P4;
+    }
+    else if (EleMu) {
+      if (LepColl[0].Flavour == 1) {
+	XLepP4 = LepColl[0].P4;
+	WLepP4 = LepColl[1].P4;
+      }
+      else {
+	XLepP4 = LepColl[1].P4;
+	WLepP4 = LepColl[0].P4;
+      }
+    }
+    else std::cerr << "Wrong lepton selection !!! :( \n";
+
+    AnaUtil::fillHist1D("XlepPt",  XLepP4.Pt());
+    AnaUtil::fillHist1D("XlepEta", XLepP4.Eta());
+    AnaUtil::fillHist1D("WlepPt",  WLepP4.Pt());
+    AnaUtil::fillHist1D("WlepEta", WLepP4.Eta());
+
+    float HT_jets = 0.0;
+    double minDr_XlepJets = 999.9;
+    double minDr_WlepJets = 999.9;
+    double maxDr_XlepJets = -999.9;
+    double maxDr_WlepJets = -999.9;
+    double minDphi_XlepJets = 999.9;
+    double minDphi_WlepJets = 999.9;
+    double maxDphi_XlepJets = -999.9;
+    double maxDphi_WlepJets = -999.9;
+    for (auto &jet : JetColl) {
+      HT_jets += jet.PT;
+      double dr_jetXlep   = XLepP4.DeltaR(jet.P4());
+      double dphi_jetXlep = std::fabs(TVector2::Phi_mpi_pi(jet.P4().Phi() - XLepP4.Phi())); 
+      double dr_jetWlep = WLepP4.DeltaR(jet.P4());
+      double dphi_jetWlep = std::fabs(TVector2::Phi_mpi_pi(jet.P4().Phi() - WLepP4.Phi()));
+      if (dr_jetXlep <= minDr_XlepJets) minDr_XlepJets = dr_jetXlep;
+      if (dr_jetWlep <= minDr_WlepJets) minDr_WlepJets = dr_jetWlep;
+      if (dr_jetXlep > maxDr_XlepJets)  maxDr_XlepJets = dr_jetXlep;
+      if (dr_jetWlep > maxDr_WlepJets)  maxDr_WlepJets = dr_jetWlep;
+      if (dphi_jetXlep <= minDphi_XlepJets) minDphi_XlepJets = dphi_jetXlep;
+      if (dphi_jetWlep <= minDphi_WlepJets) minDphi_WlepJets = dphi_jetWlep;
+      if (dphi_jetXlep > maxDphi_XlepJets)  maxDphi_XlepJets = dphi_jetXlep;
+      if (dphi_jetWlep > maxDphi_WlepJets)  maxDphi_WlepJets = dphi_jetWlep;
+    }
+    AnaUtil::fillHist1D ("HT_Jets", HT_jets);
+    AnaUtil::fillHist1D ("minDr_XlepJets", minDr_XlepJets);
+    AnaUtil::fillHist1D ("maxDr_XlepJets", maxDr_XlepJets);
+    AnaUtil::fillHist1D ("minDphi_XlepJets", minDphi_XlepJets);
+    AnaUtil::fillHist1D ("maxDphi_XlepJets", maxDphi_XlepJets);
+    AnaUtil::fillHist1D ("minDr_WlepJets", minDr_WlepJets);
+    AnaUtil::fillHist1D ("maxDr_WlepJets", maxDr_WlepJets);
+    AnaUtil::fillHist1D ("minDphi_WlepJets", minDphi_WlepJets);
+    AnaUtil::fillHist1D ("maxDphi_WlepJets", maxDphi_WlepJets);
           
-     /* ********************************** Jet Selection ************************************ */
-     for (TObject *_j: *BrJet){
-       const Jet& jet = dynamic_cast<const Jet&> (*_j);
-       AnaUtil::fillHist1D("JetCutFlow", 0, evWt);
-
-       if (jet.PT <= 30) continue;
-       AnaUtil::fillHist1D("JetCutFlow", 1, evWt);
-       if (std::abs(jet.Eta) >= 2.5) continue;
-       AnaUtil::fillHist1D("JetCutFlow", 2, evWt);
-       if (!(jetLeptonCleaning(jet, MuonColl, ElectronColl, 0.4))) continue;
-       AnaUtil::fillHist1D("JetCutFlow", 3, evWt);
-       if (!(jetTauhCleaning(jet, TauhColl, 0.4))) continue;
-       AnaUtil::fillHist1D("JetCutFlow", 4, evWt);
-       JetColl.push_back(jet);
-     }
-     std::sort(std::begin(JetColl), std::end(JetColl), PtComparator<Jet>());
+    size_t nLoop2Ele  = (nGoodEle >= 2)  ? 2 : nGoodEle;
+    size_t nLoop2Mu   = (nGoodMuon >= 2) ? 2 : nGoodMuon;
+    size_t nLoop4Jet  = (nGoodJet >= 4)  ? 4 : nGoodJet;
+    size_t nLoop4lJet = (nGoodlJet >= 4) ? 4 : nGoodlJet;
+    size_t nLoop6Jet  = (nGoodJet >= 6)  ? 6 : nGoodJet;
+    size_t nLoopBJet  = (nGoodBJet >= 2) ? 2 : nGoodBJet;
+    size_t nLoopTauh  = (nGoodTauh > 1)  ? 1 : nGoodTauh;
      
-     /* ********************************** Tau Selection ************************************ */
-     //int iTauh = 0;
-     for (TObject *_tau: *BrJet){
-       const Jet& tauj = dynamic_cast<const Jet&> (*_tau);
-       if (tauj.TauTag == 0) continue;
-       AnaUtil::fillHist1D("TauhCutFlow", 0, evWt);
-       if (tauj.PT <= 20) continue;
-       AnaUtil::fillHist1D("TauhCutFlow", 1, evWt);
-       if (std::abs(tauj.Eta) >= 2.4) continue;
-       AnaUtil::fillHist1D("TauhCutFlow", 2, evWt);
-       TauhColl.push_back(tauj);
-     }
-     std::sort(std::begin(TauhColl), std::end(TauhColl), PtComparator<Jet>());
+    // b-jet plots (for max 2 b-jets)
+    for (size_t i = 0; i < nLoopBJet; ++i) {
+      TLorentzVector bjP4 = BJetColl[i].P4();
+      std::string pt_name  = "BJet"+std::to_string(i+1)+"Pt";
+      std::string phi_name = "BJet"+std::to_string(i+1)+"Phi";
+      std::string eta_name = "BJet"+std::to_string(i+1)+"Eta";
+      AnaUtil::fillHist1D (pt_name.c_str(), bjP4.Pt(), 1);
+      AnaUtil::fillHist1D (phi_name.c_str(), bjP4.Phi(), 1);
+      AnaUtil::fillHist1D (eta_name.c_str(), bjP4.Eta(), 1);
+    }
+
+    // Loop over max 2 electrons
+    for (size_t iele = 0; iele < nLoop2Ele; ++iele) {
+      TLorentzVector eleP4 = ElectronColl[iele].P4();
+      std::string elePt_name  = "Electron"+std::to_string(iele+1)+"Pt";
+      std::string eleEta_name = "Electron"+std::to_string(iele+1)+"Eta";
+      std::string elePhi_name = "Electron"+std::to_string(iele+1)+"Phi";
+      AnaUtil::fillHist1D (elePt_name.c_str(), eleP4.Pt(), 1);
+      AnaUtil::fillHist1D (eleEta_name.c_str(), eleP4.Eta(), 1);
+      AnaUtil::fillHist1D (elePhi_name.c_str(), eleP4.Phi(), 1);
+      for (size_t ijet = 0; ijet < nLoop4Jet; ++ijet) {
+	TLorentzVector jP4 = JetColl[ijet].P4();
+	std::string DR_jetEle_name   = "DR_Jet"+std::to_string(ijet+1)+"Electron"+std::to_string(iele+1);
+	std::string DPhi_jetEle_name = "DPhi_Jet"+std::to_string(ijet+1)+"Electron"+std::to_string(iele+1);
+	AnaUtil::fillHist1D (DR_jetEle_name.c_str(), jP4.DeltaR(eleP4), 1);
+	AnaUtil::fillHist1D (DPhi_jetEle_name.c_str(), std::fabs(TVector2::Phi_mpi_pi(jP4.Phi()-eleP4.Phi())), 1);
+      }
+      for (size_t ib = 0; ib < nLoopBJet; ++ib) {
+	TLorentzVector bjP4 = BJetColl[ib].P4();
+	std::string DR_bjetEle_name   = "DR_bJet"+std::to_string(ib+1)+"Electron"+std::to_string(iele+1);
+	std::string DPhi_bjetEle_name = "DPhi_bJet"+std::to_string(ib+1)+"Electron"+std::to_string(iele+1);
+	AnaUtil::fillHist1D (DR_bjetEle_name.c_str(), bjP4.DeltaR(eleP4), 1);
+	AnaUtil::fillHist1D (DPhi_bjetEle_name.c_str(), std::fabs(TVector2::Phi_mpi_pi(bjP4.Phi() - eleP4.Phi())), 1);	 
+      }
+    }
+
+    // Loop over max 2 muons
+    for (size_t imu = 0; imu < nLoop2Mu; ++imu) {
+      TLorentzVector muP4 = MuonColl[imu].P4();
+      std::string muPt_name  = "Muon"+std::to_string(imu+1)+"Pt";
+      std::string muEta_name = "Muon"+std::to_string(imu+1)+"Eta";
+      std::string muPhi_name = "Muon"+std::to_string(imu+1)+"Phi";
+      AnaUtil::fillHist1D (muPt_name.c_str(), muP4.Pt(), 1);
+      AnaUtil::fillHist1D (muEta_name.c_str(), muP4.Eta(), 1);
+      AnaUtil::fillHist1D (muPhi_name.c_str(), muP4.Phi(), 1);
+      for (size_t iTauh = 0; iTauh < nLoopTauh; ++iTauh) {
+	TLorentzVector tauhP4 = TauhColl[iTauh].P4();
+	std::string DR_tauhMu_name = "DR_mu"+std::to_string(imu+1)+"tauh"+std::to_string(iTauh+1);
+	std::string DPhi_tauhMu_name = "Deltaphi_mu"+std::to_string(imu+1)+"tauh"+std::to_string(iTauh+1);
+	AnaUtil::fillHist1D (DR_tauhMu_name.c_str(), tauhP4.DeltaR(muP4), 1);
+	AnaUtil::fillHist1D (DPhi_tauhMu_name.c_str(), std::fabs(TVector2::Phi_mpi_pi(tauhP4.Phi() - muP4.Phi())), 1);
+      }
+      for (size_t ijet = 0; ijet < nLoop4lJet; ++ijet) {
+	TLorentzVector jP4 = lightJetColl[ijet].P4();
+	std::string DR_jetMu_name = "DR_Jet"+std::to_string(ijet+1)+"Muon"+std::to_string(imu+1);
+	std::string DPhi_jetMu_name = "DPhi_Jet"+std::to_string(ijet+1)+"Muon"+std::to_string(imu+1);
+	AnaUtil::fillHist1D (DR_jetMu_name.c_str(), jP4.DeltaR(muP4), 1);
+	AnaUtil::fillHist1D (DPhi_jetMu_name.c_str(), std::fabs(TVector2::Phi_mpi_pi(jP4.Phi() - muP4.Phi())), 1);
+      }
+      for (size_t ib = 0; ib < nLoopBJet; ++ib) {
+	TLorentzVector bjP4 = BJetColl[ib].P4();
+	std::string DR_bjetMu_name   = "DR_bJet"+std::to_string(ib+1)+"Muon"+std::to_string(imu+1);
+	std::string DPhi_bjetMu_name = "DPhi_bJet"+std::to_string(ib+1)+"Muon"+std::to_string(imu+1);
+	AnaUtil::fillHist1D (DR_bjetMu_name.c_str(), bjP4.DeltaR(muP4), 1);
+	AnaUtil::fillHist1D (DPhi_bjetMu_name.c_str(), std::fabs(TVector2::Phi_mpi_pi(bjP4.Phi() - muP4.Phi())), 1);	 
+      }
+    }
      
-     /* ************************************************************************************ */
-     for (auto &jet : JetColl)
-       (jet.BTag == 1 && std::fabs(jet.Eta) < 2.5) ? BJetColl.push_back(jet) : lightJetColl.push_back(jet);
+    // Loop over max 6 good jets
+    float minDR = 999.9;
+    float maxDR = -999.9;
+    for (size_t i = 0; i < nLoop6Jet; ++i) {
+      std::string pt_name  = "Jet"+std::to_string(i+1)+"Pt";
+      TLorentzVector jP4   = JetColl[i].P4();
+      AnaUtil::fillHist1D (pt_name.c_str(), JetColl[i].PT, 1);
+      for (size_t j = i+1; j < nLoop6Jet; ++j) {
+	TLorentzVector j2P4   = JetColl[j].P4();
+	float dR = jP4.DeltaR(j2P4);
+	if (dR < minDR) minDR = dR;
+	if (dR > maxDR) maxDR = dR;
+      }
+    }
+    AnaUtil::fillHist1D("DR_minimum_allJets",minDR,1.0);
+    AnaUtil::fillHist1D("DR_maximum_allJets",maxDR,1.0);
+    // Loop over max 4 light jets
+    float min_invM = 9999.9;
+    for (size_t i = 0; i < nLoop4lJet; ++i) {
+      std::string jetPtName  = "lightJet"+std::to_string(i+1)+"Pt";
+      std::string jetEtaName = "lightJet"+std::to_string(i+1)+"Eta";
+      TLorentzVector ljetiP4 = lightJetColl[i].P4();
+      AnaUtil::fillHist1D (jetPtName.c_str(), ljetiP4.Pt(), 1);
+      AnaUtil::fillHist1D (jetEtaName.c_str(), ljetiP4.Eta(), 1);
+      for (size_t j = i+1; j < nLoop4lJet; ++j) {
+	TLorentzVector ljetjP4 =lightJetColl[j].P4();
+	std::string PT_histName   = "PT_lightJet"+std::to_string(i+1)+"Jet"+std::to_string(j+1);
+	std::string IM_histName   = "IM_lightJet"+std::to_string(i+1)+"Jet"+std::to_string(j+1);
+	std::string DR_histName   = "DR_lightJet"+std::to_string(i+1)+"Jet"+std::to_string(j+1);
+	std::string DEta_histName = "DEta_lightJet"+std::to_string(i+1)+"Jet"+std::to_string(j+1);
+	std::string DPhi_histName = "DPhi_lightJet"+std::to_string(i+1)+"Jet"+std::to_string(j+1);
+	float invM = (ljetiP4+ljetjP4).M();
+	AnaUtil::fillHist1D (PT_histName.c_str(), (ljetiP4+ljetjP4).Pt(), 1);
+	AnaUtil::fillHist1D (IM_histName.c_str(), invM, 1);
+	AnaUtil::fillHist1D (DR_histName.c_str(), ljetiP4.DeltaR(ljetjP4), 1);
+	AnaUtil::fillHist1D (DEta_histName.c_str(), std::fabs(ljetiP4.Eta() - ljetjP4.Eta()), 1);
+	AnaUtil::fillHist1D (DPhi_histName.c_str(), std::fabs(TVector2::Phi_mpi_pi(ljetiP4.Phi() - ljetjP4.Phi())), 1);
+	if (invM < min_invM) min_invM = invM;
+      }
+    }
 
-     int nGoodMuon     = MuonColl.size();
-     int nGoodEle      = ElectronColl.size();
-     int nGoodPhoton   = PhotonColl.size();
-     int nGoodTauh     = TauhColl.size();
-     int nGoodJet      = JetColl.size();
-     int nGoodlJet     = lightJetColl.size();
-     int nGoodBJet     = BJetColl.size();
+    AnaUtil::fillHist1D("IM_minimum_lightJets",min_invM, 1.0);
 
-     // -------------- Initial Cuts ---------------- //
-     if (nGoodMuon + nGoodEle + nGoodTauh + nGoodJet == 0) continue;
-     AnaUtil::fillHist1D("evtCutFlow", 1, evWt);
-     AnaUtil::fillHist1D("evtCutFlowWt", 1, lumiWt);
-     
-     if (nGoodMuon + nGoodEle != 2) continue;
-     AnaUtil::fillHist1D("evtCutFlow", 2, evWt);
-     AnaUtil::fillHist1D("evtCutFlowWt", 2, lumiWt);
+    // -------------------- NEW --------------------- //
+    //mT of leading lepton and met
+    TLorentzVector metp4;
+    metp4.SetPtEtaPhiE(met_->MET, 0.0, met_->Phi, met_->MET);
+    TLorentzVector tauhp4 = TauhColl[0].P4();
+    TLorentzVector bjetp4 = BJetColl[0].P4();
+    TLorentzVector ljetp4 = lightJetColl[0].P4();
 
-     if (nGoodMuon < 1) continue;
-     AnaUtil::fillHist1D("evtCutFlow", 3, evWt);
-     AnaUtil::fillHist1D("evtCutFlowWt", 3, lumiWt);
-          
-     if (nGoodTauh != 1) continue;
-     AnaUtil::fillHist1D("evtCutFlow", 4, evWt);
-     AnaUtil::fillHist1D("evtCutFlowWt", 4, lumiWt);     
+    float mT = Calculate_MT(WLepP4, metp4);
+    AnaUtil::fillHist1D("met", metp4.Pt(), 1);
+    AnaUtil::fillHist1D("MT", mT, 1);
+    // ---------------------------------------------- //
+    double XMT = Calculate_TotalMT(XLepP4, tauhp4, metp4);
+    AnaUtil::fillHist1D ("MT_X", XMT);
 
-     bool has2ndBjet = (nGoodBJet > 1 && BJetColl[1].PT > 30) ? true : false;
-     
-     if (nGoodlJet < 1) continue;
-     AnaUtil::fillHist1D("evtCutFlow", 5, evWt);
-     AnaUtil::fillHist1D("evtCutFlowWt", 5, lumiWt);
-     
-     if (nGoodBJet < 1 || has2ndBjet) continue;
-     AnaUtil::fillHist1D("evtCutFlow", 6, evWt);
-     AnaUtil::fillHist1D("evtCutFlowWt", 6, lumiWt);
+    // --------------- Collinear mass --------------- //
+    // -------------------- GS ---------------------- //
+    double corr = 1.0/(1 + metp4.Px()/tauhp4.Px());
+    TLorentzVector Ntap4;
+    Ntap4.SetPtEtaPhiE((1.0/corr)*tauhp4.Pt(), tauhp4.Eta(), tauhp4.Phi(), tauhp4.E());
+    double colnMass_Xlep = (Ntap4 + XLepP4).M();
+    double colnMass_Wlep = (Ntap4 + WLepP4).M();
 
-     std::vector<ZCandidate> ZCandList;
-     if (nGoodMuon >= 2) ZSelector(MuonColl, ZCandList);
-     if (nGoodEle  >= 2) ZSelector(ElectronColl, ZCandList);
-     if (ZCandList.size() > 0 && ZCandList[0].massDiff < 15) continue;
-     AnaUtil::fillHist1D("evtCutFlow", 7, evWt);
-     AnaUtil::fillHist1D("evtCutFlowWt", 7, lumiWt);
-     // ---------------------------------------------- //
-     
-     AnaUtil::fillHist1D("nGoodMuon", nGoodMuon);
-     AnaUtil::fillHist1D("nGoodElectron", nGoodEle);
-     AnaUtil::fillHist1D("nGoodLepton", (nGoodMuon + nGoodEle)); 
-     AnaUtil::fillHist1D("nGoodPhoton", nGoodPhoton);
-     AnaUtil::fillHist1D("nGoodTauh", nGoodTauh);
-     AnaUtil::fillHist1D("nGoodJet", nGoodJet);
-     AnaUtil::fillHist1D("nGoodBJet", nGoodBJet); 
-     AnaUtil::fillHist1D("nGoodlJet", nGoodlJet);
-     
-     AnaUtil::fillHist1D("Tauh1Pt", TauhColl[0].PT, 1);
-     AnaUtil::fillHist1D("Tauh1Eta", TauhColl[0].Eta, 1);
-     AnaUtil::fillHist1D("Tauh1Phi", TauhColl[0].Phi, 1);
+    AnaUtil::fillHist1D("InvM_coln_XlepTauh_GS", colnMass_Xlep);
+    AnaUtil::fillHist1D("InvM_coln_WlepTauh_GS", colnMass_Wlep);
 
-     // ---- Leading and sub-leading lepton pT ------ //
-     TLorentzVector hLepP4 = MuonColl[0].P4();
-     bool ismu = true;
-     bool isele = false;
-     if (nGoodEle > 0 && ElectronColl[0].PT > hLepP4.Pt()){
-       isele   = true;
-       ismu    = false;
-       hLepP4  = ElectronColl[0].P4();
-     }
+    // -------------------- IC ---------------------- //
+    double IM_Xleptau = (XLepP4 + tauhp4).M();
+    double IM_Wleptau = (WLepP4 + tauhp4).M();
+    double pTvis_tau =  TauhColl[0].PT;
+    double pTnu = (metp4.Px()*tauhp4.Px() + metp4.Py()*tauhp4.Py())/std::fabs(pTvis_tau);                         
+    double x_vis = std::fabs(pTvis_tau)/(std::fabs(pTvis_tau) + std::fabs(pTnu));                  
+    double M_coll_IC_Xlep = IM_Xleptau/TMath::Sqrt(x_vis);  
+    double M_coll_IC_Wlep = IM_Wleptau/TMath::Sqrt(x_vis);  
 
-     TLorentzVector h2LepP4;
-     h2LepP4.SetPtEtaPhiM(0.,0.,0.,0.);
-     if (isele) {
-       if (nGoodEle > 1) h2LepP4 = (ElectronColl[1].PT > MuonColl[0].PT) ? ElectronColl[1].P4() : MuonColl[0].P4();
-       else h2LepP4 = MuonColl[0].P4();
-     }
-     else if (ismu) {
-       if (nGoodEle == 0) h2LepP4 = MuonColl[1].P4();
-       else if (nGoodMuon == 1) h2LepP4 = ElectronColl[0].P4();
-       else if (nGoodMuon > 1 && nGoodEle > 0) h2LepP4 = (MuonColl[1].PT > ElectronColl[0].PT) ? MuonColl[1].P4() : ElectronColl[0].P4();
-     }
-     // ----------------------------------------------- //
+    AnaUtil::fillHist1D("InvM_coln_XlepTauh_IC", M_coll_IC_Xlep);
+    AnaUtil::fillHist1D("InvM_coln_WlepTauh_IC", M_coll_IC_Wlep);
 
-     AnaUtil::fillHist1D("lep1Pt", hLepP4.Pt(), 1);
-     AnaUtil::fillHist1D("lep1Eta", hLepP4.Eta(), 1);
-     AnaUtil::fillHist1D("lep2Pt", h2LepP4.Pt(), 1);
-     AnaUtil::fillHist1D("lep2Eta", h2LepP4.Eta(), 1);
-          
-     size_t nLoop2Ele  = (nGoodEle >= 2)  ? 2 : nGoodEle;
-     size_t nLoop2Mu   = (nGoodMuon >= 2) ? 2 : nGoodMuon;
-     size_t nLoop4Jet  = (nGoodJet >= 4)  ? 4 : nGoodJet;
-     size_t nLoop4lJet = (nGoodlJet >= 4) ? 4 : nGoodlJet;
-     size_t nLoop6Jet  = (nGoodJet >= 6)  ? 6 : nGoodJet;
-     size_t nLoopBJet  = (nGoodBJet >= 2) ? 2 : nGoodBJet;
-     size_t nLoopTauh  = (nGoodTauh > 1)  ? 1 : nGoodTauh;
-     
-     // b-jet plots (for max 2 b-jets)
-     for (size_t i = 0; i < nLoopBJet; ++i) {
-       TLorentzVector bjP4 = BJetColl[i].P4();
-       std::string pt_name  = "BJet"+std::to_string(i+1)+"Pt";
-       std::string phi_name = "BJet"+std::to_string(i+1)+"Phi";
-       std::string eta_name = "BJet"+std::to_string(i+1)+"Eta";
-       AnaUtil::fillHist1D (pt_name.c_str(), bjP4.Pt(), 1);
-       AnaUtil::fillHist1D (phi_name.c_str(), bjP4.Phi(), 1);
-       AnaUtil::fillHist1D (eta_name.c_str(), bjP4.Eta(), 1);
-     }
+    if (MuMu) {
+      AnaUtil::fillHist1D("InvM_coln_XlepTauh_IC_MuMu", M_coll_IC_Xlep);
+      AnaUtil::fillHist1D("InvM_coln_WlepTauh_IC_MuMu", M_coll_IC_Wlep);
+    }
+    else if (EleMu) {
+      AnaUtil::fillHist1D("InvM_coln_XlepTauh_IC_EleMu", M_coll_IC_Xlep);
+      AnaUtil::fillHist1D("InvM_coln_WlepTauh_IC_EleMu", M_coll_IC_Wlep);
+    }
+    else std::cerr << "Wrong Channel\n";
 
-     // Loop over max 2 electrons
-     for (size_t iele = 0; iele < nLoop2Ele; ++iele) {
-       TLorentzVector eleP4 = ElectronColl[iele].P4();
-       std::string elePt_name  = "Electron"+std::to_string(iele+1)+"Pt";
-       std::string eleEta_name = "Electron"+std::to_string(iele+1)+"Eta";
-       std::string elePhi_name = "Electron"+std::to_string(iele+1)+"Phi";
-       AnaUtil::fillHist1D (elePt_name.c_str(), eleP4.Pt(), 1);
-       AnaUtil::fillHist1D (eleEta_name.c_str(), eleP4.Eta(), 1);
-       AnaUtil::fillHist1D (elePhi_name.c_str(), eleP4.Phi(), 1);
-       for (size_t ijet = 0; ijet < nLoop4Jet; ++ijet) {
-	 TLorentzVector jP4 = JetColl[ijet].P4();
-	 std::string DR_jetEle_name   = "DR_Jet"+std::to_string(ijet+1)+"Electron"+std::to_string(iele+1);
-	 std::string DPhi_jetEle_name = "DPhi_Jet"+std::to_string(ijet+1)+"Electron"+std::to_string(iele+1);
-	 AnaUtil::fillHist1D (DR_jetEle_name.c_str(), jP4.DeltaR(eleP4), 1);
-	 AnaUtil::fillHist1D (DPhi_jetEle_name.c_str(), std::fabs(TVector2::Phi_mpi_pi(jP4.Phi()-eleP4.Phi())), 1);
-       }
-       for (size_t ib = 0; ib < nLoopBJet; ++ib) {
-	 TLorentzVector bjP4 = BJetColl[ib].P4();
-	 std::string DR_bjetEle_name   = "DR_bJet"+std::to_string(ib+1)+"Electron"+std::to_string(iele+1);
-	 std::string DPhi_bjetEle_name = "DPhi_bJet"+std::to_string(ib+1)+"Electron"+std::to_string(iele+1);
-	 AnaUtil::fillHist1D (DR_bjetEle_name.c_str(), bjP4.DeltaR(eleP4), 1);
-	 AnaUtil::fillHist1D (DPhi_bjetEle_name.c_str(), std::fabs(TVector2::Phi_mpi_pi(bjP4.Phi() - eleP4.Phi())), 1);	 
-       }
-     }
-
-     // Loop over max 2 muons
-     for (size_t imu = 0; imu < nLoop2Mu; ++imu) {
-       TLorentzVector muP4 = MuonColl[imu].P4();
-       std::string muPt_name  = "Muon"+std::to_string(imu+1)+"Pt";
-       std::string muEta_name = "Muon"+std::to_string(imu+1)+"Eta";
-       std::string muPhi_name = "Muon"+std::to_string(imu+1)+"Phi";
-       AnaUtil::fillHist1D (muPt_name.c_str(), muP4.Pt(), 1);
-       AnaUtil::fillHist1D (muEta_name.c_str(), muP4.Eta(), 1);
-       AnaUtil::fillHist1D (muPhi_name.c_str(), muP4.Phi(), 1);
-       for (size_t iTauh = 0; iTauh < nLoopTauh; ++iTauh) {
-         TLorentzVector tauhP4 = TauhColl[iTauh].P4();
-         std::string DR_tauhMu_name = "DR_mu"+std::to_string(imu+1)+"tauh"+std::to_string(iTauh+1);
-	 std::string DPhi_tauhMu_name = "Deltaphi_mu"+std::to_string(imu+1)+"tauh"+std::to_string(iTauh+1);
-	 AnaUtil::fillHist1D (DR_tauhMu_name.c_str(), tauhP4.DeltaR(muP4), 1);
-	 AnaUtil::fillHist1D (DPhi_tauhMu_name.c_str(), std::fabs(TVector2::Phi_mpi_pi(tauhP4.Phi() - muP4.Phi())), 1);
-       }
-       for (size_t ijet = 0; ijet < nLoop4lJet; ++ijet) {
-	 TLorentzVector jP4 = lightJetColl[ijet].P4();
-	 std::string DR_jetMu_name = "DR_Jet"+std::to_string(ijet+1)+"Muon"+std::to_string(imu+1);
-	 std::string DPhi_jetMu_name = "DPhi_Jet"+std::to_string(ijet+1)+"Muon"+std::to_string(imu+1);
-	 AnaUtil::fillHist1D (DR_jetMu_name.c_str(), jP4.DeltaR(muP4), 1);
-	 AnaUtil::fillHist1D (DPhi_jetMu_name.c_str(), std::fabs(TVector2::Phi_mpi_pi(jP4.Phi() - muP4.Phi())), 1);
-       }
-       for (size_t ib = 0; ib < nLoopBJet; ++ib) {
-	 TLorentzVector bjP4 = BJetColl[ib].P4();
-	 std::string DR_bjetMu_name   = "DR_bJet"+std::to_string(ib+1)+"Muon"+std::to_string(imu+1);
-	 std::string DPhi_bjetMu_name = "DPhi_bJet"+std::to_string(ib+1)+"Muon"+std::to_string(imu+1);
-	 AnaUtil::fillHist1D (DR_bjetMu_name.c_str(), bjP4.DeltaR(muP4), 1);
-	 AnaUtil::fillHist1D (DPhi_bjetMu_name.c_str(), std::fabs(TVector2::Phi_mpi_pi(bjP4.Phi() - muP4.Phi())), 1);	 
-       }
-     }
-     
-     // Loop over max 6 good jets
-     float minDR = 999.9;
-     float maxDR = -999.9;
-     for (size_t i = 0; i < nLoop6Jet; ++i) {
-       std::string pt_name  = "Jet"+std::to_string(i+1)+"Pt";
-       TLorentzVector jP4   = JetColl[i].P4();
-       AnaUtil::fillHist1D (pt_name.c_str(), JetColl[i].PT, 1);
-       for (size_t j = i+1; j < nLoop6Jet; ++j) {
-	 TLorentzVector j2P4   = JetColl[j].P4();
-	 float dR = jP4.DeltaR(j2P4);
-	 if (dR < minDR) minDR = dR;
-	 if (dR > maxDR) maxDR = dR;
-       }
-     }
-     AnaUtil::fillHist1D("DR_minimum_allJets",minDR,1.0);
-     AnaUtil::fillHist1D("DR_maximum_allJets",maxDR,1.0);
-     // Loop over max 4 light jets
-     float min_invM = 9999.9;
-     for (size_t i = 0; i < nLoop4lJet; ++i) {
-       std::string jetPtName  = "lightJet"+std::to_string(i+1)+"Pt";
-       std::string jetEtaName = "lightJet"+std::to_string(i+1)+"Eta";
-       TLorentzVector ljetiP4 = lightJetColl[i].P4();
-       AnaUtil::fillHist1D (jetPtName.c_str(), ljetiP4.Pt(), 1);
-       AnaUtil::fillHist1D (jetEtaName.c_str(), ljetiP4.Eta(), 1);
-       for (size_t j = i+1; j < nLoop4lJet; ++j) {
-	 TLorentzVector ljetjP4 =lightJetColl[j].P4();
-	 std::string PT_histName   = "PT_lightJet"+std::to_string(i+1)+"Jet"+std::to_string(j+1);
-	 std::string IM_histName   = "IM_lightJet"+std::to_string(i+1)+"Jet"+std::to_string(j+1);
-	 std::string DR_histName   = "DR_lightJet"+std::to_string(i+1)+"Jet"+std::to_string(j+1);
-	 std::string DEta_histName = "DEta_lightJet"+std::to_string(i+1)+"Jet"+std::to_string(j+1);
-	 std::string DPhi_histName = "DPhi_lightJet"+std::to_string(i+1)+"Jet"+std::to_string(j+1);
-	 float invM = (ljetiP4+ljetjP4).M();
-	 AnaUtil::fillHist1D (PT_histName.c_str(), (ljetiP4+ljetjP4).Pt(), 1);
-	 AnaUtil::fillHist1D (IM_histName.c_str(), invM, 1);
-	 AnaUtil::fillHist1D (DR_histName.c_str(), ljetiP4.DeltaR(ljetjP4), 1);
-	 AnaUtil::fillHist1D (DEta_histName.c_str(), std::fabs(ljetiP4.Eta() - ljetjP4.Eta()), 1);
-	 AnaUtil::fillHist1D (DPhi_histName.c_str(), std::fabs(TVector2::Phi_mpi_pi(ljetiP4.Phi() - ljetjP4.Phi())), 1);
-	 if (invM < min_invM) min_invM = invM;
-       }
-     }
-
-     AnaUtil::fillHist1D("IM_minimum_lightJets",min_invM, 1.0);
-     // -------------------- NEW --------------------- //
-     //mT of leading lepton and met
-     TLorentzVector metp4;
-     metp4.SetPtEtaPhiE(met_->MET, 0.0, met_->Phi, met_->MET);
-
-     float mT = Calculate_MT(hLepP4, metp4);
-     AnaUtil::fillHist1D("met", metp4.Pt(), 1);
-     AnaUtil::fillHist1D("MT", mT, 1);
-     // ---------------------------------------------- //
-     double XMT = Calculate_TotalMT(MuonColl[0].P4(), TauhColl[0].P4(), metp4);
-     AnaUtil::fillHist1D ("MT_X", XMT);
-
-     // Collinear mass
-     // GS
-     double corr = 1.0/(1 + metp4.Px()/TauhColl[0].P4().Px());
-     TLorentzVector Ntap4;
-     Ntap4.SetPtEtaPhiE((1.0/corr)*TauhColl[0].P4().Pt(), TauhColl[0].P4().Eta(), TauhColl[0].P4().Phi(), TauhColl[0].P4().E());
-     double colnMass = (Ntap4 + MuonColl[0].P4()).M();
-     double colnMass_lep1 = (Ntap4 + hLepP4).M();
-     double colnMass_lep2 = (Ntap4 + h2LepP4).M();
-
-     AnaUtil::fillHist1D("InvM_coln_muTauh_GS", colnMass);
-     AnaUtil::fillHist1D("InvM_coln_lep1Tauh_GS", colnMass_lep1);
-     AnaUtil::fillHist1D("InvM_coln_lep2Tauh_GS", colnMass_lep2);
-
-     // IC
-     double IM_mutau   = (MuonColl[0].P4()+TauhColl[0].P4()).M();
-     double IM_lep1tau = (hLepP4 + TauhColl[0].P4()).M();
-     double IM_lep2tau = (h2LepP4 + TauhColl[0].P4()).M();
-
-     double pTvis_tau =  TauhColl[0].PT;
-     double pTnu = (metp4.Px()*TauhColl[0].P4().Px() + metp4.Py()*TauhColl[0].P4().Py())/std::fabs(pTvis_tau);                         
-     double x_vis = std::fabs(pTvis_tau)/(std::fabs(pTvis_tau) + std::fabs(pTnu));                  
-     double M_coll_IC = IM_mutau/TMath::Sqrt(x_vis);  
-     double M_coll_IC_lep1 = IM_lep1tau/TMath::Sqrt(x_vis);  
-     double M_coll_IC_lep2 = IM_lep2tau/TMath::Sqrt(x_vis);  
-
-     AnaUtil::fillHist1D("InvM_coln_muTauh_IC", M_coll_IC);
-     AnaUtil::fillHist1D("InvM_coln_lep1Tauh_IC", M_coll_IC_lep1);
-     AnaUtil::fillHist1D("InvM_coln_lep2Tauh_IC", M_coll_IC_lep2);
+    // ------------------------------------------------ //
 
 
-     // Filling the branches of a flat ntuple for skimming
-     if (skimObj_) {
-       TreeVariables varList;
 
-       varList.event         = iEntry;
-       // numbers of objects in final state
-       varList.nLeptons      = nGoodMuon+nGoodEle;
-       varList.nJets         = nGoodJet;
-       varList.nbJets        = nGoodBJet;
-       varList.nlJets        = nGoodlJet;
-       varList.nTauh         = nGoodTauh;
-       // properties of individual object
-       varList.pt_tauh1      = TauhColl[0].PT;
-       varList.eta_tauh1     = std::fabs(TauhColl[0].Eta);
-       varList.phi_tauh1     = std::fabs(TauhColl[0].Phi);
-       varList.met           = met_->MET;
-       varList.pt_bjet1      = BJetColl[0].PT;
-       varList.eta_bjet1     = std::fabs(BJetColl[0].Eta);
-       varList.phi_bjet1     = std::fabs(BJetColl[0].Phi);
-       varList.pt_ljet1      = lightJetColl[0].PT;
-       varList.eta_ljet1     = std::fabs(lightJetColl[0].Eta);
-       varList.phi_ljet1     = std::fabs(lightJetColl[0].Phi);
-       varList.pt_lep1       = hLepP4.Pt();
-       varList.pt_lep2       = h2LepP4.Pt();
-       varList.eta_lep1      = std::fabs(hLepP4.Eta());
-       varList.eta_lep2      = std::fabs(h2LepP4.Eta());
-       varList.phi_lep1      = std::fabs(hLepP4.Phi());
-       varList.phi_lep2      = std::fabs(h2LepP4.Phi());
-       // di-lepton variables
-       varList.dr_lep1lep2   = hLepP4.DeltaR(h2LepP4);
-       varList.dphi_lep1lep2 = std::fabs(TVector2::Phi_mpi_pi(hLepP4.Phi() - h2LepP4.Phi()));
-       varList.deta_lep1lep2 = std::fabs(hLepP4.Eta() - h2LepP4.Eta());
-       // lepton-tauh variables
-       varList.dr_lep1tauh   = hLepP4.DeltaR(TauhColl[0].P4());
-       varList.dphi_lep1tauh = std::fabs(TVector2::Phi_mpi_pi(hLepP4.Phi() - TauhColl[0].Phi));
-       varList.deta_lep1tauh = std::fabs(hLepP4.Eta() - TauhColl[0].Eta);
-       varList.dr_lep2tauh   = h2LepP4.DeltaR(TauhColl[0].P4());
-       varList.dphi_lep2tauh = std::fabs(TVector2::Phi_mpi_pi(h2LepP4.Phi() - TauhColl[0].Phi));
-       varList.deta_lep2tauh = std::fabs(h2LepP4.Eta() - TauhColl[0].Eta);
-       // tauh-jet variables
-       varList.dr_tauhjet   = (TauhColl[0].P4()).DeltaR(JetColl[0].P4());
-       varList.dphi_tauhjet = std::fabs(TVector2::Phi_mpi_pi(TauhColl[0].Phi - JetColl[0].Phi));
-       varList.deta_tauhjet = std::fabs(JetColl[0].Eta - TauhColl[0].Eta);
-       varList.dr_tauhljet   = (TauhColl[0].P4()).DeltaR(lightJetColl[0].P4());
-       varList.dphi_tauhljet = std::fabs(TVector2::Phi_mpi_pi(TauhColl[0].Phi - lightJetColl[0].Phi));
-       varList.deta_tauhljet = std::fabs(lightJetColl[0].Eta - TauhColl[0].Eta);
-       varList.dr_tauhbjet   = (TauhColl[0].P4()).DeltaR(BJetColl[0].P4());
-       varList.dphi_tauhbjet = std::fabs(TVector2::Phi_mpi_pi(TauhColl[0].Phi - BJetColl[0].Phi));
-       varList.deta_tauhbjet = std::fabs(BJetColl[0].Eta - TauhColl[0].Eta);
-       // lepton-jet variables
-       // -- lep - bJets
-       varList.dr_lep1bjet   = hLepP4.DeltaR(BJetColl[0].P4());
-       varList.dr_lep2bjet   = h2LepP4.DeltaR(BJetColl[0].P4());
-       varList.dphi_lep1bjet = std::fabs(TVector2::Phi_mpi_pi(hLepP4.Phi() - BJetColl[0].Phi));
-       varList.dphi_lep2bjet = std::fabs(TVector2::Phi_mpi_pi(h2LepP4.Phi() - BJetColl[0].Phi));
-       varList.deta_lep1bjet = std::fabs(BJetColl[0].Eta - hLepP4.Eta());
-       varList.deta_lep2bjet = std::fabs(BJetColl[0].Eta - h2LepP4.Eta());
-       // -- lep - lightJets
-       varList.dr_lep1ljet   = hLepP4.DeltaR(lightJetColl[0].P4());
-       varList.dr_lep2ljet   = h2LepP4.DeltaR(lightJetColl[0].P4());
-       varList.dphi_lep1ljet = std::fabs(TVector2::Phi_mpi_pi(hLepP4.Phi() - lightJetColl[0].Phi));
-       varList.dphi_lep2ljet = std::fabs(TVector2::Phi_mpi_pi(h2LepP4.Phi() - lightJetColl[0].Phi));
-       varList.deta_lep1ljet = std::fabs(lightJetColl[0].Eta - hLepP4.Eta());
-       varList.deta_lep2ljet = std::fabs(lightJetColl[0].Eta - h2LepP4.Eta());
-       // lepton - met variables
-       varList.dphi_lep1met  = std::fabs(TVector2::Phi_mpi_pi(hLepP4.Phi() - metp4.Phi()));
-       varList.dphi_lep2met  = std::fabs(TVector2::Phi_mpi_pi(h2LepP4.Phi() - metp4.Phi()));
-       varList.mt_lep1met    = Calculate_MT(hLepP4, metp4);
-       varList.mt_lep2met    = Calculate_MT(h2LepP4, metp4);
-       varList.mt_muon1met   = Calculate_MT(MuonColl[0].P4(), metp4);
-       // di-jets variables
-       varList.dr_min_jets   = minDR;
-       varList.dr_max_jets   = maxDR;
-       varList.dr_bjetljet   = (lightJetColl[0].P4()).DeltaR(BJetColl[0].P4());
-       varList.dphi_bjetljet = std::fabs(TVector2::Phi_mpi_pi(BJetColl[0].Phi - lightJetColl[0].Phi));
-       varList.deta_bjetljet = std::fabs(BJetColl[0].Eta - lightJetColl[0].Eta);
-       
-       skimObj_->fill(varList);
-     }       
-     histf->cd();
+    // Filling the branches of a flat ntuple for skimming
+    if (skimObj_) {
+      TreeVariables varList;
+
+      varList.event         = iEntry;
+      // numbers of objects in final state
+      varList.nLeptons      = nGoodMuon+nGoodEle;
+      varList.nJets         = nGoodJet;
+      varList.nbJets        = nGoodBJet;
+      varList.nlJets        = nGoodlJet;
+      varList.nTauh         = nGoodTauh;
+
+      // --------- Low level variables ---------- //
+      // properties of individual object
+      // ==> Tauh vars
+      varList.px_tauh1      = tauhp4.Px();
+      varList.py_tauh1      = tauhp4.Py();
+      varList.pz_tauh1      = tauhp4.Pz();
+      varList.energy_tauh1  = tauhp4.E();
+      varList.pt_tauh1      = TauhColl[0].PT;
+      varList.eta_tauh1     = std::fabs(TauhColl[0].Eta);
+      varList.phi_tauh1     = std::fabs(TauhColl[0].Phi);
+      // ==> MET vars
+      varList.px_met        = metp4.Px();
+      varList.py_met        = metp4.Py();
+      varList.pz_met        = metp4.Pz();
+      varList.energy_met    = metp4.E();
+      varList.met           = met_->MET;
+      varList.phi_met       = metp4.Phi();
+      // ==> bjet vars
+      varList.px_bjet1      = bjetp4.Px();
+      varList.py_bjet1      = bjetp4.Py();
+      varList.pz_bjet1      = bjetp4.Pz();
+      varList.energy_bjet1  = bjetp4.E();
+      varList.pt_bjet1      = BJetColl[0].PT;
+      varList.eta_bjet1     = std::fabs(BJetColl[0].Eta);
+      varList.phi_bjet1     = std::fabs(BJetColl[0].Phi);
+      // ==> light jet vars
+      varList.px_ljet1      = ljetp4.Px();
+      varList.py_ljet1      = ljetp4.Py();
+      varList.pz_ljet1      = ljetp4.Pz();
+      varList.energy_ljet1  = ljetp4.E();
+      varList.pt_ljet1      = lightJetColl[0].PT;
+      varList.eta_ljet1     = std::fabs(lightJetColl[0].Eta);
+      varList.phi_ljet1     = std::fabs(lightJetColl[0].Phi);
+      // ==> lepton from Chi
+      varList.px_Xlep       = XLepP4.Px();
+      varList.py_Xlep       = XLepP4.Py();
+      varList.pz_Xlep       = XLepP4.Pz();
+      varList.energy_Xlep   = XLepP4.E();
+      varList.pt_Xlep       = XLepP4.Pt();
+      varList.eta_Xlep      = std::fabs(XLepP4.Eta());
+      varList.phi_Xlep      = std::fabs(XLepP4.Phi());
+      // ==> lepton from W
+      varList.px_Wlep       = WLepP4.Px();
+      varList.py_Wlep       = WLepP4.Py();
+      varList.pz_Wlep       = WLepP4.Pz();
+      varList.energy_Xlep   = XLepP4.E();
+      varList.pt_Wlep       = WLepP4.Pt();
+      varList.eta_Wlep      = std::fabs(WLepP4.Eta());
+      varList.phi_Wlep      = std::fabs(WLepP4.Phi());
+
+      // --------- High level variables ---------- //
+      // di-lepton variables
+      varList.scalarSumpt_XlwpWlep = XLepP4.Pt()+WLepP4.Pt();
+      varList.vectorSumpt_XlwpWlep = (XLepP4+WLepP4).Pt();
+      varList.dr_XlepWlep   = XLepP4.DeltaR(WLepP4);
+      varList.dphi_XlepWlep = std::fabs(TVector2::Phi_mpi_pi(XLepP4.Phi() - WLepP4.Phi()));
+      varList.deta_XlepWlep = std::fabs(XLepP4.Eta() - WLepP4.Eta());
+      // lepton-tauh variables
+      varList.dr_Xleptauh   = XLepP4.DeltaR(tauhp4);
+      varList.dphi_Xleptauh = std::fabs(TVector2::Phi_mpi_pi(XLepP4.Phi() - TauhColl[0].Phi));
+      varList.deta_Xleptauh = std::fabs(XLepP4.Eta() - TauhColl[0].Eta);
+      varList.dr_Wleptauh   = WLepP4.DeltaR(tauhp4);
+      varList.dphi_Wleptauh = std::fabs(TVector2::Phi_mpi_pi(WLepP4.Phi() - TauhColl[0].Phi));
+      varList.deta_Wleptauh = std::fabs(WLepP4.Eta() - TauhColl[0].Eta);
+      // tauh-jet variables
+      varList.dr_tauhjet    = (tauhp4).DeltaR(JetColl[0].P4());
+      varList.dphi_tauhjet  = std::fabs(TVector2::Phi_mpi_pi(TauhColl[0].Phi - JetColl[0].Phi));
+      varList.deta_tauhjet  = std::fabs(JetColl[0].Eta - TauhColl[0].Eta);
+      varList.dr_tauhljet   = (tauhp4).DeltaR(ljetp4);
+      varList.dphi_tauhljet = std::fabs(TVector2::Phi_mpi_pi(TauhColl[0].Phi - lightJetColl[0].Phi));
+      varList.deta_tauhljet = std::fabs(lightJetColl[0].Eta - TauhColl[0].Eta);
+      varList.dr_tauhbjet   = (tauhp4).DeltaR(bjetp4);
+      varList.dphi_tauhbjet = std::fabs(TVector2::Phi_mpi_pi(TauhColl[0].Phi - BJetColl[0].Phi));
+      varList.deta_tauhbjet = std::fabs(BJetColl[0].Eta - TauhColl[0].Eta);
+      // lepton-jet variables
+      varList.dr_min_Xlepjets   = minDr_XlepJets;
+      varList.dphi_min_Xlepjets = minDphi_XlepJets;
+      varList.dr_max_Xlepjets   = maxDr_XlepJets;
+      varList.dphi_max_Xlepjets = maxDphi_XlepJets;
+      varList.dr_min_Wlepjets   = minDr_WlepJets;
+      varList.dphi_min_Wlepjets = minDphi_WlepJets;
+      varList.dr_max_Wlepjets   = maxDr_WlepJets;
+      varList.dphi_max_Wlepjets = maxDphi_WlepJets;
+      // -- lep - bJets
+      varList.dr_Xlepbjet   = XLepP4.DeltaR(bjetp4);
+      varList.dr_Wlepbjet   = WLepP4.DeltaR(bjetp4);
+      varList.dphi_Xlepbjet = std::fabs(TVector2::Phi_mpi_pi(XLepP4.Phi() - BJetColl[0].Phi));
+      varList.dphi_Wlepbjet = std::fabs(TVector2::Phi_mpi_pi(WLepP4.Phi() - BJetColl[0].Phi));
+      varList.deta_Xlepbjet = std::fabs(BJetColl[0].Eta - XLepP4.Eta());
+      varList.deta_Wlepbjet = std::fabs(BJetColl[0].Eta - WLepP4.Eta());
+      // -- lep - lightJets
+      varList.dr_Xlepljet   = XLepP4.DeltaR(ljetp4);
+      varList.dr_Wlepljet   = WLepP4.DeltaR(ljetp4);
+      varList.dphi_Xlepljet = std::fabs(TVector2::Phi_mpi_pi(XLepP4.Phi() - lightJetColl[0].Phi));
+      varList.dphi_Wlepljet = std::fabs(TVector2::Phi_mpi_pi(WLepP4.Phi() - lightJetColl[0].Phi));
+      varList.deta_Xlepljet = std::fabs(lightJetColl[0].Eta - XLepP4.Eta());
+      varList.deta_Wlepljet = std::fabs(lightJetColl[0].Eta - WLepP4.Eta());
+      // lepton - met variables
+      varList.dphi_Xlepmet  = std::fabs(TVector2::Phi_mpi_pi(XLepP4.Phi() - metp4.Phi()));
+      varList.dphi_Wlepmet  = std::fabs(TVector2::Phi_mpi_pi(WLepP4.Phi() - metp4.Phi()));
+      varList.mt_Xlepmet    = Calculate_MT(XLepP4, metp4);
+      varList.mt_Wlepmet    = Calculate_MT(WLepP4, metp4);
+      //varList.mt_muon1met   = Calculate_MT(MuonColl[0].P4(), metp4);
+      // di-jets variables
+      varList.dr_min_jets   = minDR;
+      varList.dr_max_jets   = maxDR;
+      varList.dr_bjetljet   = (ljetp4).DeltaR(bjetp4);
+      varList.dphi_bjetljet = std::fabs(TVector2::Phi_mpi_pi(BJetColl[0].Phi - lightJetColl[0].Phi));
+      varList.deta_bjetljet = std::fabs(BJetColl[0].Eta - lightJetColl[0].Eta);
+      // Other observables
+      varList.scalarSumPtVis   = XLepP4.Pt() + WLepP4.Pt() + bjetp4.Pt() + ljetp4.Pt();
+      varList.scalarSumPt      = XLepP4.Pt() + WLepP4.Pt() + bjetp4.Pt() + ljetp4.Pt() + metp4.Pt();
+      varList.effectiveMassVis = (XLepP4+WLepP4+bjetp4+ljetp4).M();
+      varList.effectiveMass    = (XLepP4+WLepP4+bjetp4+ljetp4+metp4).M();
+      varList.M_coll_IC_Xlep   = M_coll_IC_Xlep;
+      varList.M_coll_IC_Wlep   = M_coll_IC_Wlep;
+      varList.HT_Jets          = HT_jets;
+
+      skimObj_->fill(varList);
+    }       
+    histf->cd();
   } 
 }
 

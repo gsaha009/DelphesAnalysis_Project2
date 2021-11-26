@@ -17,33 +17,65 @@ typedef struct
   int nlJets;
   int nTauh;
 
+  float px_tauh1;
+  float py_tauh1;
+  float pz_tauh1;
+  float energy_tauh1;
   float pt_tauh1;
   float eta_tauh1;
   float phi_tauh1;
+
+  float px_met;
+  float py_met;
+  float pz_met;
+  float energy_met;
   float met;
+  float phi_met;
+
+  float px_bjet1;
+  float py_bjet1;
+  float pz_bjet1;
+  float energy_bjet1;
   float pt_bjet1;
   float eta_bjet1;
   float phi_bjet1;
+
+  float px_ljet1;
+  float py_ljet1;
+  float pz_ljet1;
+  float energy_ljet1;
   float pt_ljet1;
   float eta_ljet1;
   float phi_ljet1;
-  float pt_lep1;
-  float pt_lep2;
-  float eta_lep1;
-  float eta_lep2;
-  float phi_lep1;
-  float phi_lep2;
 
-  float dr_lep1lep2;
-  float dphi_lep1lep2;
-  float deta_lep1lep2;
+  float px_Xlep;
+  float py_Xlep;
+  float pz_Xlep;
+  float energy_Xlep;
+  float pt_Xlep;
+  float eta_Xlep;
+  float phi_Xlep;
 
-  float dr_lep1tauh;
-  float dphi_lep1tauh;
-  float deta_lep1tauh;
-  float dr_lep2tauh;
-  float dphi_lep2tauh;
-  float deta_lep2tauh;
+  float px_Wlep;
+  float py_Wlep;
+  float pz_Wlep;
+  float energy_Wlep;
+  float pt_Wlep;
+  float eta_Wlep;
+  float phi_Wlep;
+
+  float scalarSumpt_XlwpWlep;
+  float vectorSumpt_XlwpWlep;
+  float dr_XlepWlep;
+  float dphi_XlepWlep;
+  float deta_XlepWlep;
+
+  float dr_Xleptauh;
+  float dphi_Xleptauh;
+  float deta_Xleptauh;
+  float dr_Wleptauh;
+  float dphi_Wleptauh;
+  float deta_Wleptauh;
 
   float dr_tauhjet;
   float dphi_tauhjet;
@@ -55,31 +87,47 @@ typedef struct
   float dphi_tauhbjet;
   float deta_tauhbjet;
 
-  float dr_lep1bjet;
-  float dr_lep2bjet;
-  float dphi_lep1bjet;
-  float dphi_lep2bjet;
-  float deta_lep1bjet;
-  float deta_lep2bjet;
+  float dr_min_Xlepjets;   
+  float dphi_min_Xlepjets;
+  float dr_max_Xlepjets;   
+  float dphi_max_Xlepjets;
+  float dr_min_Wlepjets;   
+  float dphi_min_Wlepjets;
+  float dr_max_Wlepjets;   
+  float dphi_max_Wlepjets;
+  
+  float dr_Xlepbjet;
+  float dr_Wlepbjet;
+  float dphi_Xlepbjet;
+  float dphi_Wlepbjet;
+  float deta_Xlepbjet;
+  float deta_Wlepbjet;
 
-  float dr_lep1ljet;
-  float dr_lep2ljet;
-  float dphi_lep1ljet;
-  float dphi_lep2ljet;
-  float deta_lep1ljet;
-  float deta_lep2ljet;
+  float dr_Xlepljet;
+  float dr_Wlepljet;
+  float dphi_Xlepljet;
+  float dphi_Wlepljet;
+  float deta_Xlepljet;
+  float deta_Wlepljet;
 
-  float dphi_lep1met;
-  float dphi_lep2met;
-  float mt_lep1met;
-  float mt_lep2met;
-  float mt_muon1met;
+  float dphi_Xlepmet;
+  float dphi_Wlepmet;
+  float mt_Xlepmet;
+  float mt_Wlepmet;
   
   float dr_min_jets;
   float dr_max_jets;
   float dr_bjetljet;
   float dphi_bjetljet;
   float deta_bjetljet;
+
+  float scalarSumPtVis;
+  float scalarSumPt;
+  float effectiveMassVis;
+  float effectiveMass;
+  float M_coll_IC_Xlep;
+  float M_coll_IC_Wlep;
+  float HT_Jets;
   
 } TreeVariables;
 

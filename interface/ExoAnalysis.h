@@ -27,6 +27,7 @@
 #include "TProfile.h"
 
 #include "AnaUtil.h"
+#include "LeptonCand.h"
 #include "ZCandidate.h"
 
 #include "/home/gsaha/Packages/Delphes-3.4.2/classes/DelphesClasses.h"
@@ -40,6 +41,21 @@
 #include "MVAnalysis.h"
 
 using namespace std;
+
+template <typename T>
+void packLeptons(const std::vector<T>& lepList, std::vector<LeptonCand>& candList) {
+  for (const auto& v: lepList) {
+    LeptonCand lc;
+    lc.PT       = v.PT;
+    lc.Eta      = v.Eta;
+    lc.Phi      = v.Phi;
+    lc.Charge   = v.Charge;
+    lc.P4       = v.P4();
+    lc.Flavour  = (typeid(v) == typeid(Muon)) ? 1 : 2;
+    
+    candList.push_back(lc);
+  }
+}
 
 //*****************Basic Templated Class(sorting purpose)***********************//
 template <class T>
