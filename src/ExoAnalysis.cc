@@ -528,74 +528,6 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
     AnaUtil::fillHist1D("Tauh1Eta", TauhColl[0].Eta, 1);
     AnaUtil::fillHist1D("Tauh1Phi", TauhColl[0].Phi, 1);
 
-    // ---- Packing electrons and muons in one container ----- //
-    std::vector<LeptonCand>LepColl;
-    if (nGoodMuon > 0) packLeptons <Muon>     (MuonColl,     LepColl);
-    if (nGoodEle  > 0) packLeptons <Electron> (ElectronColl, LepColl);
-    //sorting lepton candidates                                       
-    std::sort(std::begin(LepColl), std::end(LepColl), PtComparator<LeptonCand>()); 
-
-    bool MuMu  = (LepColl[0].Flavour == 1 && LepColl[1].Flavour == 1) ? true : false;
-    bool EleMu = (MuMu) ? false : true;
-
-    TLorentzVector XLepP4;
-    TLorentzVector WLepP4;
-    if (MuMu) {
-      // Plan to build a tagger to select muon coming from X
-      XLepP4 = LepColl[1].P4;
-      WLepP4 = LepColl[0].P4;
-    }
-    else if (EleMu) {
-      if (LepColl[0].Flavour == 1) {
-	XLepP4 = LepColl[0].P4;
-	WLepP4 = LepColl[1].P4;
-      }
-      else {
-	XLepP4 = LepColl[1].P4;
-	WLepP4 = LepColl[0].P4;
-      }
-    }
-    else std::cerr << "Wrong lepton selection !!! :( \n";
-
-    AnaUtil::fillHist1D("XlepPt",  XLepP4.Pt());
-    AnaUtil::fillHist1D("XlepEta", XLepP4.Eta());
-    AnaUtil::fillHist1D("WlepPt",  WLepP4.Pt());
-    AnaUtil::fillHist1D("WlepEta", WLepP4.Eta());
-
-    float HT_jets = 0.0;
-    double minDr_XlepJets = 999.9;
-    double minDr_WlepJets = 999.9;
-    double maxDr_XlepJets = -999.9;
-    double maxDr_WlepJets = -999.9;
-    double minDphi_XlepJets = 999.9;
-    double minDphi_WlepJets = 999.9;
-    double maxDphi_XlepJets = -999.9;
-    double maxDphi_WlepJets = -999.9;
-    for (auto &jet : JetColl) {
-      HT_jets += jet.PT;
-      double dr_jetXlep   = XLepP4.DeltaR(jet.P4());
-      double dphi_jetXlep = std::fabs(TVector2::Phi_mpi_pi(jet.P4().Phi() - XLepP4.Phi())); 
-      double dr_jetWlep = WLepP4.DeltaR(jet.P4());
-      double dphi_jetWlep = std::fabs(TVector2::Phi_mpi_pi(jet.P4().Phi() - WLepP4.Phi()));
-      if (dr_jetXlep <= minDr_XlepJets) minDr_XlepJets = dr_jetXlep;
-      if (dr_jetWlep <= minDr_WlepJets) minDr_WlepJets = dr_jetWlep;
-      if (dr_jetXlep > maxDr_XlepJets)  maxDr_XlepJets = dr_jetXlep;
-      if (dr_jetWlep > maxDr_WlepJets)  maxDr_WlepJets = dr_jetWlep;
-      if (dphi_jetXlep <= minDphi_XlepJets) minDphi_XlepJets = dphi_jetXlep;
-      if (dphi_jetWlep <= minDphi_WlepJets) minDphi_WlepJets = dphi_jetWlep;
-      if (dphi_jetXlep > maxDphi_XlepJets)  maxDphi_XlepJets = dphi_jetXlep;
-      if (dphi_jetWlep > maxDphi_WlepJets)  maxDphi_WlepJets = dphi_jetWlep;
-    }
-    AnaUtil::fillHist1D ("HT_Jets", HT_jets);
-    AnaUtil::fillHist1D ("minDr_XlepJets", minDr_XlepJets);
-    AnaUtil::fillHist1D ("maxDr_XlepJets", maxDr_XlepJets);
-    AnaUtil::fillHist1D ("minDphi_XlepJets", minDphi_XlepJets);
-    AnaUtil::fillHist1D ("maxDphi_XlepJets", maxDphi_XlepJets);
-    AnaUtil::fillHist1D ("minDr_WlepJets", minDr_WlepJets);
-    AnaUtil::fillHist1D ("maxDr_WlepJets", maxDr_WlepJets);
-    AnaUtil::fillHist1D ("minDphi_WlepJets", minDphi_WlepJets);
-    AnaUtil::fillHist1D ("maxDphi_WlepJets", maxDphi_WlepJets);
-          
     size_t nLoop2Ele  = (nGoodEle >= 2)  ? 2 : nGoodEle;
     size_t nLoop2Mu   = (nGoodMuon >= 2) ? 2 : nGoodMuon;
     size_t nLoop4Jet  = (nGoodJet >= 4)  ? 4 : nGoodJet;
@@ -714,6 +646,76 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
     }
 
     AnaUtil::fillHist1D("IM_minimum_lightJets",min_invM, 1.0);
+
+
+    // ---- Packing electrons and muons in one container ----- //
+    std::vector<LeptonCand>LepColl;
+    if (nGoodMuon > 0) packLeptons <Muon>     (MuonColl,     LepColl);
+    if (nGoodEle  > 0) packLeptons <Electron> (ElectronColl, LepColl);
+    //sorting lepton candidates                                       
+    std::sort(std::begin(LepColl), std::end(LepColl), PtComparator<LeptonCand>()); 
+
+    bool MuMu  = (LepColl[0].Flavour == 1 && LepColl[1].Flavour == 1) ? true : false;
+    bool EleMu = (MuMu) ? false : true;
+
+    TLorentzVector XLepP4;
+    TLorentzVector WLepP4;
+    if (MuMu) {
+      // Plan to build a tagger to select muon coming from X
+      XLepP4 = LepColl[1].P4;
+      WLepP4 = LepColl[0].P4;
+    }
+    else if (EleMu) {
+      if (LepColl[0].Flavour == 1) {
+	XLepP4 = LepColl[0].P4;
+	WLepP4 = LepColl[1].P4;
+      }
+      else {
+	XLepP4 = LepColl[1].P4;
+	WLepP4 = LepColl[0].P4;
+      }
+    }
+    else std::cerr << "Wrong lepton selection !!! :( \n";
+
+    AnaUtil::fillHist1D("XlepPt",  XLepP4.Pt());
+    AnaUtil::fillHist1D("XlepEta", XLepP4.Eta());
+    AnaUtil::fillHist1D("WlepPt",  WLepP4.Pt());
+    AnaUtil::fillHist1D("WlepEta", WLepP4.Eta());
+
+    float HT_jets = 0.0;
+    double minDr_XlepJets = 999.9;
+    double minDr_WlepJets = 999.9;
+    double maxDr_XlepJets = -999.9;
+    double maxDr_WlepJets = -999.9;
+    double minDphi_XlepJets = 999.9;
+    double minDphi_WlepJets = 999.9;
+    double maxDphi_XlepJets = -999.9;
+    double maxDphi_WlepJets = -999.9;
+    for (auto &jet : JetColl) {
+      HT_jets += jet.PT;
+      double dr_jetXlep   = XLepP4.DeltaR(jet.P4());
+      double dphi_jetXlep = std::fabs(TVector2::Phi_mpi_pi(jet.P4().Phi() - XLepP4.Phi())); 
+      double dr_jetWlep = WLepP4.DeltaR(jet.P4());
+      double dphi_jetWlep = std::fabs(TVector2::Phi_mpi_pi(jet.P4().Phi() - WLepP4.Phi()));
+      if (dr_jetXlep <= minDr_XlepJets) minDr_XlepJets = dr_jetXlep;
+      if (dr_jetWlep <= minDr_WlepJets) minDr_WlepJets = dr_jetWlep;
+      if (dr_jetXlep > maxDr_XlepJets)  maxDr_XlepJets = dr_jetXlep;
+      if (dr_jetWlep > maxDr_WlepJets)  maxDr_WlepJets = dr_jetWlep;
+      if (dphi_jetXlep <= minDphi_XlepJets) minDphi_XlepJets = dphi_jetXlep;
+      if (dphi_jetWlep <= minDphi_WlepJets) minDphi_WlepJets = dphi_jetWlep;
+      if (dphi_jetXlep > maxDphi_XlepJets)  maxDphi_XlepJets = dphi_jetXlep;
+      if (dphi_jetWlep > maxDphi_WlepJets)  maxDphi_WlepJets = dphi_jetWlep;
+    }
+    AnaUtil::fillHist1D ("HT_Jets", HT_jets);
+    AnaUtil::fillHist1D ("minDr_XlepJets", minDr_XlepJets);
+    AnaUtil::fillHist1D ("maxDr_XlepJets", maxDr_XlepJets);
+    AnaUtil::fillHist1D ("minDphi_XlepJets", minDphi_XlepJets);
+    AnaUtil::fillHist1D ("maxDphi_XlepJets", maxDphi_XlepJets);
+    AnaUtil::fillHist1D ("minDr_WlepJets", minDr_WlepJets);
+    AnaUtil::fillHist1D ("maxDr_WlepJets", maxDr_WlepJets);
+    AnaUtil::fillHist1D ("minDphi_WlepJets", minDphi_WlepJets);
+    AnaUtil::fillHist1D ("maxDphi_WlepJets", maxDphi_WlepJets);
+          
 
     // -------------------- NEW --------------------- //
     //mT of leading lepton and met
