@@ -10,15 +10,26 @@
 
 typedef struct  
 {
+  float pt_tauh1;
   float met;
-  float hLepPt;
-  float X_tauhPt;
-  float DR_Z_l1l2;
-  float DR_Xmu_Xtau;
-  float X_muMetMT;
-  float DPhi_Z_Xmu;
-  float XHelicity_Angle;
-  float XZPlane_Angle;
+  float mt_Wlepmet;
+  float pt_bjet1;
+  float dphi_Wleptauh;
+  float dphi_Xleptauh;
+  float pt_Xlep;
+  float pt_Wlep;
+  float vectorSumpt_XlwpWlep;
+  float dr_XlepWlep;
+  float dphi_tauhbjet;
+  float dr_min_Xlepjets;
+  float dr_min_Wlepjets;
+  float deta_Wlepbjet;
+  float dphi_Xlepmet;
+  float dphi_Wlepmet;
+  float dr_min_jets;
+  float dphi_bjetljet;
+  float effectiveMass;
+  float HT_Jets;
   
 } InputVariables;
 

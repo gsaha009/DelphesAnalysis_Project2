@@ -72,7 +72,7 @@ def main():
 
     infilepath   = '/home/gsaha/Data/SIGNALs'
     analysispath = os.getcwd()
-    jobcardpath  = os.path.join(analysispath, 'JobCards') 
+    jobcardpath  = os.path.join(analysispath, 'JobCards_'+masstag) 
     joboutpath   = os.path.join(analysispath, 'JobOutput_'+masstag)
     EXE          = os.path.join(analysispath, 'FCNC.exe') 
     
@@ -168,7 +168,7 @@ def main():
         print(f'\t\t cross-section : {xsec}, nEvents : {nEntries}')    
         ptab.add_row([ptab_handle, xsec, nEntries])
 
-        BDT_WEIGHT1 = f'/home/gsaha/Work/DelphesML/BDT/dataset_{masstag}/weights/TMVAClassification_BDT.weights.xml'
+        BDT_WEIGHT1 = f'/home/gsaha/Work/DelphesML/Project2/BDT/IC_Model_ChiMass_{args.MX}/TMVAClassification_BDTD.weights.xml'
 
         replaceAll(jobFile, 'MVAxmlFile BDT_WEIGHT1', 'MVAxmlFile '+BDT_WEIGHT1)
         replaceAll(jobFile, 'mvaInputFile mvaIn_SAMPLE', 'mvaInputFile '+mvaInFileName)
@@ -185,17 +185,17 @@ def main():
             replaceAll(jobFile, 'cutbased val', 'cutbased 0')
             replaceAll(jobFile, 'mvabased val', 'mvabased 1')
             replaceAll(jobFile, 'createMVATree val', 'createMVATree 1') if args.skim else replaceAll(jobFile, 'createMVATree val', 'createMVATree 0')
-            replaceAll(jobFile, 'readMVA val', 'readMVA 1')
+            replaceAll(jobFile, 'readMVA val', 'readMVA 1') if not args.skim else replaceAll(jobFile, 'readMVA val', 'readMVA 0') 
         else:
             replaceAll(jobFile, 'createMVATree val', 'createMVATree 0')
             replaceAll(jobFile, 'readMVA val', 'readMVA 0')            
             raise RuntimeError("Mention BDT or CUT")
 
-        if MX == '20':
+        if MX == '60':
             replaceAll(jobFile, 'lowXmass val', 'lowXmass 1')
             replaceAll(jobFile, 'highXmass val', 'highXmass 0')
             replaceAll(jobFile, 'bdtThreshold score', 'bdtThreshold -0.03')
-        elif MX == '60':
+        elif MX == '90':
             replaceAll(jobFile, 'lowXmass val', 'lowXmass 0')
             replaceAll(jobFile, 'highXmass val', 'highXmass 1')
             replaceAll(jobFile, 'bdtThreshold score', 'bdtThreshold -0.01')

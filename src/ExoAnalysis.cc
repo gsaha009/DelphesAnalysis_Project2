@@ -298,6 +298,8 @@ void ExoAnalysis::bookHistograms()
   new TH1D ("InvM_coln_XlepTauh_IC_EleMu", "Collinear mass of #chi lepton and #tau_{h} (GeV)", 100, 0, 200);
   new TH1D ("InvM_coln_WlepTauh_IC_EleMu", "Collinear mass of W#pm lepton and #tau_{h} (GeV)", 100, 0, 200);
 
+  new TH1D("BDT_Score", "BDT Response", 40, -0.5, 0.5);
+  new TH1D("BDT_Score_fineBin", "BDT Response", 2000, -1.0, 1.0);
   
   histf->cd();
   histf->ls();
@@ -902,9 +904,41 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
       skimObj_->fill(varList);
     }       
     histf->cd();
-  } 
-}
 
+    double mvaOut = -999.9;
+
+    if (_readMVA) {
+      InputVariables varList;
+
+      varList.pt_tauh1             = TauhColl[0].PT;
+      varList.met                  = met_->MET;
+      varList.mt_Wlepmet           = Calculate_MT(WLepP4, metp4);
+      varList.pt_bjet1             = BJetColl[0].PT;
+      varList.dphi_Wleptauh        = std::fabs(TVector2::Phi_mpi_pi(WLepP4.Phi() - TauhColl[0].Phi));
+      varList.dphi_Xleptauh        = std::fabs(TVector2::Phi_mpi_pi(XLepP4.Phi() - TauhColl[0].Phi));
+      varList.pt_Xlep              = XLepP4.Pt();
+      varList.pt_Wlep              = WLepP4.Pt();
+      varList.vectorSumpt_XlwpWlep = (XLepP4+WLepP4).Pt();
+      varList.dr_XlepWlep          = XLepP4.DeltaR(WLepP4);
+      varList.dphi_tauhbjet        = std::fabs(TVector2::Phi_mpi_pi(TauhColl[0].Phi - BJetColl[0].Phi));
+      varList.dr_min_Xlepjets      = minDr_XlepJets;
+      varList.dr_min_Wlepjets      = minDr_WlepJets;
+      varList.deta_Wlepbjet        = std::fabs(BJetColl[0].Eta - WLepP4.Eta());
+      varList.dphi_Xlepmet         = std::fabs(TVector2::Phi_mpi_pi(XLepP4.Phi() - metp4.Phi()));
+      varList.dphi_Wlepmet         = std::fabs(TVector2::Phi_mpi_pi(WLepP4.Phi() - metp4.Phi()));
+      varList.dr_min_jets          = minDR;
+      varList.dphi_bjetljet        = std::fabs(TVector2::Phi_mpi_pi(BJetColl[0].Phi - lightJetColl[0].Phi));
+      varList.effectiveMass        = (XLepP4+WLepP4+bjetp4+ljetp4+metp4).M();
+      varList.HT_Jets              = HT_jets;
+      
+      mvaOut = _mvaObj->evaluate(_MVAnetwork, varList);
+    }
+    histf->cd();
+
+    AnaUtil::fillHist1D("BDT_Score", mvaOut);
+    AnaUtil::fillHist1D("BDT_Score_fineBin", mvaOut);
+  }
+}
 
 void ExoAnalysis::endJob() {
   
