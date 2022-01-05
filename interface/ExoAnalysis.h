@@ -272,6 +272,8 @@ public:
   bool readGenInfo() const {return readGenInfo_;}
   bool isMC() const {return isMC_;}
   bool isSignal() const {return isSignal_;}
+  bool isSL() const {return _isSL;}
+  bool isDL() const {return _isDL;}
 
   bool readJob(const std::string& jobFile, int& nFiles);
   bool beginJob();
@@ -333,8 +335,8 @@ public:
   //MVA
   bool _createMVATree {false};
   bool _readMVA {false};
-  bool _isXZ {false};
-  bool _isH2Z {false};
+  bool _isDL {false};
+  bool _isSL {false};
   std::string _mvaInputFile {""};
   std::string _MVAnetwork {""};
   std::string _MVAxmlFile {""};

@@ -112,11 +112,8 @@ void ExoAnalysis::bookHistograms()
   new TH1D("JetCutFlow", "Jet CutFlow", 5, -0.5, 4.5);
   new TH1D("PhotonCutFlow", "Photon CutFlow", 3, -0.5, 2.5);
 
-  //histf->cd();
-  //histf->cd("Analysis");
   new TH1D("evtCutFlow", "Event CutFlow", 8, -0.5, 7.5);
   new TH1D("evtCutFlowWt", "HepMCEvent Weight", 8, -0.5, 7.5);
-  //new TH1D("nvtx", "Number of Primary vertices", 60, -0.5, 59.5);
 
   new TH1D("met", "Missing Tranverse Energy", 40, 0, 200);
   new TH1D("nGoodMuon", "Number of Good Muons", 10, -0.5, 9.5);
@@ -485,34 +482,67 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
     AnaUtil::fillHist1D("evtCutFlow", 1, evWt);
     AnaUtil::fillHist1D("evtCutFlowWt", 1, lumiWt);
     
-    if (nGoodMuon + nGoodEle != 2) continue;
-    AnaUtil::fillHist1D("evtCutFlow", 2, evWt);
-    AnaUtil::fillHist1D("evtCutFlowWt", 2, lumiWt);
-    
-    if (nGoodMuon < 1) continue;
-    AnaUtil::fillHist1D("evtCutFlow", 3, evWt);
-    AnaUtil::fillHist1D("evtCutFlowWt", 3, lumiWt);
-    
-    if (nGoodTauh != 1) continue;
-    AnaUtil::fillHist1D("evtCutFlow", 4, evWt);
-    AnaUtil::fillHist1D("evtCutFlowWt", 4, lumiWt);     
+    if (isDL()) {
+      if (nGoodMuon + nGoodEle != 2) continue;
+      AnaUtil::fillHist1D("evtCutFlow", 2, evWt);
+      AnaUtil::fillHist1D("evtCutFlowWt", 2, lumiWt);
+      
+      if (nGoodMuon < 1) continue;
+      AnaUtil::fillHist1D("evtCutFlow", 3, evWt);
+      AnaUtil::fillHist1D("evtCutFlowWt", 3, lumiWt);
+      
+      if (nGoodTauh != 1) continue;
+      AnaUtil::fillHist1D("evtCutFlow", 4, evWt);
+      AnaUtil::fillHist1D("evtCutFlowWt", 4, lumiWt);     
+      
+      bool has2ndBjet = (nGoodBJet > 1 && BJetColl[1].PT > 30) ? true : false;
+      
+      if (nGoodlJet < 1) continue;
+      AnaUtil::fillHist1D("evtCutFlow", 5, evWt);
+      AnaUtil::fillHist1D("evtCutFlowWt", 5, lumiWt);
+      
+      if (nGoodBJet < 1 || has2ndBjet) continue;
+      AnaUtil::fillHist1D("evtCutFlow", 6, evWt);
+      AnaUtil::fillHist1D("evtCutFlowWt", 6, lumiWt);
+      
+      std::vector<ZCandidate> ZCandList;
+      if (nGoodMuon >= 2) ZSelector(MuonColl, ZCandList);
+      if (nGoodEle  >= 2) ZSelector(ElectronColl, ZCandList);
+      if (ZCandList.size() > 0 && ZCandList[0].massDiff < 15) continue;
+      AnaUtil::fillHist1D("evtCutFlow", 7, evWt);
+      AnaUtil::fillHist1D("evtCutFlowWt", 7, lumiWt);
+    }
+    else if (isSL()) {
+      if (nGoodMuon != 1) continue;
+      AnaUtil::fillHist1D("evtCutFlow", 2, evWt);
+      AnaUtil::fillHist1D("evtCutFlowWt", 2, lumiWt);
+      
+      if (nGoodEle != 0) continue;
+      AnaUtil::fillHist1D("evtCutFlow", 3, evWt);
+      AnaUtil::fillHist1D("evtCutFlowWt", 3, lumiWt);
 
-    bool has2ndBjet = (nGoodBJet > 1 && BJetColl[1].PT > 30) ? true : false;
-     
-    if (nGoodlJet < 1) continue;
-    AnaUtil::fillHist1D("evtCutFlow", 5, evWt);
-    AnaUtil::fillHist1D("evtCutFlowWt", 5, lumiWt);
-     
-    if (nGoodBJet < 1 || has2ndBjet) continue;
-    AnaUtil::fillHist1D("evtCutFlow", 6, evWt);
-    AnaUtil::fillHist1D("evtCutFlowWt", 6, lumiWt);
+      if (nGoodTauh != 1) continue;
+      AnaUtil::fillHist1D("evtCutFlow", 4, evWt);
+      AnaUtil::fillHist1D("evtCutFlowWt", 4, lumiWt);     
 
-    std::vector<ZCandidate> ZCandList;
-    if (nGoodMuon >= 2) ZSelector(MuonColl, ZCandList);
-    if (nGoodEle  >= 2) ZSelector(ElectronColl, ZCandList);
-    if (ZCandList.size() > 0 && ZCandList[0].massDiff < 15) continue;
-    AnaUtil::fillHist1D("evtCutFlow", 7, evWt);
-    AnaUtil::fillHist1D("evtCutFlowWt", 7, lumiWt);
+      if (nGoodlJet < 3) continue;
+      AnaUtil::fillHist1D("evtCutFlow", 5, evWt);
+      AnaUtil::fillHist1D("evtCutFlowWt", 5, lumiWt);
+
+      bool has2ndBjet = (nGoodBJet > 1 && BJetColl[1].PT > 30) ? true : false;
+      if (nGoodBJet < 1 || has2ndBjet) continue;
+      AnaUtil::fillHist1D("evtCutFlow", 6, evWt);
+      AnaUtil::fillHist1D("evtCutFlowWt", 6, lumiWt);
+
+      std::vector<ZCandidate> ZCandList;
+      if (nGoodMuon >= 2) ZSelector(MuonColl, ZCandList);
+      if (nGoodEle  >= 2) ZSelector(ElectronColl, ZCandList);
+      if (ZCandList.size() > 0) continue;
+      AnaUtil::fillHist1D("evtCutFlow", 7, evWt);
+      AnaUtil::fillHist1D("evtCutFlowWt", 7, lumiWt);
+    }
+    else 
+      std::cerr<<"Channel isnt mentioned properly in the jobcard!\n";
     // ---------------------------------------------- //
    
 
@@ -944,16 +974,32 @@ void ExoAnalysis::endJob() {
   
   histf->cd();
   //histf->cd("Analysis");
-  vector<string> evLabels {
-    "Events processed",
-      "pass obj selection",
-      "nMu + nEle == 2",
-      "nMu >= 1",
-      "nTau >= 1",
-      "NLightJet >= 1",
-      "nBJets == 1",
-      "no Z"
+  vector<string> evLabels;
+  if (isDL()) 
+    evLabels = 
+      {
+	"Events processed",
+	"pass obj selection",
+	"nMu + nEle == 2",
+	"nMu >= 1",
+	"nTau >= 1",
+	"NLightJet >= 1",
+	"nBJets == 1",
+	"no Z"
       };
+  else if (isSL())
+    evLabels =
+      {
+        "Events processed",
+	"pass obj selection",
+	"nMu = 1",
+	"nEle = 0",
+	"nTau = 1",
+	"NLightJet >= 3",
+	"nBJets == 1",
+	"no Z"
+      };
+  
   AnaUtil::SetEvtCutFlowBinLabels("evtCutFlow",evLabels);
   AnaUtil::showEfficiency("evtCutFlow", evLabels, "Event Selection");
   AnaUtil::showEfficiency("evtCutFlowWt", evLabels, "Event Selection : Lumi Scaled");  
@@ -1031,10 +1077,10 @@ bool ExoAnalysis::readJob(const string& jobFile, int& nFiles)
       _mvaInputFile = value;
     //else if (key == "mvaOutputFile")
     //  _mvaOutputFile = value;
-   // else if (key == "isXZ")
-   //   isXZ_ = (atoi(value.c_str()) > 0) ? true : false;
-   // else if (key == "isH2Z")
-     // isH2Z_ = (atoi(value.c_str()) > 0) ? true : false;
+   else if (key == "isDL")
+      _isDL = (atoi(value.c_str()) > 0) ? true : false;
+   else if (key == "isSL")
+      _isSL = (atoi(value.c_str()) > 0) ? true : false;
   //  else if (key == "CutOnMVAScorePlane")
     //  _CutOnMVAScorePlane = (atoi(value.c_str()) > 0) ? true : false;    
     else if (key == "eventId" && tokens.size() == 4)

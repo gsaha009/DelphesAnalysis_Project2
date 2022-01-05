@@ -26,12 +26,13 @@ def replaceAll(file,searchExp,replaceExp):
                                             
 def main():
     parser = argparse.ArgumentParser(description='JobCardMaker')
-    parser.add_argument('--proc', type=str, action='store', required=True, help='name of the process {XZ or HZ}')
-    parser.add_argument('--MX', type=str, action='store', required=True, help='Mass of X')
-    parser.add_argument('--tag', type=str, action='store', required=True, help='BDT | CUT | DNN ...')
-    parser.add_argument('--skim', action='store_true', required=False, help='')
-    parser.add_argument('--SignalOnly', action='store_true', required=False, help='')
-    parser.add_argument('--BkgOnly', action='store_true', required=False, help='')
+    parser.add_argument('--proc',        type=str, action='store',      required=False, default='TTbarFCNC', help='name of the process {XZ or HZ}')
+    parser.add_argument('--channel',     type=str, action='store',      required=True,                       help='DL | SL')
+    parser.add_argument('--MX',          type=str, action='store',      required=True,                       help='Mass of X')
+    parser.add_argument('--tag',         type=str, action='store',      required=True,                       help='BDT | CUT | DNN ...')
+    parser.add_argument('--skim',                  action='store_true', required=False,                      help='need to skim?')
+    parser.add_argument('--SignalOnly',            action='store_true', required=False,                      help='jobs only for signal samples')
+    parser.add_argument('--BkgOnly',               action='store_true', required=False,                      help='jobs only for bkg samples')
 
     args = parser.parse_args()
     
@@ -67,8 +68,9 @@ def main():
         'Bkg_ZZZ' :              [0.0158, '/home/gsaha/sshfs_mount/lacie8tby/Exotic/Delphes/2016/ZZZ']
     }
 
-    MX  = args.MX
-    masstag = args.proc+'_ChiMass_'+str(MX)
+    MX      = args.MX
+    chan    = args.channel
+    masstag = args.proc+'_ChiMass_'+str(MX)+'_'+chan
 
     infilepath   = '/home/gsaha/Data/SIGNALs'
     analysispath = os.getcwd()
@@ -200,6 +202,12 @@ def main():
             replaceAll(jobFile, 'highXmass val', 'highXmass 1')
             replaceAll(jobFile, 'bdtThreshold score', 'bdtThreshold -0.01')
 
+        if chan == 'DL':
+            replaceAll(jobFile, 'isDL val', 'isDL 1')
+            replaceAll(jobFile, 'isSL val', 'isSL 0')
+        elif chan == 'SL':
+            replaceAll(jobFile, 'isDL val', 'isDL 0')
+            replaceAll(jobFile, 'isSL val', 'isSL 1')
 
         with open(jobFile, 'a') as outf:
             for item in files:
