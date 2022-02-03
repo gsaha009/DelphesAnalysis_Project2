@@ -29,7 +29,7 @@ def main():
     parser.add_argument('--proc',        type=str, action='store',      required=False, default='TTbarFCNC', help='name of the process {XZ or HZ}')
     parser.add_argument('--channel',     type=str, action='store',      required=True,                       help='DL | SL')
     parser.add_argument('--MX',          type=str, action='store',      required=True,                       help='Mass of X')
-    parser.add_argument('--tag',         type=str, action='store',      required=True,                       help='BDT | CUT | DNN ...')
+    parser.add_argument('--tag',         type=str, action='store',      required=True,                       help='CUT | MVA')
     parser.add_argument('--skim',                  action='store_true', required=False,                      help='need to skim?')
     parser.add_argument('--SignalOnly',            action='store_true', required=False,                      help='jobs only for signal samples')
     parser.add_argument('--BkgOnly',               action='store_true', required=False,                      help='jobs only for bkg samples')
@@ -183,7 +183,7 @@ def main():
             replaceAll(jobFile, 'mvabased val', 'mvabased 0')
             replaceAll(jobFile, 'createMVATree val', 'createMVATree 1') if args.skim else replaceAll(jobFile, 'createMVATree val', 'createMVATree 0')
             replaceAll(jobFile, 'readMVA val', 'readMVA 0')
-        elif args.tag == "BDT":
+        elif args.tag == "MVA":
             replaceAll(jobFile, 'cutbased val', 'cutbased 0')
             replaceAll(jobFile, 'mvabased val', 'mvabased 1')
             replaceAll(jobFile, 'createMVATree val', 'createMVATree 1') if args.skim else replaceAll(jobFile, 'createMVATree val', 'createMVATree 0')

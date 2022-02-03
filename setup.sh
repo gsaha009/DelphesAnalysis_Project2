@@ -4,7 +4,9 @@ echo "W A R N I N G : >>------->  Do not forget to use the alias 'gcc9' [to enab
 APPDIR=/home/gsaha
 WORKDIR=$APPDIR/Work/DelphesAnalysis_Project2
 ROOTPATH=/home/gsaha/Packages/buildroot/bin/thisroot.sh
+ROOT_INCLUDE_PATH=/home/gsaha/Packages/Delphes-3.4.2/external/ExRootAnalysis
 cd $WORKDIR
+export PATH=ROOT_INCLUDE_PATH:$PATH
 export LD_LIBRARY_PATH=/home/gsaha/Packages/Delphes-3.4.2/:$LD_LIBRARY_PATH
 echo libPath=$LD_LIBRARY_PATH
 echo "Getting ROOT-6.16"

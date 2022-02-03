@@ -274,6 +274,8 @@ public:
   bool isSignal() const {return isSignal_;}
   bool isSL() const {return _isSL;}
   bool isDL() const {return _isDL;}
+  bool isHighMassX() const {return _highXmass;}
+  bool isLowMassX()  const {return _lowXmass;}
 
   bool readJob(const std::string& jobFile, int& nFiles);
   bool beginJob();
@@ -297,6 +299,7 @@ public:
   bool jetLeptonCleaning(const Jet& jet, std::vector <Muon> muList_, std::vector <Electron> eleList_, double dR);
   bool jetTauhCleaning(const Jet& jet, std::vector <Jet> TauhList_, double dR);
   void dumpGenInfo(TClonesArray *gen, ostream& os);
+  void wjetsSelector(const std::vector <Jet>& alljetList_, std::vector <Jet>& wjetspair);
 
   //Values are kept in map from JobCard
   const std::map<std::string, double>& lumiWtMap() const {return AnaUtil::cutMap(hmap_, "lumiWtList");}
@@ -337,6 +340,8 @@ public:
   bool _readMVA {false};
   bool _isDL {false};
   bool _isSL {false};
+  bool _highXmass {false};
+  bool _lowXmass {false};
   std::string _mvaInputFile {""};
   std::string _MVAnetwork {""};
   std::string _MVAxmlFile {""};
