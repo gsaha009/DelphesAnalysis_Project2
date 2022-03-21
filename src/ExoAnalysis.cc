@@ -1156,7 +1156,7 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
       if (skimObj_) {
 	TreeVariablesDL varList;
 	
-	varList.event         = evt_no;
+	varList.event         = iEntry;
 	varList.event_wt      = event_weight;
 	// numbers of objects in final state
 	varList.nleptons      = nGoodMuon + nGoodEle;
@@ -1550,7 +1550,7 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
       if (skimObj_) {
 	TreeVariablesSL varList;
 	
-	varList.event         = evt_no;
+	varList.event         = iEntry;
 	varList.event_wt      = event_weight;
 	// numbers of objects in final state
 	varList.nleptons      = nGoodMuon+nGoodEle;
