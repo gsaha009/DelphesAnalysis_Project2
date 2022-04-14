@@ -39,6 +39,7 @@
 
 #include "MVASkim.h"
 #include "MVAnalysis.h"
+#include "HistBooker.h"
 
 using namespace std;
 
