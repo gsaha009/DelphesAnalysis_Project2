@@ -299,7 +299,7 @@ class MVASkim {
     
 public:
 
-  MVASkim(const std::string& filename);
+  MVASkim(const std::string& filename, bool SL, bool DL);
   virtual ~MVASkim();
 
   void fill(const TreeVariablesDL& varList);

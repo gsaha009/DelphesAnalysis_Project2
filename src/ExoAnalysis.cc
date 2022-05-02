@@ -73,18 +73,18 @@ bool ExoAnalysis::beginJob()
   
   if(_createMVATree) {
 #ifdef TRUE_CPP14
-    skimObj_ = std::make_unique <MVASkim> (_mvaInputFile);
+    skimObj_ = std::make_unique <MVASkim> (_mvaInputFile, isSL(), isDL());
 #else
-    skimObj_ = std::unique_ptr <MVASkim>(new MVASkim (_mvaInputFile));
+    skimObj_ = std::unique_ptr <MVASkim>(new MVASkim (_mvaInputFile, isSL(), isDL()));
 #endif
     if (!skimObj_) return false;
   }
   
   else if (_readMVA) {
 #ifdef TRUE_CPP14
-    _mvaObj = std::make_unique<MVAnalysis>(_MVAnetwork, _MVAxmlFile);
+    _mvaObj = std::make_unique<MVAnalysis>(_MVAnetwork, _MVAxmlFile, isSL(), isDL());
 #else
-    _mvaObj = std::unique_ptr <MVAnalysis>(new MVAnalysis (_MVAnetwork, _MVAxmlFile));
+    _mvaObj = std::unique_ptr <MVAnalysis>(new MVAnalysis (_MVAnetwork, _MVAxmlFile, isSL(), isDL()));
 #endif
     if (!_mvaObj) return false;
   }
@@ -158,7 +158,7 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
     treeReader->ReadEntry(iEntry); // Load selected branches with data from spacified event
 
     HepMCEvent *event   = (HepMCEvent*) BrEvent -> At(0); 
-    int evt_no          = event -> Number;
+    //int evt_no          = event -> Number;
     float event_weight  = event -> Weight; // original event weight 
     //float cross_section = event -> CrossSection; // in pb
     //float cross_section_err = event -> CrossSectionError; // in pb
@@ -258,6 +258,8 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
       AnaUtil::fillHist1D("TauhCutFlow", 1, evWt);
       if (std::abs(tauj.Eta) >= 2.4) continue;
       AnaUtil::fillHist1D("TauhCutFlow", 2, evWt);
+      if (!(jetLeptonCleaning(tauj, MuonColl, ElectronColl, 0.4))) continue;
+      AnaUtil::fillHist1D("TauhCutFlow", 3, evWt);
       TauhColl.push_back(tauj);
     }
     std::sort(std::begin(TauhColl), std::end(TauhColl), PtComparator<Jet>());
@@ -463,22 +465,22 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
       
       if (nGoodTauh != 1) continue;
       AnaUtil::fillHist1D("evtCutFlow", 4, evWt);
-      AnaUtil::fillHist1D("evtCutFlowWt", 4, lumiWt);     
-      
-      bool has2ndBjet = (nGoodBJet > 1 && BJetColl[1].PT > 30) ? true : false;
+      AnaUtil::fillHist1D("evtCutFlowWt", 4, lumiWt);
       
       if (nGoodlJet < 1) continue;
       AnaUtil::fillHist1D("evtCutFlow", 5, evWt);
       AnaUtil::fillHist1D("evtCutFlowWt", 5, lumiWt);
       
+      bool has2ndBjet = (nGoodBJet > 1 && BJetColl[1].PT > 30) ? true : false;
       if (nGoodBJet < 1 || has2ndBjet) continue;
+      //if (nGoodBJet != 1) continue;
       AnaUtil::fillHist1D("evtCutFlow", 6, evWt);
       AnaUtil::fillHist1D("evtCutFlowWt", 6, lumiWt);
       
       std::vector<ZCandidate> ZCandList;
       if (nGoodMuon >= 2) ZSelector(MuonColl, ZCandList);
       if (nGoodEle  >= 2) ZSelector(ElectronColl, ZCandList);
-      if (ZCandList.size() > 0 && ZCandList[0].massDiff < 15) continue;
+      if (ZCandList.size() > 0 && ZCandList[0].massDiff < 10) continue;
       AnaUtil::fillHist1D("evtCutFlow", 7, evWt);
       AnaUtil::fillHist1D("evtCutFlowWt", 7, lumiWt);
     }
@@ -577,11 +579,16 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
     // doesnt represent the contribution of tau neutrino (decay product of Chi) only.
     // It should be appropriate for SL.
     taup4.SetPtEtaPhiE((1.0/x_vis)*tauhp4.Pt(), tauhp4.Eta(), tauhp4.Phi(), (1.0/x_vis)*tauhp4.E());
+    // 2202.04336
+    TLorentzVector nup4;
+    nup4.SetPtEtaPhiE((1-x_vis)*taup4.Pt(), taup4.Eta(), taup4.Phi(), (1-x_vis)*taup4.E());
 
     float tau_pt  = taup4.Pt();
     float tau_eta = taup4.Eta();
     AnaUtil::fillHist1D("PT_RecoTau",  tau_pt);
     AnaUtil::fillHist1D("Eta_RecoTau", tau_eta);
+    AnaUtil::fillHist1D("PT_RecoNu",   nup4.Pt());
+    AnaUtil::fillHist1D("Eta_RecoNu",  nup4.Eta());
     // ------------------------------------------------------------------------------ //
     //                                        DL                                      //
     //            p p > t t~, (t > b w, w > l nu ), (t~ > X j, X > mu ta)             //
@@ -591,40 +598,44 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
       bool MuMu  = (MuonColl.size() == 2) ? true : false;
       bool EleMu = (MuMu) ? false : true;
       bool oppCharge {false};
-
+      
+      // ------------ MuMu channel ------------- //
       if (MuMu) { 
-	// which muon is the closest to tauh
 	bool leadMuCloseToTauh = (tauhp4.DeltaR(MuonColl[0].P4()) <= tauhp4.DeltaR(MuonColl[1].P4())) ? true : false;
-	if (leadMuCloseToTauh) {
-	  if (MuonColl[0].Charge * TauhColl[0].Charge < 0.0) { // closest mu is lead-mu and tauh opp charge
-	    oppCharge = true;
-	    XLepP4 = MuonColl[0].P4();
-	    WLepP4 = MuonColl[1].P4();
+	if (leadMuCloseToTauh) {	                            // if leading muon is the closest muon to tauh
+	  if (MuonColl[0].Charge * TauhColl[0].Charge < 0.0) {      // lead-mu and tauh : opposite charge
+	    oppCharge = true;                                       // So, oppCharge = true
+	    XLepP4 = MuonColl[0].P4();                              // XLep = leading muon 
+	    WLepP4 = MuonColl[1].P4();                              // Wlep = subleading muon 
 	  }
-	  else if (MuonColl[1].Charge * TauhColl[0].Charge < 0.0) { // closest mu is sublead-mu and tauh opp charge 
-	    oppCharge = true;
-	    XLepP4 = MuonColl[1].P4();
-	    WLepP4 = MuonColl[0].P4();
+	  else if (MuonColl[1].Charge * TauhColl[0].Charge < 0.0) { // if above condition is failed,
+                                                                    // i.e. lead-mu and tauh : same charge
+                                                                    // sublead-mu and tauh : opposite charge
+	    oppCharge = true;                                       // So, oppCharge = true 
+	    XLepP4 = MuonColl[1].P4();                              // XLep = subleading muon
+	    WLepP4 = MuonColl[0].P4();                              // Wlep = leading muon
 	  }
-	  else oppCharge = false;
+	  else oppCharge = false;                                   // both muons and tauh : same charge
 	}
-	else {
-	  if (MuonColl[1].Charge * TauhColl[0].Charge < 0.0) {
-	    oppCharge =true;
-	    XLepP4 = MuonColl[1].P4();
-	    WLepP4 = MuonColl[0].P4();
+
+	else {                                                      // if sublead muon is the closest one to tauh
+	  if (MuonColl[1].Charge * TauhColl[0].Charge < 0.0) {      // sublead-mu and tauh : opposite charge
+	    oppCharge =true;                                        // So, oppCharge = true 
+	    XLepP4 = MuonColl[1].P4();                              // Xlep = subleading muon
+	    WLepP4 = MuonColl[0].P4();                              // Wlep = leading muon 
 	  }
-	  else if (MuonColl[0].Charge * TauhColl[0].Charge < 0.0) {
-	    oppCharge = true;
-	    XLepP4 = MuonColl[0].P4();
-	    WLepP4 = MuonColl[1].P4();	    
+	  else if (MuonColl[0].Charge * TauhColl[0].Charge < 0.0) { // if above condition is failed, 
+	                                                            // i.e. sublead-mu and tauh : same charge
+                                                                    // lead-mu and tauh : opposite charge  
+	    oppCharge = true;                                       // So, oppCharge = true   
+	    XLepP4 = MuonColl[0].P4();                              // XLep = leading muon  
+	    WLepP4 = MuonColl[1].P4();	                            // Wlep = subleading muon 
 	  }
-	  else oppCharge = false;
+	  else oppCharge = false;                                   // both muons and tauh : same charge 
 	}
       }
-
-      /*
-	if (isLowMassX()) {
+  
+      /*	if (isLowMassX()) {
 	  XLepP4 = MuonColl[1].P4();
 	  WLepP4 = MuonColl[0].P4();
 	  oppCharge = (MuonColl[1].Charge * TauhColl[0].Charge < 0.0) ? true : false; 
@@ -634,8 +645,10 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
 	  WLepP4 = MuonColl[1].P4();
 	  oppCharge = (MuonColl[0].Charge * TauhColl[0].Charge < 0.0) ? true : false;
 	}
-      }
+	}
       */
+
+      // ------------ EleMu channel ------------- //
       else if (EleMu) {
 	XLepP4 = MuonColl[0].P4();
 	WLepP4 = ElectronColl[0].P4();
@@ -644,9 +657,13 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
 
       else std::cerr << "Wrong lepton selection !!! :( \n";
 
-      if (!oppCharge) continue;
+      //if (XLepP4.DeltaR(WLepP4) < 0.4) continue;
       AnaUtil::fillHist1D("evtCutFlow", 8, evWt);
       AnaUtil::fillHist1D("evtCutFlowWt", 8, lumiWt);
+      
+      if (!oppCharge) continue;
+      AnaUtil::fillHist1D("evtCutFlow", 9, evWt);
+      AnaUtil::fillHist1D("evtCutFlowWt", 9, lumiWt);
 
       //////////////////////////////////////////////////////
       ////////// variables from one leg (t/t~) /////////////
@@ -746,6 +763,8 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
 	AnaUtil::fillHist1D("InvM_coln_XlepTauh_MuMu", M_coll_Xlep);
 	AnaUtil::fillHist1D("DR_XlepTauh_MuMu", DR_xlep_tauh);
 	AnaUtil::fillHist1D("DR_WlepTauh_MuMu", DR_wlep_tauh);
+	AnaUtil::fillHist1D("DPhi_XlepTauh_MuMu", DPhi_xlep_tauh);
+	AnaUtil::fillHist1D("DPhi_WlepTauh_MuMu", DPhi_wlep_tauh);
 	AnaUtil::fillHist2D("DR_XlepTauh_Vs_WlepTauh_MuMu", DR_xlep_tauh, DR_wlep_tauh);
 	AnaUtil::fillHist1D("IsOppCharge_MuMu", oppCharge ? 1 : 0);
 	AnaUtil::fillHist2D("IsOppCharge_DR_XlepTauh_MuMu", oppCharge ? 1 : 0, DR_xlep_tauh);
@@ -755,6 +774,8 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
 	AnaUtil::fillHist1D("InvM_coln_XlepTauh_EleMu", M_coll_Xlep);
 	AnaUtil::fillHist1D("DR_XlepTauh_EleMu", DR_xlep_tauh);
 	AnaUtil::fillHist1D("DR_WlepTauh_EleMu", DR_wlep_tauh);
+	AnaUtil::fillHist1D("DPhi_XlepTauh_EleMu", DPhi_xlep_tauh);
+	AnaUtil::fillHist1D("DPhi_WlepTauh_EleMu", DPhi_wlep_tauh);
 	AnaUtil::fillHist2D("DR_XlepTauh_Vs_WlepTauh_EleMu", DR_xlep_tauh, DR_wlep_tauh);
 	AnaUtil::fillHist1D("IsOppCharge_EleMu", oppCharge ? 1 : 0);
 	AnaUtil::fillHist2D("IsOppCharge_DR_XlepTauh_EleMu", oppCharge ? 1 : 0, DR_xlep_tauh);
@@ -982,10 +1003,42 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
       
       if (_readMVA) {
 	InputVariablesDL varList;
+	/*
+	varList.dphi_met_tauh        = std::fabs(DPhi_met_tauh);
+	varList.dphi_wlep_leadbj     = std::fabs(DPhi_wlep_leadbj);
+	varList.dphi_xlep_wlep       = std::fabs(DPhi_xlep_wlep);
+	varList.dr_xlep_tauh         = DR_xlep_tauh;
+	varList.effectivemass        = Effectivemass;
+	varList.ht_jets              = HT_jets;
+	varList.mt_wlep_met          = MT_wlep_met;
+	varList.mt_x                 = XMT;
+	varList.met                  = met_->MET;
+	varList.scalarsumpt          = Scalarsumpt;
+	varList.dphi_leadbj_leadlj   = std::fabs(DPhi_leadbj_leadlj);
+	varList.m_coll_xlep          = M_coll_Xlep;
+	varList.m_coll_wlep          = M_coll_Wlep;
+	*/
+	varList.pt_tauh=                 tauhp4.Pt();
+	varList.met=                     met_->MET; 
+	varList.pt_leadbj=               leadbjp4.Pt();
+	varList.pt_xlep=                 XlepPt;
+	varList.pt_wlep=                 WlepPt;
+	varList.vectorsumpt_xlep_wlep=   Vectorsumpt_xlep_wlep;
+	varList.dr_xlep_wlep=            DR_xlep_wlep;
+	varList.dphi_wlep_tauh=          std::fabs(DPhi_wlep_tauh);
+	varList.dphi_wlep_leadbj=        std::fabs(DPhi_wlep_leadbj);
+	varList.ht_jets=                 HT_jets;
+	varList.dr_min_xlep_jets=        minDr_XlepJets;
+	varList.dr_min_wlep_jets=        minDr_WlepJets;
+	varList.dphi_xlep_tauh=          std::fabs(DPhi_xlep_tauh);
+	varList.effectivemass=           Effectivemass;
+	varList.dr_min_jets=             minDR;
+	varList.mt_wlep_met=             MT_wlep_met;
+	varList.dphi_tauh_leadbj=        std::fabs(DPhi_tauh_leadbj);
+	varList.dphi_met_wlep=           std::fabs(DPhi_wlep_met);
+	varList.dphi_leadbj_leadlj=      std::fabs(DPhi_leadbj_leadlj);
 	
-	varList.pt_tauh              = tauhp4.Pt();
-	varList.met                  = metp4.Pt();
-	
+
 	mvaOut = _mvaObj->evaluate(_MVAnetwork, varList);
       }
       histf->cd();
@@ -1397,6 +1450,7 @@ void ExoAnalysis::endJob() {
 	"NLightJet >= 1",
 	"nBJets == 1",
 	"no Z",
+	"Xlep-Wlep clean [NA]",
 	"Xlep-tauh opp charge"
       };
   else if (isSL())
