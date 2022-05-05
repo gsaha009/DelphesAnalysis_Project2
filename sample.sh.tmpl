@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# -- name ---
+#$ -N __name
+
+# Make sure that the .e and .o file arrive in the working directory
+#$ -cwd
+
+# Specify where standard output and error are stored
+#$ -o __jobout.output
+#$ -e __joberr.output
+
+# Merge the standard out and standard error to one file
+# -j y
+
+#$ -l h=__node
+
+echo "-- Starting on $(hostname) at $(date) from $(pwd)"
+
+scl enable devtoolset-9 bash
+source /home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/setup.sh
+cd __jobcardpath
+../FCNC.exe __jobcardbasename
+
+echo "-- Finished at $(date)"
+
+exit $?

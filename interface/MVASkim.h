@@ -152,6 +152,7 @@ typedef struct
   float effectivemass_vis;
   float effectivemass;
   float ht_jets;  
+  float smin;
 
 } TreeVariablesDL;
 
@@ -292,6 +293,7 @@ typedef struct
   float dr_min_jets;
   float dr_max_jets;
   float ht_jets;
+  float smin;
   
 } TreeVariablesSL;
 
@@ -300,7 +302,8 @@ class MVASkim {
 public:
 
   MVASkim(const std::string& filename, bool SL, bool DL);
-  virtual ~MVASkim();
+  //virtual ~MVASkim() = default;
+  virtual ~MVASkim() {};
 
   void fill(const TreeVariablesDL& varList);
   void fill(const TreeVariablesSL& varList);

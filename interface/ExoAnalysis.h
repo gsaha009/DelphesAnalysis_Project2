@@ -301,6 +301,19 @@ public:
   bool jetTauhCleaning(const Jet& jet, std::vector <Jet> TauhList_, double dR);
   void dumpGenInfo(TClonesArray *gen, ostream& os);
   void wjetsSelector(const std::vector <Jet>& alljetList_, std::vector <Jet>& wjetspair);
+  float comp_smin(const TLorentzVector &lep1p4,
+		  const TLorentzVector &tauh1p4,
+		  const TLorentzVector &bj1p4,
+		  const TLorentzVector &lj1p4,
+		  const TLorentzVector &wj1p4,
+		  const TLorentzVector &wj2p4,
+		  const TLorentzVector &metp4); // for SL
+  float comp_smin(const TLorentzVector &lep1p4,
+		  const TLorentzVector &lep2p4,
+		  const TLorentzVector &tauh1p4,
+		  const TLorentzVector &bj1p4,
+		  const TLorentzVector &lj1p4,
+		  const TLorentzVector &metp4); // for DL
 
   //Values are kept in map from JobCard
   const std::map<std::string, double>& lumiWtMap() const {return AnaUtil::cutMap(hmap_, "lumiWtList");}

@@ -326,6 +326,7 @@ void HistBooker::bookDLHistograms () {
   bookHist1D("maxDr_WlepJets",    "maximum #Delta R [lepton from W, all jets]",    25, 0, 5.0);
   bookHist1D("minDphi_WlepJets",  "minimum #Delta #Phi [lepton from W, all jets]", 32, 0, 3.2);
   bookHist1D("maxDphi_WlepJets",  "maximum #Delta #Phi [lepton from W, all jets]", 32, 0, 3.2);
+  bookHist1D("smin",              "#sqrt(#sedge(s)_{min})",                      100, 0, 1000);
 }
 
 void HistBooker::bookSLHistograms () {
@@ -412,4 +413,5 @@ void HistBooker::bookSLHistograms () {
   bookHist1D("minDphi_XlepJets","minDphi_XlepJets",           32, 0, 3.2);
   bookHist1D("maxDphi_XlepJets", "maxDphi_XlepJets",          32, 0, 3.2);
 
+  bookHist1D("smin",            "#sqrt(#sedge(s)_{min})",   100, 0, 1000);
 }

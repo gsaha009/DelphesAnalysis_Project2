@@ -165,7 +165,7 @@ MVASkim::MVASkim(const string& filename, bool SL, bool DL) {
     _treeDL->Branch("effectivemass_vis",&_varListDL.effectivemass_vis, "effectivemass_vis/F");
     _treeDL->Branch("effectivemass",    &_varListDL.effectivemass,     "effectivemass/F");
     _treeDL->Branch("ht_jets",          &_varListDL.ht_jets,           "ht_jets/F");
-
+    _treeDL->Branch("smin",             &_varListDL.smin,             "smin/F");
   }  
   // ------------------------------------------------------------- //
   //                               SL Tree                         //
@@ -304,15 +304,16 @@ MVASkim::MVASkim(const string& filename, bool SL, bool DL) {
     _treeSL->Branch("dr_min_jets",       &_varListSL.dr_min_jets,      "dr_min_jets/F");
     _treeSL->Branch("dr_max_jets",       &_varListSL.dr_max_jets,      "dr_max_jets/F");
     _treeSL->Branch("ht_jets",           &_varListSL.ht_jets,          "ht_jets/F");
+    _treeSL->Branch("smin",              &_varListSL.smin,             "smin/F");
   }
   _mvaFile->ls();
 }
 
-MVASkim::~MVASkim() {
-  if (_treeDL) delete _treeDL;  
-  if (_treeSL) delete _treeSL;  
-  if (_mvaFile) delete _mvaFile;
-}
+//MVASkim::~MVASkim() {
+//  if (_treeDL) delete _treeDL;  
+//  if (_treeSL) delete _treeSL;  
+//  if (_mvaFile) delete _mvaFile;
+//}
 
 void MVASkim::fill(const TreeVariablesDL& varList) {
   memcpy(&_varListDL, &varList, sizeof(varList));

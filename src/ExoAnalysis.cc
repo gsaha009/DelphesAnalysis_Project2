@@ -839,6 +839,8 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
       AnaUtil::fillHist1D ("minDphi_WlepJets", minDphi_WlepJets);
       AnaUtil::fillHist1D ("maxDphi_WlepJets", maxDphi_WlepJets);
       
+      float smin = comp_smin(XLepP4, WLepP4, tauhp4, leadbjp4, leadljp4, metp4);
+      AnaUtil::fillHist1D ("smin", smin);
 
       // Filling the branches of a flat ntuple for skimming
       if (skimObj_) {
@@ -994,6 +996,7 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
 	varList.effectivemass_vis     = Effectivemass_vis;
 	varList.effectivemass         = Effectivemass;
 	varList.ht_jets               = HT_jets;
+	varList.smin                  = smin;
 
 	skimObj_->fill(varList);
       }       
@@ -1068,7 +1071,7 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
       float massdiff = wp4.M() - W_mass_nom;
       AnaUtil::fillHist1D("w_massdiff", massdiff);
 
-      if (std::fabs(massdiff) > 40.0) continue;
+      if (std::fabs(massdiff) > 30.0) continue;
       AnaUtil::fillHist1D("evtCutFlow", 8, evWt);
       AnaUtil::fillHist1D("evtCutFlowWt", 8, lumiWt);
 
@@ -1266,6 +1269,9 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
       AnaUtil::fillHist1D ("minDphi_XlepJets", minDphi_XlepJets);
       AnaUtil::fillHist1D ("maxDphi_XlepJets", maxDphi_XlepJets);
 
+      float smin = comp_smin(XLepP4, tauhp4, leadbjp4, leadljp4, wj1p4, wj2p4, metp4);
+      AnaUtil::fillHist1D ("smin", smin);
+
       // needs to be done
       if (skimObj_) {
 	TreeVariablesSL varList;
@@ -1406,6 +1412,7 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
 	varList.dr_min_jets      = minDR;
 	varList.dr_max_jets      = maxDR;
 	varList.ht_jets          = HT_jets;
+	varList.smin             = smin;
 	
 	skimObj_->fill(varList);
       }       
@@ -1464,7 +1471,7 @@ void ExoAnalysis::endJob() {
 	"NLightJet >= 3",
 	"nBJets == 1",
 	"has probable 2 W jets",
-	"|w reco mass - mW| < 30 GeV"
+	"|w reco mass - mW| < 40 GeV"
       };
   
   AnaUtil::SetEvtCutFlowBinLabels("evtCutFlow",evLabels);
@@ -1495,6 +1502,35 @@ void ExoAnalysis::wjetsSelector(const std::vector <Jet>& alljetList_, std::vecto
   }
   wjetspair.push_back(alljetList_[j1_idx]);
   wjetspair.push_back(alljetList_[j2_idx]);
+}
+
+float ExoAnalysis::comp_smin(const TLorentzVector &lep1p4, 
+			     const TLorentzVector &tauh1p4,
+			     const TLorentzVector &bj1p4,
+			     const TLorentzVector &lj1p4,
+			     const TLorentzVector &wj1p4, 
+			     const TLorentzVector &wj2p4,
+			     const TLorentzVector &metp4) {
+  TLorentzVector visp4 = lep1p4 + tauh1p4 + bj1p4 + wj1p4 + wj2p4 + lj1p4;
+  float vispt = visp4.Pt();
+  float vism  = visp4.M();
+  float viset = TMath::Sqrt(std::pow(vism, 2) + std::pow(vispt, 2));
+  float metet = metp4.E();
+  return TMath::Sqrt(std::pow(vism, 2) + 2 * (viset * metet - (visp4.Px() * metp4.Px() + visp4.Py() * metp4.Py())));
+}
+
+float ExoAnalysis::comp_smin(const TLorentzVector &lep1p4,
+			     const TLorentzVector &lep2p4,
+			     const TLorentzVector &tauh1p4,
+			     const TLorentzVector &bj1p4, 
+			     const TLorentzVector &lj1p4,
+			     const TLorentzVector &metp4) {
+  TLorentzVector visp4 = lep1p4 + lep2p4 + tauh1p4 + bj1p4 + lj1p4;
+  float vispt = visp4.Pt();
+  float vism  = visp4.M();
+  float viset = TMath::Sqrt(std::pow(vism, 2) + std::pow(vispt, 2));
+  float metet = metp4.E();
+  return TMath::Sqrt(std::pow(vism, 2) + 2 * (viset * metet - (visp4.Px() * metp4.Px() + visp4.Py() * metp4.Py())));
 }
 
 void ExoAnalysis::closeHistFiles(){
