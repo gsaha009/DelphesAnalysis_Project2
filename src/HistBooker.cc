@@ -388,9 +388,9 @@ void HistBooker::bookSLHistograms () {
   bookHist1D("DR_Xtau_leadbj",       "#Delta R",             25, 0, 5);
   bookHist1D("DPhi_Xtau_leadbj",     "#Delta #Phi",          32, -3.2, 3.2); 
   bookHist1D("DEta_Xtau_leadbj",     "#Delta #eta",          32, -3.2, 3.2); 
-  bookHist1D("DR_leadbj_leadlj",       "#Delta R",             25, 0, 5);
-  bookHist1D("DPhi_leadbj_leadlj",     "#Delta #Phi",          32, -3.2, 3.2); 
-  bookHist1D("DEta_leadbj_leadlj",     "#Delta #eta",          32, -3.2, 3.2); 
+  //bookHist1D("DR_leadbj_leadlj",       "#Delta R",             25, 0, 5);
+  //bookHist1D("DPhi_leadbj_leadlj",     "#Delta #Phi",          32, -3.2, 3.2); 
+  //bookHist1D("DEta_leadbj_leadlj",     "#Delta #eta",          32, -3.2, 3.2); 
   bookHist1D("DR_w_leadlj",       "#Delta R",             25, 0, 5);
   bookHist1D("DPhi_w_leadlj",     "#Delta #Phi",          32, -3.2, 3.2); 
   bookHist1D("DEta_w_leadlj",     "#Delta #eta",          32, -3.2, 3.2); 
