@@ -1,10 +1,11 @@
 # Delphes-Analysis FrameWork 
 
-C++ and ROOT based code setup.
+C++, ROOT and Delphes based code setup. It is mandatory to install `Delphes-3.4.2` before. 
 
 ## Instructions : 
  - Check the setup.sh file. Use correct paths of Delphes and ROOT
  - `source setup.sh`
+ - Use the correct `Delphes` path in `Makefile.exoanalysis`
  - Change the paths in `DelphesClasses.h/cc` and `ExoAnalysis.h`
  - ... Ready for compilation
 
