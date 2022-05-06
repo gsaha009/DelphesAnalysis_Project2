@@ -3,8 +3,8 @@ dataType mc
 ###MVA Flags###
 createMVATree 1
 readMVA 0
-isXZ 1
-isH2Z 0
+isDL 0
+isSL 1
 MVAnetwork BDTG
 MVAxmlFile /home/gsaha/DelphesAnalysis/JobCards/BDT_WEIGHTS/XZ/TMVAClassification_BDTG.weights.xml
 MVAxmlFile2 /home/gsaha/DelphesAnalysis/JobCards/BDT_WEIGHTS/H2Z/TMVAClassification_BDTG.weights.xml
