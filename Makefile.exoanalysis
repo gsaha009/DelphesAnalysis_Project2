@@ -12,7 +12,7 @@ DICTH  = $(patsubst %.$(CSUF),%.h,$(DICTC))
 SRCS   = src/DelphesClasses.cc \
          src/AnaUtil.cc \
 	 src/HistBooker.cc \
-         src/exoAnalysis.cc \
+         src/main.cc \
 	 src/ExoAnalysis.cc \
 	 src/MVASkim.cc \
 	 src/MVAnalysis.cc
