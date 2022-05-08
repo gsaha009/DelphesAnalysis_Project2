@@ -732,6 +732,7 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
       AnaUtil::fillHist1D("DR_wlep_leadbj", DR_wlep_leadbj);
       AnaUtil::fillHist1D("DPhi_wlep_leadbj", DPhi_wlep_leadbj);
       AnaUtil::fillHist1D("DEta_wlep_leadbj", DEta_wlep_leadbj);
+      AnaUtil::fillHist1D("DPhi_wlep_met",    DPhi_wlep_met);
       AnaUtil::fillHist1D("MT_wlep_met",      MT_wlep_met);
       AnaUtil::fillHist1D("InvM_coln_WlepTauh", M_coll_Wlep);      
 
@@ -841,6 +842,9 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
       
       float smin = comp_smin(XLepP4, WLepP4, tauhp4, leadbjp4, leadljp4, metp4);
       AnaUtil::fillHist1D ("smin", smin);
+
+      float clusterMT = comp_clusterMT(XLepP4, WLepP4, tauhp4, leadbjp4, leadljp4, metp4);
+      AnaUtil::fillHist1D ("clusterMT", clusterMT);
 
       // Filling the branches of a flat ntuple for skimming
       if (skimObj_) {
@@ -1075,6 +1079,12 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
       AnaUtil::fillHist1D("evtCutFlow", 8, evWt);
       AnaUtil::fillHist1D("evtCutFlowWt", 8, lumiWt);
 
+      TLorentzVector topljp4;
+      for (auto &jet : lightJetColl) {
+	topljp4 = jet.P4();
+	if (topljp4 != wj1p4 && topljp4 != wj1p4) break; 
+      }
+
       TLorentzVector t1p4   = wp4 + leadbjp4;
 
       float InvM_Wj1Wj2     = wp4.M();
@@ -1115,18 +1125,18 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
       float XlepEta          = XLepP4.Eta();
       float M_coll_Xlep      = (XLepP4 + tauhp4).M()/TMath::Sqrt(x_vis); // Collinear mass formation
       TLorentzVector Xp4     = taup4 + XLepP4;
-      TLorentzVector t2p4    = Xp4 + leadljp4;
+      TLorentzVector t2p4    = Xp4 + topljp4;
       float M_coll_test      = Xp4.M();
       float InvM_Xleadlj     = t2p4.M(); 
 
-      float DR_Xlep_leadlj   = XLepP4.DeltaR(leadljp4);
-      float DPhi_Xlep_leadlj = TVector2::Phi_mpi_pi(XLepP4.Phi() - leadljp4.Phi()); 
+      float DR_Xlep_leadlj   = XLepP4.DeltaR(topljp4);
+      float DPhi_Xlep_leadlj = TVector2::Phi_mpi_pi(XLepP4.Phi() - topljp4.Phi()); 
 
-      float DR_Xtauh_leadlj  = tauhp4.DeltaR(leadljp4);
-      float DPhi_Xtauh_leadlj= TVector2::Phi_mpi_pi(tauhp4.Phi() - leadljp4.Phi()); 
+      float DR_Xtauh_leadlj  = tauhp4.DeltaR(topljp4);
+      float DPhi_Xtauh_leadlj= TVector2::Phi_mpi_pi(tauhp4.Phi() - topljp4.Phi()); 
 
-      float DR_X_leadlj      = Xp4.DeltaR(leadljp4);
-      float DPhi_X_leadlj    = TVector2::Phi_mpi_pi(Xp4.Phi() - leadljp4.Phi());
+      float DR_X_leadlj      = Xp4.DeltaR(topljp4);
+      float DPhi_X_leadlj    = TVector2::Phi_mpi_pi(Xp4.Phi() - topljp4.Phi());
 
       float DR_Xlep_Xtau     = XLepP4.DeltaR(tauhp4);
       float DPhi_Xlep_Xtau   = TVector2::Phi_mpi_pi(XLepP4.Phi() - tauhp4.Phi());
@@ -1179,13 +1189,13 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
       float DPhi_Xtau_leadbj       = TVector2::Phi_mpi_pi(tauhp4.Phi() - leadbjp4.Phi());
       float DEta_Xtau_leadbj       = tauhp4.Eta() - leadbjp4.Eta();
       // leadb-leadl
-      //float DR_leadbj_leadlj       = leadbjp4.DeltaR(leadljp4);
-      //float DPhi_leadbj_leadlj     = TVector2::Phi_mpi_pi(leadbjp4.Phi() - leadljp4.Phi());
-      //float DEta_leadbj_leadlj     = leadbjp4.Eta() - leadljp4.Eta();
+      //float DR_leadbj_leadlj       = leadbjp4.DeltaR(topljp4);
+      //float DPhi_leadbj_leadlj     = TVector2::Phi_mpi_pi(leadbjp4.Phi() - topljp4.Phi());
+      //float DEta_leadbj_leadlj     = leadbjp4.Eta() - topljp4.Eta();
       // W-leadl
-      float DR_w_leadlj         = wp4.DeltaR(leadljp4);
-      float DPhi_w_leadlj       = TVector2::Phi_mpi_pi(wp4.Phi() - leadljp4.Phi());
-      float DEta_w_leadlj       = wp4.Eta() - leadljp4.Eta();
+      float DR_w_leadlj         = wp4.DeltaR(topljp4);
+      float DPhi_w_leadlj       = TVector2::Phi_mpi_pi(wp4.Phi() - topljp4.Phi());
+      float DEta_w_leadlj       = wp4.Eta() - topljp4.Eta();
       // Chi-leadb
       float DR_X_leadbj            = Xp4.DeltaR(leadbjp4);
       float DPhi_X_leadbj          = TVector2::Phi_mpi_pi(Xp4.Phi() - leadbjp4.Phi());
@@ -1201,7 +1211,7 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
       // total
       float Total_mass        = (t1p4 + t2p4).M();
       float Total_vector_pt   = (t1p4 + t2p4).Pt();
-      float Total_scalar_pt   = XlepPt + taup4.Pt() + leadljp4.Pt() + leadbjp4.Pt() + wj1p4.Pt() + wj2p4.Pt();
+      float Total_scalar_pt   = XlepPt + taup4.Pt() + topljp4.Pt() + leadbjp4.Pt() + wj1p4.Pt() + wj2p4.Pt();
 
       AnaUtil::fillHist1D("DR_Xlep_wj1",             DR_Xlep_wj1);       
       AnaUtil::fillHist1D("DPhi_Xlep_wj1",           DPhi_Xlep_wj1);     
@@ -1269,8 +1279,11 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
       AnaUtil::fillHist1D ("minDphi_XlepJets", minDphi_XlepJets);
       AnaUtil::fillHist1D ("maxDphi_XlepJets", maxDphi_XlepJets);
 
-      float smin = comp_smin(XLepP4, tauhp4, leadbjp4, leadljp4, wj1p4, wj2p4, metp4);
+      float smin = comp_smin(XLepP4, tauhp4, leadbjp4, topljp4, wj1p4, wj2p4, metp4);
       AnaUtil::fillHist1D ("smin", smin);
+
+      float clusterMT = comp_clusterMT(XLepP4, tauhp4, leadbjp4, topljp4, wj1p4, wj2p4, metp4);
+      AnaUtil::fillHist1D ("clusterMT", clusterMT);
 
       // needs to be done
       if (skimObj_) {
@@ -1309,13 +1322,13 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
 	varList.eta_leadbj    = std::fabs(leadbjp4.Eta());
 	varList.phi_leadbj    = std::fabs(leadbjp4.Phi());
 	// ==> leading light jet vars
-	varList.px_leadlj     = leadljp4.Px();
-	varList.py_leadlj     = leadljp4.Py();
-	varList.pz_leadlj     = leadljp4.Pz();
-	varList.energy_leadlj = leadljp4.E();
-	varList.pt_leadlj     = leadljp4.Pt();
-	varList.eta_leadlj    = std::fabs(leadljp4.Eta());
-	varList.phi_leadlj    = std::fabs(leadljp4.Phi());
+	varList.px_leadlj     = topljp4.Px();
+	varList.py_leadlj     = topljp4.Py();
+	varList.pz_leadlj     = topljp4.Pz();
+	varList.energy_leadlj = topljp4.E();
+	varList.pt_leadlj     = topljp4.Pt();
+	varList.eta_leadlj    = std::fabs(topljp4.Eta());
+	varList.phi_leadlj    = std::fabs(topljp4.Phi());
 	// ==> w jet1 vars
 	varList.px_wjet1      = wj1p4.Px();
 	varList.py_wjet1      = wj1p4.Py();
@@ -1484,8 +1497,9 @@ void ExoAnalysis::wjetsSelector(const std::vector <Jet>& alljetList_, std::vecto
   float minMassDiff = 9999.9;
   unsigned int j1_idx = 0;
   unsigned int j2_idx = 0;
-  // 0th light jet comes from top
-  for (unsigned int i = 1; i < alljetList_.size(); ++i) {
+  // 0th light jet comes from top : OLD idea
+  // now loop over all jets and later we will select jet from top
+  for (unsigned int i = 0; i < alljetList_.size(); ++i) {
     const auto& ip = alljetList_[i];
     TLorentzVector j1p4 = ip.P4();
     for (unsigned int j = i+1; j < alljetList_.size(); ++j) {
@@ -1531,6 +1545,33 @@ float ExoAnalysis::comp_smin(const TLorentzVector &lep1p4,
   float viset = TMath::Sqrt(std::pow(vism, 2) + std::pow(vispt, 2));
   float metet = metp4.E();
   return TMath::Sqrt(std::pow(vism, 2) + 2 * (viset * metet - (visp4.Px() * metp4.Px() + visp4.Py() * metp4.Py())));
+}
+
+float ExoAnalysis::comp_clusterMT(const TLorentzVector &lep1p4,
+				  const TLorentzVector &lep2p4,
+				  const TLorentzVector &tauh1p4,
+				  const TLorentzVector &bj1p4,
+				  const TLorentzVector &lj1p4,
+				  const TLorentzVector &metp4) {
+  TLorentzVector cluster_p4 = lep1p4 + lep2p4 + tauh1p4 + bj1p4 + lj1p4;
+  TLorentzVector cluster_met_p4 = cluster_p4 + metp4;
+  float part1 = std::pow(TMath::Sqrt(std::pow(cluster_p4.Pt(),2)+std::pow(cluster_p4.M(),2)) + metp4.Pt(), 2);
+  float part2 = std::pow(cluster_met_p4.Pt(), 2);
+  return TMath::Sqrt(part1 - part2);
+}
+
+float ExoAnalysis::comp_clusterMT(const TLorentzVector &lep1p4, 
+				  const TLorentzVector &tauh1p4,
+				  const TLorentzVector &bj1p4,
+				  const TLorentzVector &lj1p4,
+				  const TLorentzVector &wj1p4, 
+				  const TLorentzVector &wj2p4,
+				  const TLorentzVector &metp4) {
+  TLorentzVector cluster_p4 = lep1p4 + tauh1p4 + bj1p4 + lj1p4 + wj1p4 + wj2p4;
+  TLorentzVector cluster_met_p4 = cluster_p4 + metp4;
+  float part1 = std::pow(TMath::Sqrt(std::pow(cluster_p4.Pt(),2)+std::pow(cluster_p4.M(),2)) + metp4.Pt(), 2);
+  float part2 = std::pow(cluster_met_p4.Pt(), 2);
+  return TMath::Sqrt(part1 - part2);
 }
 
 void ExoAnalysis::closeHistFiles(){

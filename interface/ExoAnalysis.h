@@ -314,7 +314,19 @@ public:
 		  const TLorentzVector &bj1p4,
 		  const TLorentzVector &lj1p4,
 		  const TLorentzVector &metp4); // for DL
-
+  float comp_clusterMT (const TLorentzVector &lep1p4,
+			const TLorentzVector &tauh1p4,
+			const TLorentzVector &bj1p4,
+			const TLorentzVector &lj1p4,
+			const TLorentzVector &wj1p4,
+			const TLorentzVector &wj2p4,
+			const TLorentzVector &metp4); // for SL
+  float comp_clusterMT (const TLorentzVector &lep1p4,
+			const TLorentzVector &lep2p4,
+			const TLorentzVector &tauh1p4,
+			const TLorentzVector &bj1p4,
+			const TLorentzVector &lj1p4,
+			const TLorentzVector &metp4); // for DL
   //Values are kept in map from JobCard
   const std::map<std::string, double>& lumiWtMap() const {return AnaUtil::cutMap(hmap_, "lumiWtList");}
   const std::map<std::string, double>& muonCutMap() const {return AnaUtil::cutMap(hmap_, "muonCutList");}

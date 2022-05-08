@@ -1,0 +1,51 @@
+Tag: DL_MX_60_Final
+
+Lumi: 3000000
+
+infiles:
+  Signal :
+    muta_lnu : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Sig_Xmuta_0p01_Xct_0p01_Xuc_0p005_MX_60_MH_160_DL_BDTD_mvaIn.root, 0.0225, 100000, 'signal']
+  Background :
+    TTJets2L : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_TTJets_DiLep_Set_New_DL_BDTD_mvaIn.root, 109.8, 10855428, 'TT + Jets']
+    TTWJets  : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_TTWJetsToLNu_DL_BDTD_mvaIn.root, 0.25, 4765526, 'TTV + Jets']
+    TTZJets  : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_TTZJetsToLL_DL_BDTD_mvaIn.root, 0.24, 2584012, 'TTV + Jets']
+    #RestBackground:
+    WZTo3LNu : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_WZTo3LNu_012Jets_DL_BDTD_mvaIn.root, 2.273, 9947106, 'VV(V) + Jets']
+    WZTo2L2Q : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_WZTo2L2Q_012Jets_DL_BDTD_mvaIn.root, 4.504, 2477920, 'VV(V) + Jets']
+    ZZTo4L   : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_ZZTo4L_012Jets_DL_BDTD_mvaIn.root, 0.187, 2500000, 'VV(V) + Jets']
+    WWW      : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_WWW_DL_BDTD_mvaIn.root, 0.236, 240000, 'VV(V) + Jets']
+    WWZ      : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_WWZ_DL_BDTD_mvaIn.root, 0.189, 250000, 'VV(V) + Jets']
+    WZZ      : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_WZZ_DL_BDTD_mvaIn.root, 0.064, 246800, 'VV(V) + Jets']
+    ZZZ      : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_ZZZ_DL_BDTD_mvaIn.root, 0.016, 249237, 'VV(V) + Jets']
+    TTWQQ    : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_TTWToQQ_DL_BDTD_mvaIn.root, 0.074, 3900000, 'TTV + Jets']
+    bbtata   : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_bbtautau_DL_BDTD_mvaIn.root, 0.115, 4450000, 'Rares']
+
+intree: EventsDL
+
+features:
+  pt_tauh                   : [100, 0.0, 400.0]
+  met                       : [100, 0.0, 400.0]
+  pt_leadbj                 : [100, 0.0, 400.0]
+  pt_xlep                   : [100, 0.0, 400.0]
+  pt_wlep                   : [100, 0.0, 400.0]
+  vectorsumpt_xlep_wlep     : [100, 0.0, 400.0]
+  dr_xlep_wlep              : [50, 0.0, 5.0]
+  dphi_wlep_tauh            : [64, 0.0, 3.2]
+  dphi_wlep_leadbj          : [64, 0.0, 3.2]
+  ht_jets                   : [100, 0.0, 1200.0]
+  dr_min_xlep_jets          : [50, 0.0, 5.0]
+  dr_min_wlep_jets          : [50, 0.0, 5.0]
+  dphi_xlep_tauh            : [64, 0.0, 3.2]
+  #effectivemass             : [100, 0.0, 2000.0]
+  effectiveMass_t1          : [100, 0.0, 2000.0] #new
+  effectiveMass_t2          : [100, 0.0, 2000.0] #new
+  dr_min_jets               : [50, 0.0, 5.0]
+  mt_wlep_met               : [100, 0.0, 400.0]
+  dphi_tauh_leadbj          : [64, 0.0, 3.2]
+  dphi_met_xlep             : [64, 0.0, 3.2]
+  dphi_met_wlep             : [64, 0.0, 3.2]
+  dphi_leadbj_leadlj        : [64, 0.0, 3.2]
+  smin                      : [100, 0.0, 2000.0] 
+
+DoScaling : yes
+UseNormForPlots : yes
