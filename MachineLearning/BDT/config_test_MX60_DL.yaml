@@ -1,0 +1,19 @@
+Tag: DL_MX_60_New
+
+Lumi: 300000
+
+infiles:
+  Signal :
+    muta_lnu : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/Sig_Xmuta_0p01_Xct_0p01_Xuc_0p005_MX_60_MH_160_DL_BDTD_hist.root, 0.0225, 100000, 'signal']
+  Background : 
+    TTJets2L : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/Bkg_TTJets_DiLep_DL_BDTD_hist.root, 109.8, 10855428, 'TT + Jets']
+    TTWJets  : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/Bkg_TTWJetsToLNu_DL_BDTD_hist.root, 0.25, 4765526, 'TTV + Jets']
+    TTZJets  : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/Bkg_TTZJetsToLL_DL_BDTD_hist.root, 0.24, 2584012, 'TTV + Jets']
+    WZTo3LNu : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/Bkg_WZTo3LNu_012Jets_DL_BDTD_hist.root, 2.273, 9947106, 'VV(V) + Jets']
+    ZZTo4L   : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/Bkg_ZZTo4L_012Jets_DL_BDTD_hist.root, 0.187, 2500000, 'VV(V) + Jets']
+    WWW      : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/Bkg_WWW_DL_BDTD_hist.root, 0.236, 240000, 'VV(V) + Jets']
+    WWZ      : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/Bkg_WWZ_DL_BDTD_hist.root, 0.189, 250000, 'VV(V) + Jets']
+    WZZ      : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/Bkg_WZZ_DL_BDTD_hist.root, 0.064, 246800, 'VV(V) + Jets']
+    ZZZ      : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/Bkg_ZZZ_DL_BDTD_hist.root, 0.016, 249237, 'VV(V) + Jets']
+
+UseNormForPlots : yes
