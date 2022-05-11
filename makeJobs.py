@@ -74,14 +74,12 @@ def main():
         'Sig_Xmuta_0p005_Xct_0p005_Xuc_0p005'  : [0.001, f'/store/user/gsaha/Data/FCNC_TTbar_Signals/S3_Xmuta_{subtag}_MX_{mx}_MH_{mh}_gXmuta_0p005_gXct_0p005_gXuc_0p005_DelphesRootFiles'],
         'Sig_Xmuta_0p007_Xct_0p003_Xuc_0p005'  : [0.001, f'/store/user/gsaha/Data/FCNC_TTbar_Signals/S3_Xmuta_{subtag}_MX_{mx}_MH_{mh}_gXmuta_0p007_gXct_0p003_gXuc_0p005_DelphesRootFiles'],
         'Sig_Xmuta_0p007_Xct_0p007_Xuc_0p005'  : [0.001, f'/store/user/gsaha/Data/FCNC_TTbar_Signals/S3_Xmuta_{subtag}_MX_{mx}_MH_{mh}_gXmuta_0p007_gXct_0p007_gXuc_0p005_DelphesRootFiles'],
-        'Bkg_TTJets_DiLep_Set_Old'             : [109.84, '/store/user/gsaha/Data/Backgrounds/TTJets_DiLept'],
-        'Bkg_TTJets_DiLep_Set_New'             : [109.84, '/store/user/gsaha/Data/Backgrounds/TTbarDL_elmuta_012Jets_LO_MLM_DelphesRootFiles'],
-        'Bkg_TTJets_SingleLep'                 : [380.0,  '/store/user/gsaha/Data/Backgrounds/TTbarSL_elmuta_012Jets_LO_MLM_DelphesRootFiles'],
+        ##'Bkg_TTJets_DiLep_Set_Old'             : [109.84, '/store/user/gsaha/Data/Backgrounds/TTJets_DiLept'],
+        'Bkg_TTJets_DiLep_Set_New'             : [107.65, '/store/user/gsaha/Data/Backgrounds/TTbarDL_elmuta_012Jets_LO_MLM_DelphesRootFiles'],
+        'Bkg_TTJets_SingleLep'                 : [437.14, '/store/user/gsaha/Data/Backgrounds/TTbarSL_elmuta_012Jets_LO_MLM_DelphesRootFiles'],
         'Bkg_TTWJetsToLNu'                     : [0.254,  '/store/user/gsaha/Data/Backgrounds/TTWJetsToLNu'],
-        'Bkg_TTWToQQ'                          : [0.5,    '/store/user/gsaha/Data/Backgrounds/TTWnojetsToQQ_LO_DelphesRootFiles'],
+        'Bkg_TTWToQQ'                          : [0.103,  '/store/user/gsaha/Data/Backgrounds/TTWnojetsToQQ_LO_DelphesRootFiles'],
         'Bkg_TTZJetsToLL'                      : [0.240,  '/store/user/gsaha/Data/Backgrounds/TTZJetsToLL'],
-        #'Bkg_TTZToQQ'                          : [0.5,    '/store/user/gsaha/Data/Backgrounds/'], # under processing
-        #'Bkg_TTHToTauTau'                      : [0.5,    '/store/user/gsaha/Data/Backgrounds/'], # under processing 
         'Bkg_WZTo3LNu_012Jets'                 : [2.273,  '/store/user/gsaha/Data/Backgrounds/WZTo3LNu_012J'],
         'Bkg_WZTo2L2Q_012Jets'                 : [4.504,  '/store/user/gsaha/Data/Backgrounds/WZTo2L2Q_012J_14TeV'],
         'Bkg_ZZTo4L_012Jets'                   : [0.187,  '/store/user/gsaha/Data/Backgrounds/ZZTo4L_14TeV'],
@@ -89,9 +87,12 @@ def main():
         'Bkg_WWZ'                              : [0.1889, '/store/user/gsaha/Data/Backgrounds/WWZ'],
         'Bkg_WZZ'                              : [0.06376,'/store/user/gsaha/Data/Backgrounds/WZZ'],
         'Bkg_ZZZ'                              : [0.0158, '/store/user/gsaha/Data/Backgrounds/ZZZ'],
-        'Bkg_bbtautau'                         : [0.5,    '/store/user/gsaha/Data/Backgrounds/bbtautau_QCD_QED_LO_DelphesRootFiles']
+        'Bkg_bbtautau'                         : [0.114,  '/store/user/gsaha/Data/Backgrounds/bbtautau_QCD_QED_LO_DelphesRootFiles'],
+        'Bkg_TTHnojetsToTauTau'                : [0.006,  '/store/user/gsaha/Data/Backgrounds/TTHnojetsToTauTau_LO_DelphesRootFiles'],
+        'Bkg_TTZnojetsToQQ'                    : [0.206,  '/store/user/gsaha/Data/Backgrounds/TTZnojetsToQQ_LO_DelphesRootFiles']
     }
     nodes = ['compute-0-1', 'compute-0-2', 'compute-0-3', 'compute-0-4', 'compute-0-6', 'compute-0-7', 'compute-0-8', 'compute-0-9', 'compute-0-10']
+    #'compute-0-5', 'compute-0-15', 'compute-0-16', 'compute-0-17', 'compute-0-18', 'compute-0-19','compute-0-20','compute-0-21']
 
     analysispath = os.getcwd() if args.anapath == None else args.anapath
     jobcardpath  = os.path.join(analysispath, f'JobCards_MX_{mx}') 

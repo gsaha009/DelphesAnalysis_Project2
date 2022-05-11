@@ -327,6 +327,8 @@ public:
 			const TLorentzVector &bj1p4,
 			const TLorentzVector &lj1p4,
 			const TLorentzVector &metp4); // for DL
+  float comp_cosThetaStar(const TLorentzVector & daughterP4_lead, const TLorentzVector & daughterP4_sublead);
+
   //Values are kept in map from JobCard
   const std::map<std::string, double>& lumiWtMap() const {return AnaUtil::cutMap(hmap_, "lumiWtList");}
   const std::map<std::string, double>& muonCutMap() const {return AnaUtil::cutMap(hmap_, "muonCutList");}

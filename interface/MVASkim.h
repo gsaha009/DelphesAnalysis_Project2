@@ -153,6 +153,8 @@ typedef struct
   float effectivemass;
   float ht_jets;  
   float smin;
+  float costhetaS_xlep_tau;
+  float costhetaS_xlep_tauh;
 
 } TreeVariablesDL;
 
@@ -191,13 +193,13 @@ typedef struct
   float eta_leadbj;
   float phi_leadbj;
 
-  float px_leadlj;
-  float py_leadlj;
-  float pz_leadlj;
-  float energy_leadlj;
-  float pt_leadlj;
-  float eta_leadlj;
-  float phi_leadlj;
+  float px_toplj;
+  float py_toplj;
+  float pz_toplj;
+  float energy_toplj;
+  float pt_toplj;
+  float eta_toplj;
+  float phi_toplj;
 
   float px_wjet1;
   float py_wjet1;
@@ -223,6 +225,54 @@ typedef struct
   float eta_xlep;
   float phi_xlep;
 
+  float px_tau;
+  float py_tau;
+  float pz_tau;
+  float energy_tau;
+  float pt_tau;
+  float eta_tau;
+  float phi_tau;
+
+  float px_nu;
+  float py_nu;
+  float pz_nu;
+  float energy_nu;
+  float pt_nu;
+  float eta_nu;
+  float phi_nu;
+
+  float px_w;
+  float py_w;
+  float pz_w;
+  float energy_w;
+  float pt_w;
+  float eta_w;
+  float phi_w;
+
+  float px_chi;
+  float py_chi;
+  float pz_chi;
+  float energy_chi;
+  float pt_chi;
+  float eta_chi;
+  float phi_chi;
+
+  float px_tSM;
+  float py_tSM;
+  float pz_tSM;
+  float energy_tSM;
+  float pt_tSM;
+  float eta_tSM;
+  float phi_tSM;
+
+  float px_tBSM;
+  float py_tBSM;
+  float pz_tBSM;
+  float energy_tBSM;
+  float pt_tBSM;
+  float eta_tBSM;
+  float phi_tBSM;
+
   // from one leg
   float invm_wj1_wj2;
   float dr_wj1_wj2;
@@ -235,18 +285,25 @@ typedef struct
   float dr_wj2_leadbj;
   float dphi_wj2_leadbj;
   float invm_w_leadbj;
+  float dphi_met_leadbj;
+  float dphi_met_wj1;
+  float dphi_met_wj2;
+  float dphi_met_w;
+
   // from other leg
   float m_coll_x;
-  float m_coll_xtest;
-  float invm_x_leadlj;
-  float dr_xlep_leadlj;
-  float dphi_xlep_leadlj;
-  float dr_tauh_leadlj;
-  float dphi_tauh_leadlj;
-  float dr_x_leadlj;
-  float dphi_x_leadlj;
+  float invm_x_toplj;
+  float dr_xlep_toplj;
+  float dphi_xlep_toplj;
+  float dr_tauh_toplj;
+  float dphi_tauh_toplj;
+  float dr_x_toplj;
+  float dphi_x_toplj;
   float dr_xlep_tauh;
   float dphi_xlep_tauh;
+  float dphi_met_toplj;
+  float dphi_met_xlep;
+  float dphi_met_tauh;
   // from both leg
   float dr_xlep_wj1;
   float dphi_xlep_wj1;
@@ -269,12 +326,12 @@ typedef struct
   float dr_tauh_leadbj;
   float dphi_tauh_leadbj;
   float deta_tauh_leadbj;
-  float dr_leadbj_leadlj;
-  float dphi_leadbj_leadlj;
-  float deta_leadbj_leadlj;
-  float dr_w_leadlj;
-  float dphi_w_leadlj;
-  float deta_w_leadlj;
+  float dr_leadbj_toplj;
+  float dphi_leadbj_toplj;
+  float deta_leadbj_toplj;
+  float dr_w_toplj;
+  float dphi_w_toplj;
+  float deta_w_toplj;
   float dr_x_leadbj;
   float dphi_x_leadbj;
   float deta_x_leadbj;
@@ -287,13 +344,16 @@ typedef struct
   float total_mass;
   float total_vector_pt;
   float total_scalar_pt;
-  float dphi_xlep_met;
   float mt_xlep_met;
   // di-jets variables
   float dr_min_jets;
   float dr_max_jets;
   float ht_jets;
   float smin;
+  float costhetaS_xlep_tau;
+  float costhetaS_xlep_tauh;
+  float minDr_XlepJets;
+  float maxDr_XlepJets;
   
 } TreeVariablesSL;
 

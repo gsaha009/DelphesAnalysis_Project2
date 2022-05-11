@@ -166,6 +166,9 @@ MVASkim::MVASkim(const string& filename, bool SL, bool DL) {
     _treeDL->Branch("effectivemass",    &_varListDL.effectivemass,     "effectivemass/F");
     _treeDL->Branch("ht_jets",          &_varListDL.ht_jets,           "ht_jets/F");
     _treeDL->Branch("smin",             &_varListDL.smin,             "smin/F");
+    _treeDL->Branch("costhetaS_xlep_tau",&_varListDL.costhetaS_xlep_tau,"costhetaS_xlep_tau/F");
+    _treeDL->Branch("costhetaS_xlep_tauh",&_varListDL.costhetaS_xlep_tauh,"costhetaS_xlep_tauh/F");
+
   }  
   // ------------------------------------------------------------- //
   //                               SL Tree                         //
@@ -204,13 +207,13 @@ MVASkim::MVASkim(const string& filename, bool SL, bool DL) {
     _treeSL->Branch("eta_leadbj",       &_varListSL.eta_leadbj,      "eta_leadbj/F");
     _treeSL->Branch("phi_leadbj",       &_varListSL.phi_leadbj,      "phi_leadbj/F");
 
-    _treeSL->Branch("px_leadlj",        &_varListSL.px_leadlj,       "px_leadlj/F");
-    _treeSL->Branch("py_leadlj",        &_varListSL.py_leadlj,       "py_leadlj/F");
-    _treeSL->Branch("pz_leadlj",        &_varListSL.pz_leadlj,       "pz_leadlj/F");
-    _treeSL->Branch("energy_leadlj",    &_varListSL.energy_leadlj,   "energy_leadlj/F");
-    _treeSL->Branch("pt_leadlj",        &_varListSL.pt_leadlj,       "pt_leadlj/F");
-    _treeSL->Branch("eta_leadlj",       &_varListSL.eta_leadlj,      "eta_leadlj/F");
-    _treeSL->Branch("phi_leadlj",       &_varListSL.phi_leadlj,      "phi_leadlj/F");
+    _treeSL->Branch("px_toplj",        &_varListSL.px_toplj,       "px_toplj/F");
+    _treeSL->Branch("py_toplj",        &_varListSL.py_toplj,       "py_toplj/F");
+    _treeSL->Branch("pz_toplj",        &_varListSL.pz_toplj,       "pz_toplj/F");
+    _treeSL->Branch("energy_toplj",    &_varListSL.energy_toplj,   "energy_toplj/F");
+    _treeSL->Branch("pt_toplj",        &_varListSL.pt_toplj,       "pt_toplj/F");
+    _treeSL->Branch("eta_toplj",       &_varListSL.eta_toplj,      "eta_toplj/F");
+    _treeSL->Branch("phi_toplj",       &_varListSL.phi_toplj,      "phi_toplj/F");
 
     _treeSL->Branch("px_wjet1",        &_varListSL.px_wjet1,       "px_wjet1/F");
     _treeSL->Branch("py_wjet1",        &_varListSL.py_wjet1,       "py_wjet1/F");
@@ -236,6 +239,54 @@ MVASkim::MVASkim(const string& filename, bool SL, bool DL) {
     _treeSL->Branch("eta_xlep",       &_varListSL.eta_xlep,      "eta_xlep/F");
     _treeSL->Branch("phi_xlep",       &_varListSL.phi_xlep,      "phi_xlep/F");
 
+    _treeSL->Branch("px_tau",         &_varListSL.px_tau,        "px_tau/F");
+    _treeSL->Branch("py_tau",         &_varListSL.py_tau,        "py_tau/F");
+    _treeSL->Branch("pz_tau",         &_varListSL.pz_tau,        "pz_tau/F");
+    _treeSL->Branch("energy_tau",     &_varListSL.energy_tau,    "energy_tau/F");
+    _treeSL->Branch("pt_tau",         &_varListSL.pt_tau,        "pt_tau/F");
+    _treeSL->Branch("eta_tau",        &_varListSL.eta_tau,       "eta_tau/F");
+    _treeSL->Branch("phi_tau",        &_varListSL.phi_tau,       "phi_tau/F");
+
+    _treeSL->Branch("px_nu",         &_varListSL.px_nu,        "px_nu/F");
+    _treeSL->Branch("py_nu",         &_varListSL.py_nu,        "py_nu/F");
+    _treeSL->Branch("pz_nu",         &_varListSL.pz_nu,        "pz_nu/F");
+    _treeSL->Branch("energy_nu",     &_varListSL.energy_nu,    "energy_nu/F");
+    _treeSL->Branch("pt_nu",         &_varListSL.pt_nu,        "pt_nu/F");
+    _treeSL->Branch("eta_nu",        &_varListSL.eta_nu,       "eta_nu/F");
+    _treeSL->Branch("phi_nu",        &_varListSL.phi_nu,       "phi_nu/F");
+
+    _treeSL->Branch("px_w",         &_varListSL.px_w,        "px_w/F");
+    _treeSL->Branch("py_w",         &_varListSL.py_w,        "py_w/F");
+    _treeSL->Branch("pz_w",         &_varListSL.pz_w,        "pz_w/F");
+    _treeSL->Branch("energy_w",     &_varListSL.energy_w,    "energy_w/F");
+    _treeSL->Branch("pt_w",         &_varListSL.pt_w,        "pt_w/F");
+    _treeSL->Branch("eta_w",        &_varListSL.eta_w,       "eta_w/F");
+    _treeSL->Branch("phi_w",        &_varListSL.phi_w,       "phi_w/F");
+
+    _treeSL->Branch("px_chi",         &_varListSL.px_chi,        "px_chi/F");
+    _treeSL->Branch("py_chi",         &_varListSL.py_chi,        "py_chi/F");
+    _treeSL->Branch("pz_chi",         &_varListSL.pz_chi,        "pz_chi/F");
+    _treeSL->Branch("energy_chi",     &_varListSL.energy_chi,    "energy_chi/F");
+    _treeSL->Branch("pt_chi",         &_varListSL.pt_chi,        "pt_chi/F");
+    _treeSL->Branch("eta_chi",        &_varListSL.eta_chi,       "eta_chi/F");
+    _treeSL->Branch("phi_chi",        &_varListSL.phi_chi,       "phi_chi/F");
+
+    _treeSL->Branch("px_tSM",         &_varListSL.px_tSM,        "px_tSM/F");
+    _treeSL->Branch("py_tSM",         &_varListSL.py_tSM,        "py_tSM/F");
+    _treeSL->Branch("pz_tSM",         &_varListSL.pz_tSM,        "pz_tSM/F");
+    _treeSL->Branch("energy_tSM",     &_varListSL.energy_tSM,    "energy_tSM/F");
+    _treeSL->Branch("pt_tSM",         &_varListSL.pt_tSM,        "pt_tSM/F");
+    _treeSL->Branch("eta_tSM",        &_varListSL.eta_tSM,       "eta_tSM/F");
+    _treeSL->Branch("phi_tSM",        &_varListSL.phi_tSM,       "phi_tSM/F");
+
+    _treeSL->Branch("px_tBSM",         &_varListSL.px_tBSM,        "px_tBSM/F");
+    _treeSL->Branch("py_tBSM",         &_varListSL.py_tBSM,        "py_tBSM/F");
+    _treeSL->Branch("pz_tBSM",         &_varListSL.pz_tBSM,        "pz_tBSM/F");
+    _treeSL->Branch("energy_tBSM",     &_varListSL.energy_tBSM,    "energy_tBSM/F");
+    _treeSL->Branch("pt_tBSM",         &_varListSL.pt_tBSM,        "pt_tBSM/F");
+    _treeSL->Branch("eta_tBSM",        &_varListSL.eta_tBSM,       "eta_tBSM/F");
+    _treeSL->Branch("phi_tBSM",        &_varListSL.phi_tBSM,       "phi_tBSM/F");
+
     _treeSL->Branch("invm_wj1_wj2",       &_varListSL.invm_wj1_wj2,      "invm_wj1_wj2/F");
     _treeSL->Branch("dr_wj1_wj2",         &_varListSL.dr_wj1_wj2,        "dr_wj1_wj2/F");
     _treeSL->Branch("dphi_wj1_wj2",       &_varListSL.dphi_wj1_wj2,      "dphi_wj1_wj2/F");
@@ -247,18 +298,24 @@ MVASkim::MVASkim(const string& filename, bool SL, bool DL) {
     _treeSL->Branch("dr_wj2_leadbj",      &_varListSL.dr_wj2_leadbj,     "dr_wj2_leadbj/F");
     _treeSL->Branch("dphi_wj2_leadbj",    &_varListSL.dphi_wj2_leadbj,   "dphi_wj2_leadbj/F");
     _treeSL->Branch("invm_w_leadbj",      &_varListSL.invm_w_leadbj,     "invm_w_leadbj/F");
+    _treeSL->Branch("dphi_met_leadbj",    &_varListSL.dphi_met_leadbj,   "dphi_met_leadbj/F");
+    _treeSL->Branch("dphi_met_wj1",       &_varListSL.dphi_met_wj1,      "dphi_met_wj1/F");
+    _treeSL->Branch("dphi_met_wj2",       &_varListSL.dphi_met_wj2,      "dphi_met_wj2/F");
+    _treeSL->Branch("dphi_met_w",         &_varListSL.dphi_met_w,        "dphi_met_w/F");
 
     _treeSL->Branch("m_coll_x",           &_varListSL.m_coll_x,          "m_coll_x/F");
-    _treeSL->Branch("m_coll_xtest",       &_varListSL.m_coll_xtest,      "m_coll_xtest/F");
-    _treeSL->Branch("invm_x_leadlj",      &_varListSL.invm_x_leadlj,     "invm_x_leadlj/F");
-    _treeSL->Branch("dr_xlep_leadlj",     &_varListSL.dr_xlep_leadlj,    "dr_xlep_leadlj/F");
-    _treeSL->Branch("dphi_xlep_leadlj",   &_varListSL.dphi_xlep_leadlj,  "dphi_xlep_leadlj/F");
-    _treeSL->Branch("dr_tauh_leadlj",     &_varListSL.dr_tauh_leadlj,    "dr_tauh_leadlj/F");
-    _treeSL->Branch("dphi_tauh_leadlj",   &_varListSL.dphi_tauh_leadlj,  "dphi_tauh_leadlj/F");
-    _treeSL->Branch("dr_x_leadlj",        &_varListSL.dr_x_leadlj,       "dr_x_leadlj/F");
-    _treeSL->Branch("dphi_x_leadlj",      &_varListSL.dphi_x_leadlj,     "dphi_x_leadlj/F");
+    _treeSL->Branch("invm_x_toplj",       &_varListSL.invm_x_toplj,      "invm_x_toplj/F");
+    _treeSL->Branch("dr_xlep_toplj",      &_varListSL.dr_xlep_toplj,     "dr_xlep_toplj/F");
+    _treeSL->Branch("dphi_xlep_toplj",    &_varListSL.dphi_xlep_toplj,   "dphi_xlep_toplj/F");
+    _treeSL->Branch("dr_tauh_toplj",      &_varListSL.dr_tauh_toplj,     "dr_tauh_toplj/F");
+    _treeSL->Branch("dphi_tauh_toplj",    &_varListSL.dphi_tauh_toplj,   "dphi_tauh_toplj/F");
+    _treeSL->Branch("dr_x_toplj",         &_varListSL.dr_x_toplj,        "dr_x_toplj/F");
+    _treeSL->Branch("dphi_x_toplj",       &_varListSL.dphi_x_toplj,      "dphi_x_toplj/F");
     _treeSL->Branch("dr_xlep_tauh",       &_varListSL.dr_xlep_tauh,      "dr_xlep_tauh/F");
     _treeSL->Branch("dphi_xlep_tauh",     &_varListSL.dphi_xlep_tauh,    "dphi_xlep_tauh/F");
+    _treeSL->Branch("dphi_met_toplj",     &_varListSL.dphi_met_toplj,    "dphi_met_toplj/F");
+    _treeSL->Branch("dphi_met_xlep",      &_varListSL.dphi_met_xlep ,    "dphi_met_xlep /F");
+    _treeSL->Branch("dphi_met_tauh",      &_varListSL.dphi_met_tauh,     "dphi_met_tauh/F");
 
     _treeSL->Branch("dr_xlep_wj1",       &_varListSL.dr_xlep_wj1,      "dr_xlep_wj1/F");
     _treeSL->Branch("dphi_xlep_wj1",     &_varListSL.dphi_xlep_wj1,    "dphi_xlep_wj1/F");
@@ -281,12 +338,12 @@ MVASkim::MVASkim(const string& filename, bool SL, bool DL) {
     _treeSL->Branch("dr_tauh_leadbj",    &_varListSL.dr_tauh_leadbj,   "dr_tauh_leadbj/F");
     _treeSL->Branch("dphi_tauh_leadbj",  &_varListSL.dphi_tauh_leadbj, "dphi_tauh_leadbj/F");
     _treeSL->Branch("deta_tauh_leadbj",  &_varListSL.deta_tauh_leadbj, "deta_tauh_leadbj/F");
-    _treeSL->Branch("dr_leadbj_leadlj",  &_varListSL.dr_leadbj_leadlj, "dr_leadbj_leadlj/F");
-    _treeSL->Branch("dphi_leadbj_leadlj",&_varListSL.dphi_leadbj_leadlj,"dphi_leadbj_leadlj/F");
-    _treeSL->Branch("deta_leadbj_leadlj",&_varListSL.deta_leadbj_leadlj,"deta_leadbj_leadlj/F");
-    _treeSL->Branch("dr_w_leadlj",       &_varListSL.dr_w_leadlj,      "dr_w_leadlj/F");
-    _treeSL->Branch("dphi_w_leadlj",     &_varListSL.dphi_w_leadlj,    "dphi_w_leadlj/F");
-    _treeSL->Branch("deta_w_leadlj",     &_varListSL.deta_w_leadlj,    "deta_w_leadlj/F");
+    _treeSL->Branch("dr_leadbj_toplj",  &_varListSL.dr_leadbj_toplj,  "dr_leadbj_toplj/F");
+    _treeSL->Branch("dphi_leadbj_toplj",&_varListSL.dphi_leadbj_toplj,"dphi_leadbj_toplj/F");
+    _treeSL->Branch("deta_leadbj_toplj",&_varListSL.deta_leadbj_toplj,"deta_leadbj_toplj/F");
+    _treeSL->Branch("dr_w_toplj",       &_varListSL.dr_w_toplj,       "dr_w_toplj/F");
+    _treeSL->Branch("dphi_w_toplj",     &_varListSL.dphi_w_toplj,    "dphi_w_toplj/F");
+    _treeSL->Branch("deta_w_toplj",     &_varListSL.deta_w_toplj,    "deta_w_toplj/F");
     _treeSL->Branch("dr_x_leadbj",       &_varListSL.dr_x_leadbj,      "dr_x_leadbj/F");
     _treeSL->Branch("dphi_x_leadbj",     &_varListSL.dphi_x_leadbj,    "dphi_x_leadbj/F");
     _treeSL->Branch("deta_x_leadbj",     &_varListSL.deta_x_leadbj,    "deta_x_leadbj/F");
@@ -299,12 +356,16 @@ MVASkim::MVASkim(const string& filename, bool SL, bool DL) {
     _treeSL->Branch("total_mass",        &_varListSL.total_mass,       "total_mass/F");
     _treeSL->Branch("total_vector_pt",   &_varListSL.total_vector_pt,  "total_vector_pt/F");
     _treeSL->Branch("total_scalar_pt",   &_varListSL.total_scalar_pt,  "total_scalar_pt/F");
-    _treeSL->Branch("dphi_xlep_met",     &_varListSL.dphi_xlep_met,    "dphi_xlep_met/F");
     _treeSL->Branch("mt_xlep_met",       &_varListSL.mt_xlep_met,      "mt_xlep_met/F");
     _treeSL->Branch("dr_min_jets",       &_varListSL.dr_min_jets,      "dr_min_jets/F");
     _treeSL->Branch("dr_max_jets",       &_varListSL.dr_max_jets,      "dr_max_jets/F");
     _treeSL->Branch("ht_jets",           &_varListSL.ht_jets,          "ht_jets/F");
     _treeSL->Branch("smin",              &_varListSL.smin,             "smin/F");
+    _treeSL->Branch("costhetaS_xlep_tau",&_varListSL.costhetaS_xlep_tau,"costhetaS_xlep_tau/F");
+    _treeSL->Branch("costhetaS_xlep_tauh",&_varListSL.costhetaS_xlep_tauh,"costhetaS_xlep_tauh/F");
+
+    _treeSL->Branch("minDr_XlepJets",    &_varListSL.minDr_XlepJets,   "minDr_XlepJets/F");
+    _treeSL->Branch("maxDr_XlepJets",    &_varListSL.maxDr_XlepJets,   "maxDr_XlepJets/F");
   }
   _mvaFile->ls();
 }

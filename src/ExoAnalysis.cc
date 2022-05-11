@@ -846,6 +846,11 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
       float clusterMT = comp_clusterMT(XLepP4, WLepP4, tauhp4, leadbjp4, leadljp4, metp4);
       AnaUtil::fillHist1D ("clusterMT", clusterMT);
 
+      float costhetaS_xlep_tau = comp_cosThetaStar(XLepP4, taup4);
+      AnaUtil::fillHist1D ("costhetaS_xlep_tau", costhetaS_xlep_tau);
+      float costhetaS_xlep_tauh = comp_cosThetaStar(XLepP4, tauhp4);
+      AnaUtil::fillHist1D ("costhetaS_xlep_tauh", costhetaS_xlep_tauh);
+
       // Filling the branches of a flat ntuple for skimming
       if (skimObj_) {
 	TreeVariablesDL varList;
@@ -1001,6 +1006,8 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
 	varList.effectivemass         = Effectivemass;
 	varList.ht_jets               = HT_jets;
 	varList.smin                  = smin;
+	varList.costhetaS_xlep_tau    = costhetaS_xlep_tau;
+	varList.costhetaS_xlep_tauh   = costhetaS_xlep_tauh;
 
 	skimObj_->fill(varList);
       }       
@@ -1079,6 +1086,10 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
       AnaUtil::fillHist1D("evtCutFlow", 8, evWt);
       AnaUtil::fillHist1D("evtCutFlowWt", 8, lumiWt);
 
+      AnaUtil::fillHist1D("Wj1Pt",          wj1p4.Pt());
+      AnaUtil::fillHist1D("Wj2Pt",          wj2p4.Pt());
+      AnaUtil::fillHist1D("WPt",            wp4.Pt());
+
       TLorentzVector topljp4;
       for (auto &jet : lightJetColl) {
 	topljp4 = jet.P4();
@@ -1086,36 +1097,40 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
       }
 
       TLorentzVector t1p4   = wp4 + leadbjp4;
+      AnaUtil::fillHist1D("Pt_topSM", t1p4.Pt());
 
       float InvM_Wj1Wj2     = wp4.M();
       float DR_Wj1Wj2       = wj1p4.DeltaR(wj2p4);
       float DPhi_Wj1Wj2     = TVector2::Phi_mpi_pi(wj1p4.Phi() - wj2p4.Phi());
       float DEta_Wj1Wj2     = wj1p4.Eta() - wj2p4.Eta();
-
-      float DR_w_leadbj     = leadbjp4.DeltaR(wp4);
-      float DPhi_w_leadbj   = TVector2::Phi_mpi_pi(wp4.Phi() - leadbjp4.Phi()); 
-      float InvM_w_leadbj   = t1p4.M();
-
-      float DR_wj1_leadbj   = leadbjp4.DeltaR(wj1p4);
-      float DPhi_wj1_leadbj = TVector2::Phi_mpi_pi(wj1p4.Phi() - leadbjp4.Phi()); 
-
-      float DR_wj2_leadbj   = leadbjp4.DeltaR(wj2p4);
-      float DPhi_wj2_leadbj = TVector2::Phi_mpi_pi(wj2p4.Phi() - leadbjp4.Phi()); 
-
-      AnaUtil::fillHist1D("Wj1Pt",          wj1p4.Pt());
-      AnaUtil::fillHist1D("Wj2Pt",          wj2p4.Pt());
-      AnaUtil::fillHist1D("WPt",            wp4.Pt());
       AnaUtil::fillHist1D("InvM_Wj1Wj2",    InvM_Wj1Wj2);
       AnaUtil::fillHist1D("DR_Wj1Wj2",      DR_Wj1Wj2);
       AnaUtil::fillHist1D("DPhi_Wj1Wj2",    DPhi_Wj1Wj2);
       AnaUtil::fillHist1D("DEta_Wj1Wj2",    DEta_Wj1Wj2);
+
+      float DR_w_leadbj     = leadbjp4.DeltaR(wp4);
+      float DPhi_w_leadbj   = TVector2::Phi_mpi_pi(wp4.Phi() - leadbjp4.Phi()); 
+      float InvM_w_leadbj   = t1p4.M();
       AnaUtil::fillHist1D("DR_w_leadb",     DR_w_leadbj);
       AnaUtil::fillHist1D("DPhi_w_leadb",   DPhi_w_leadbj);
+      AnaUtil::fillHist1D("InvM_w_leadbj",  InvM_w_leadbj);
+
+      float DR_wj1_leadbj   = leadbjp4.DeltaR(wj1p4);
+      float DPhi_wj1_leadbj = TVector2::Phi_mpi_pi(wj1p4.Phi() - leadbjp4.Phi()); 
       AnaUtil::fillHist1D("DR_wj1_leadb",   DR_wj1_leadbj);
       AnaUtil::fillHist1D("DPhi_wj1_leadb", DPhi_wj1_leadbj);
+
+      float DR_wj2_leadbj   = leadbjp4.DeltaR(wj2p4);
+      float DPhi_wj2_leadbj = TVector2::Phi_mpi_pi(wj2p4.Phi() - leadbjp4.Phi()); 
       AnaUtil::fillHist1D("DR_wj2_leadb",   DR_wj2_leadbj);
       AnaUtil::fillHist1D("DPhi_wj2_leadb", DPhi_wj2_leadbj);
-      AnaUtil::fillHist1D("InvM_w_leadbj",  InvM_w_leadbj);
+      
+      float DPhi_met_wj1    = TVector2::Phi_mpi_pi(wj1p4.Phi() - metp4.Phi());
+      float DPhi_met_wj2    = TVector2::Phi_mpi_pi(wj2p4.Phi() - metp4.Phi());
+      float DPhi_met_w      = TVector2::Phi_mpi_pi(wp4.Phi() - metp4.Phi());
+      AnaUtil::fillHist1D("DPhi_met_wj1",    DPhi_met_wj1);
+      AnaUtil::fillHist1D("DPhi_met_wj2",    DPhi_met_wj2);
+      AnaUtil::fillHist1D("DPhi_met_w",      DPhi_met_w);
       
       //////////////////////////////////////////////////////
       ////////// variables from other leg (t~/t) ///////////
@@ -1127,93 +1142,54 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
       TLorentzVector Xp4     = taup4 + XLepP4;
       TLorentzVector t2p4    = Xp4 + topljp4;
       float M_coll_test      = Xp4.M();
-      float InvM_Xleadlj     = t2p4.M(); 
+      float InvM_Xtoplj      = t2p4.M(); 
+      AnaUtil::fillHist1D("XlepPt",           XlepPt);
+      AnaUtil::fillHist1D("XlepEta",          XlepEta);
+      AnaUtil::fillHist1D("M_coll_Xlep",      M_coll_Xlep);
+      AnaUtil::fillHist1D("M_coll_test",      M_coll_test);
+      AnaUtil::fillHist1D("InvM_Xtoplj",      InvM_Xtoplj);
+      AnaUtil::fillHist1D("Pt_topBSM",        t2p4.Pt());
 
-      float DR_Xlep_leadlj   = XLepP4.DeltaR(topljp4);
-      float DPhi_Xlep_leadlj = TVector2::Phi_mpi_pi(XLepP4.Phi() - topljp4.Phi()); 
+      float DR_Xlep_toplj   = XLepP4.DeltaR(topljp4);
+      float DPhi_Xlep_toplj = TVector2::Phi_mpi_pi(XLepP4.Phi() - topljp4.Phi()); 
+      AnaUtil::fillHist1D("DR_Xlep_toplj",    DR_Xlep_toplj);
+      AnaUtil::fillHist1D("DPhi_Xlep_toplj",  DPhi_Xlep_toplj);
 
-      float DR_Xtauh_leadlj  = tauhp4.DeltaR(topljp4);
-      float DPhi_Xtauh_leadlj= TVector2::Phi_mpi_pi(tauhp4.Phi() - topljp4.Phi()); 
+      float DR_Xtauh_toplj  = tauhp4.DeltaR(topljp4);
+      float DPhi_Xtauh_toplj= TVector2::Phi_mpi_pi(tauhp4.Phi() - topljp4.Phi()); 
+      AnaUtil::fillHist1D("DR_Xtauh_toplj",   DR_Xtauh_toplj);
+      AnaUtil::fillHist1D("DPhi_Xtauh_toplj", DPhi_Xtauh_toplj);
 
-      float DR_X_leadlj      = Xp4.DeltaR(topljp4);
-      float DPhi_X_leadlj    = TVector2::Phi_mpi_pi(Xp4.Phi() - topljp4.Phi());
+      float DR_X_toplj      = Xp4.DeltaR(topljp4);
+      float DPhi_X_toplj    = TVector2::Phi_mpi_pi(Xp4.Phi() - topljp4.Phi());
+      AnaUtil::fillHist1D("DR_X_toplj",       DR_X_toplj);
+      AnaUtil::fillHist1D("DPhi_X_toplj",     DPhi_X_toplj);
 
       float DR_Xlep_Xtau     = XLepP4.DeltaR(tauhp4);
       float DPhi_Xlep_Xtau   = TVector2::Phi_mpi_pi(XLepP4.Phi() - tauhp4.Phi());
+      AnaUtil::fillHist1D("DR_Xlep_Xtau",     DR_Xlep_Xtau);
+      AnaUtil::fillHist1D("DPhi_Xlep_Xtau",   DPhi_Xlep_Xtau);
 
-      AnaUtil::fillHist1D("XlepPt",        XlepPt);
-      AnaUtil::fillHist1D("XlepEta",       XlepEta);
-      AnaUtil::fillHist1D("M_coll_Xlep",   M_coll_Xlep);
-      AnaUtil::fillHist1D("M_coll_test",   M_coll_test);
-      AnaUtil::fillHist1D("InvM_Xleadlj",  InvM_Xleadlj);
-      AnaUtil::fillHist1D("DR_Xlep_leadlj",    DR_Xlep_leadlj);
-      AnaUtil::fillHist1D("DPhi_Xlep_leadlj",  DPhi_Xlep_leadlj);
-      AnaUtil::fillHist1D("DR_Xtauh_leadlj",   DR_Xtauh_leadlj);
-      AnaUtil::fillHist1D("DPhi_Xtauh_leadlj", DPhi_Xtauh_leadlj);
-      AnaUtil::fillHist1D("DR_X_leadlj",    DR_X_leadlj);
-      AnaUtil::fillHist1D("DPhi_X_leadlj",  DPhi_X_leadlj);
-      AnaUtil::fillHist1D("DR_Xlep_Xtau",   DR_Xlep_Xtau);
-      AnaUtil::fillHist1D("DPhi_Xlep_Xtau", DPhi_Xlep_Xtau);
-
+      float DPhi_met_toplj   = TVector2::Phi_mpi_pi(metp4.Phi() - topljp4.Phi());
+      float DPhi_met_xlep    = TVector2::Phi_mpi_pi(metp4.Phi() - XLepP4.Phi());
+      AnaUtil::fillHist1D("DPhi_met_toplj",   DPhi_met_toplj);
+      AnaUtil::fillHist1D("DPhi_met_xlep",    DPhi_met_xlep);
 
       //////////////////////////////////////////////////////
       /////////// communication between 2 legs /////////////
       //////////////////////////////////////////////////////
 
       // Xlep-w
-      float DR_Xlep_wj1       = XLepP4.DeltaR(wj1p4);
-      float DPhi_Xlep_wj1     = TVector2::Phi_mpi_pi(XLepP4.Phi() - wj1p4.Phi());
-      float DEta_Xlep_wj1     = XLepP4.Eta() - wj1p4.Eta();
-      float DR_Xlep_wj2       = XLepP4.DeltaR(wj2p4);
-      float DPhi_Xlep_wj2     = TVector2::Phi_mpi_pi(XLepP4.Phi() - wj2p4.Phi());
-      float DEta_Xlep_wj2     = XLepP4.Eta() - wj2p4.Eta();
-      float DR_Xlep_w         = XLepP4.DeltaR(wp4);
-      float DPhi_Xlep_w       = TVector2::Phi_mpi_pi(XLepP4.Phi() - wp4.Phi());
-      float DEta_Xlep_w       = XLepP4.Eta() - wp4.Eta();
-      // Xlep-leadb
-      float DR_Xlep_leadbj    = XLepP4.DeltaR(leadbjp4);
-      float DPhi_Xlep_leadbj  = TVector2::Phi_mpi_pi(XLepP4.Phi() - leadbjp4.Phi());
-      float DEta_Xlep_leadbj  = XLepP4.Eta() - leadbjp4.Eta();
-      // Xtau-w
-      float DR_Xtau_wj1       = tauhp4.DeltaR(wj1p4);
-      float DPhi_Xtau_wj1     = TVector2::Phi_mpi_pi(tauhp4.Phi() - wj1p4.Phi());
-      float DEta_Xtau_wj1     = tauhp4.Eta() - wj1p4.Eta();
-      float DR_Xtau_wj2       = tauhp4.DeltaR(wj2p4);
-      float DPhi_Xtau_wj2     = TVector2::Phi_mpi_pi(tauhp4.Phi() - wj2p4.Phi());
-      float DEta_Xtau_wj2     = tauhp4.Eta() - wj2p4.Eta();
-      float DR_Xtau_w         = tauhp4.DeltaR(wp4);
-      float DPhi_Xtau_w       = TVector2::Phi_mpi_pi(tauhp4.Phi() - wp4.Phi());
-      float DEta_Xtau_w       = tauhp4.Eta() - wp4.Eta();
-      // Xtau-leadb
-      float DR_Xtau_leadbj         = tauhp4.DeltaR(leadbjp4);
-      float DPhi_Xtau_leadbj       = TVector2::Phi_mpi_pi(tauhp4.Phi() - leadbjp4.Phi());
-      float DEta_Xtau_leadbj       = tauhp4.Eta() - leadbjp4.Eta();
-      // leadb-leadl
-      //float DR_leadbj_leadlj       = leadbjp4.DeltaR(topljp4);
-      //float DPhi_leadbj_leadlj     = TVector2::Phi_mpi_pi(leadbjp4.Phi() - topljp4.Phi());
-      //float DEta_leadbj_leadlj     = leadbjp4.Eta() - topljp4.Eta();
-      // W-leadl
-      float DR_w_leadlj         = wp4.DeltaR(topljp4);
-      float DPhi_w_leadlj       = TVector2::Phi_mpi_pi(wp4.Phi() - topljp4.Phi());
-      float DEta_w_leadlj       = wp4.Eta() - topljp4.Eta();
-      // Chi-leadb
-      float DR_X_leadbj            = Xp4.DeltaR(leadbjp4);
-      float DPhi_X_leadbj          = TVector2::Phi_mpi_pi(Xp4.Phi() - leadbjp4.Phi());
-      float DEta_X_leadbj          = Xp4.Eta() - leadbjp4.Eta();
-      // Chi-W
-      float DR_X_w            = Xp4.DeltaR(wp4);
-      float DPhi_X_w          = TVector2::Phi_mpi_pi(Xp4.Phi() - wp4.Phi());
-      float DEta_X_w          = Xp4.Eta() - wp4.Eta();
-      // t-t~
-      float DR_t1_t2          = t1p4.DeltaR(t2p4);
-      float DPhi_t1_t2        = TVector2::Phi_mpi_pi(t1p4.Phi() - t2p4.Phi());
-      float DEta_t1_t2        = t1p4.Eta() - t2p4.Eta();
-      // total
-      float Total_mass        = (t1p4 + t2p4).M();
-      float Total_vector_pt   = (t1p4 + t2p4).Pt();
-      float Total_scalar_pt   = XlepPt + taup4.Pt() + topljp4.Pt() + leadbjp4.Pt() + wj1p4.Pt() + wj2p4.Pt();
-
-      AnaUtil::fillHist1D("DR_Xlep_wj1",             DR_Xlep_wj1);       
+      float DR_Xlep_wj1        = XLepP4.DeltaR(wj1p4);
+      float DPhi_Xlep_wj1      = TVector2::Phi_mpi_pi(XLepP4.Phi() - wj1p4.Phi());
+      float DEta_Xlep_wj1      = XLepP4.Eta() - wj1p4.Eta();
+      float DR_Xlep_wj2        = XLepP4.DeltaR(wj2p4);
+      float DPhi_Xlep_wj2      = TVector2::Phi_mpi_pi(XLepP4.Phi() - wj2p4.Phi());
+      float DEta_Xlep_wj2      = XLepP4.Eta() - wj2p4.Eta();
+      float DR_Xlep_w          = XLepP4.DeltaR(wp4);
+      float DPhi_Xlep_w        = TVector2::Phi_mpi_pi(XLepP4.Phi() - wp4.Phi());
+      float DEta_Xlep_w        = XLepP4.Eta() - wp4.Eta();
+      AnaUtil::fillHist1D("DR_Xlep_wj1",             DR_Xlep_wj1);
       AnaUtil::fillHist1D("DPhi_Xlep_wj1",           DPhi_Xlep_wj1);     
       AnaUtil::fillHist1D("DEta_Xlep_wj1",           DEta_Xlep_wj1);     
       AnaUtil::fillHist1D("DR_Xlep_wj2",             DR_Xlep_wj2);
@@ -1222,9 +1198,25 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
       AnaUtil::fillHist1D("DR_Xlep_w",               DR_Xlep_w);
       AnaUtil::fillHist1D("DPhi_Xlep_w",             DPhi_Xlep_w);       
       AnaUtil::fillHist1D("DEta_Xlep_w",             DEta_Xlep_w);       
+
+      // Xlep-leadb
+      float DR_Xlep_leadbj     = XLepP4.DeltaR(leadbjp4);
+      float DPhi_Xlep_leadbj   = TVector2::Phi_mpi_pi(XLepP4.Phi() - leadbjp4.Phi());
+      float DEta_Xlep_leadbj   = XLepP4.Eta() - leadbjp4.Eta();
       AnaUtil::fillHist1D("DR_Xlep_leadbj",          DR_Xlep_leadbj);
       AnaUtil::fillHist1D("DPhi_Xlep_leadbj",        DPhi_Xlep_leadbj);       
       AnaUtil::fillHist1D("DEta_Xlep_leadbj",        DEta_Xlep_leadbj);
+
+      // Xtau-w
+      float DR_Xtau_wj1        = tauhp4.DeltaR(wj1p4);
+      float DPhi_Xtau_wj1      = TVector2::Phi_mpi_pi(tauhp4.Phi() - wj1p4.Phi());
+      float DEta_Xtau_wj1      = tauhp4.Eta() - wj1p4.Eta();
+      float DR_Xtau_wj2        = tauhp4.DeltaR(wj2p4);
+      float DPhi_Xtau_wj2      = TVector2::Phi_mpi_pi(tauhp4.Phi() - wj2p4.Phi());
+      float DEta_Xtau_wj2      = tauhp4.Eta() - wj2p4.Eta();
+      float DR_Xtau_w          = tauhp4.DeltaR(wp4);
+      float DPhi_Xtau_w        = TVector2::Phi_mpi_pi(tauhp4.Phi() - wp4.Phi());
+      float DEta_Xtau_w        = tauhp4.Eta() - wp4.Eta();
       AnaUtil::fillHist1D("DR_Xtau_wj1",             DR_Xtau_wj1);
       AnaUtil::fillHist1D("DPhi_Xtau_wj1",           DPhi_Xtau_wj1);
       AnaUtil::fillHist1D("DEta_Xtau_wj1",           DEta_Xtau_wj1);
@@ -1234,24 +1226,59 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
       AnaUtil::fillHist1D("DR_Xtau_w",               DR_Xtau_w);
       AnaUtil::fillHist1D("DPhi_Xtau_w",             DPhi_Xtau_w);
       AnaUtil::fillHist1D("DEta_Xtau_w",             DEta_Xtau_w);
+
+      // Xtau-leadb
+      float DR_Xtau_leadbj     = tauhp4.DeltaR(leadbjp4);
+      float DPhi_Xtau_leadbj   = TVector2::Phi_mpi_pi(tauhp4.Phi() - leadbjp4.Phi());
+      float DEta_Xtau_leadbj   = tauhp4.Eta() - leadbjp4.Eta();
       AnaUtil::fillHist1D("DR_Xtau_leadbj",          DR_Xtau_leadbj);
       AnaUtil::fillHist1D("DPhi_Xtau_leadbj",        DPhi_Xtau_leadbj);
       AnaUtil::fillHist1D("DEta_Xtau_leadbj",        DEta_Xtau_leadbj);
-      AnaUtil::fillHist1D("DR_leadbj_leadlj",        DR_leadbj_leadlj);
-      AnaUtil::fillHist1D("DPhi_leadbj_leadlj",      DPhi_leadbj_leadlj);
-      AnaUtil::fillHist1D("DEta_leadbj_leadlj",      DEta_leadbj_leadlj);
-      AnaUtil::fillHist1D("DR_w_leadlj",             DR_w_leadlj);
-      AnaUtil::fillHist1D("DPhi_w_leadlj",           DPhi_w_leadlj);
-      AnaUtil::fillHist1D("DEta_w_leadlj",           DEta_w_leadlj);
+
+      // leadb-leadl
+      float DR_leadbj_toplj    = leadbjp4.DeltaR(topljp4);
+      float DPhi_leadbj_toplj  = TVector2::Phi_mpi_pi(leadbjp4.Phi() - topljp4.Phi());
+      float DEta_leadbj_toplj  = leadbjp4.Eta() - topljp4.Eta();
+      AnaUtil::fillHist1D("DR_leadbj_toplj",         DR_leadbj_toplj);
+      AnaUtil::fillHist1D("DPhi_leadbj_toplj",       DPhi_leadbj_toplj);
+      AnaUtil::fillHist1D("DEta_leadbj_toplj",       DEta_leadbj_toplj);
+
+      // W-leadl
+      float DR_w_toplj         = wp4.DeltaR(topljp4);
+      float DPhi_w_toplj       = TVector2::Phi_mpi_pi(wp4.Phi() - topljp4.Phi());
+      float DEta_w_toplj       = wp4.Eta() - topljp4.Eta();
+      AnaUtil::fillHist1D("DR_w_toplj",             DR_w_toplj);
+      AnaUtil::fillHist1D("DPhi_w_toplj",           DPhi_w_toplj);
+      AnaUtil::fillHist1D("DEta_w_toplj",           DEta_w_toplj);
+
+      // Chi-leadb
+      float DR_X_leadbj        = Xp4.DeltaR(leadbjp4);
+      float DPhi_X_leadbj      = TVector2::Phi_mpi_pi(Xp4.Phi() - leadbjp4.Phi());
+      float DEta_X_leadbj      = Xp4.Eta() - leadbjp4.Eta();
       AnaUtil::fillHist1D("DR_X_leadbj",             DR_X_leadbj);
       AnaUtil::fillHist1D("DPhi_X_leadbj",           DPhi_X_leadbj); 
       AnaUtil::fillHist1D("DEta_X_leadbj",           DEta_X_leadbj);
+
+      // Chi-W
+      float DR_X_w             = Xp4.DeltaR(wp4);
+      float DPhi_X_w           = TVector2::Phi_mpi_pi(Xp4.Phi() - wp4.Phi());
+      float DEta_X_w           = Xp4.Eta() - wp4.Eta();
       AnaUtil::fillHist1D("DR_X_w",                  DR_X_w);
       AnaUtil::fillHist1D("DPhi_X_w",                DPhi_X_w); 
       AnaUtil::fillHist1D("DEta_X_w",                DEta_X_w);
+
+      // t-t~
+      float DR_t1_t2           = t1p4.DeltaR(t2p4);
+      float DPhi_t1_t2         = TVector2::Phi_mpi_pi(t1p4.Phi() - t2p4.Phi());
+      float DEta_t1_t2         = t1p4.Eta() - t2p4.Eta();
       AnaUtil::fillHist1D("DR_t1_t2",                DR_t1_t2);
       AnaUtil::fillHist1D("DPhi_t1_t2",              DPhi_t1_t2);
       AnaUtil::fillHist1D("DEta_t1_t2",              DEta_t1_t2);
+
+      // total
+      float Total_mass         = (t1p4 + t2p4).M();
+      float Total_vector_pt    = (t1p4 + t2p4).Pt();
+      float Total_scalar_pt    = XlepPt + taup4.Pt() + topljp4.Pt() + leadbjp4.Pt() + wj1p4.Pt() + wj2p4.Pt();
       AnaUtil::fillHist1D("Total_mass",              Total_mass);
       AnaUtil::fillHist1D("Total_vector_pt",         Total_vector_pt);
       AnaUtil::fillHist1D("Total_scalar_pt",         Total_scalar_pt);
@@ -1284,6 +1311,11 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
 
       float clusterMT = comp_clusterMT(XLepP4, tauhp4, leadbjp4, topljp4, wj1p4, wj2p4, metp4);
       AnaUtil::fillHist1D ("clusterMT", clusterMT);
+
+      float costhetaS_xlep_tau = comp_cosThetaStar(XLepP4, taup4);
+      AnaUtil::fillHist1D ("costhetaS_xlep_tau", costhetaS_xlep_tau);
+      float costhetaS_xlep_tauh = comp_cosThetaStar(XLepP4, tauhp4);
+      AnaUtil::fillHist1D ("costhetaS_xlep_tauh", costhetaS_xlep_tauh);
 
       // needs to be done
       if (skimObj_) {
@@ -1322,13 +1354,13 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
 	varList.eta_leadbj    = std::fabs(leadbjp4.Eta());
 	varList.phi_leadbj    = std::fabs(leadbjp4.Phi());
 	// ==> leading light jet vars
-	varList.px_leadlj     = topljp4.Px();
-	varList.py_leadlj     = topljp4.Py();
-	varList.pz_leadlj     = topljp4.Pz();
-	varList.energy_leadlj = topljp4.E();
-	varList.pt_leadlj     = topljp4.Pt();
-	varList.eta_leadlj    = std::fabs(topljp4.Eta());
-	varList.phi_leadlj    = std::fabs(topljp4.Phi());
+	varList.px_toplj      = topljp4.Px();
+	varList.py_toplj      = topljp4.Py();
+	varList.pz_toplj      = topljp4.Pz();
+	varList.energy_toplj  = topljp4.E();
+	varList.pt_toplj      = topljp4.Pt();
+	varList.eta_toplj     = std::fabs(topljp4.Eta());
+	varList.phi_toplj     = std::fabs(topljp4.Phi());
 	// ==> w jet1 vars
 	varList.px_wjet1      = wj1p4.Px();
 	varList.py_wjet1      = wj1p4.Py();
@@ -1353,8 +1385,56 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
 	varList.pt_xlep       = XlepPt;
 	varList.eta_xlep      = std::fabs(XlepEta);
 	varList.phi_xlep      = std::fabs(XLepP4.Phi());
+	// ==> Tau vars
+	varList.px_tau        = taup4.Px();
+	varList.py_tau        = taup4.Py();
+	varList.pz_tau        = taup4.Pz();
+	varList.energy_tau    = taup4.E();
+	varList.pt_tau        = taup4.Pt();
+	varList.eta_tau       = std::fabs(taup4.Eta());
+	varList.phi_tau       = std::fabs(taup4.Phi());
+	// ==> Nu vars
+	varList.px_nu         = nup4.Px();
+	varList.py_nu         = nup4.Py();
+	varList.pz_nu         = nup4.Pz();
+	varList.energy_nu     = nup4.E();
+	varList.pt_nu         = nup4.Pt();
+	varList.eta_nu        = std::fabs(nup4.Eta());
+	varList.phi_nu        = std::fabs(nup4.Phi());
 
 	// --------- High level variables ---------- //
+	// w
+	varList.px_w         = wp4.Px();
+	varList.py_w         = wp4.Py();
+	varList.pz_w         = wp4.Pz();
+	varList.energy_w     = wp4.E();
+	varList.pt_w         = wp4.Pt();
+	varList.eta_w        = std::fabs(wp4.Eta());
+	varList.phi_w        = std::fabs(wp4.Phi());
+	// chi
+	varList.px_chi       = Xp4.Px();
+	varList.py_chi       = Xp4.Py();
+	varList.pz_chi       = Xp4.Pz();
+	varList.energy_chi   = Xp4.E();
+	varList.pt_chi       = Xp4.Pt();
+	varList.eta_chi      = std::fabs(Xp4.Eta());
+	varList.phi_chi      = std::fabs(Xp4.Phi());
+	// top : SM
+	varList.px_tSM       = t1p4.Px();
+	varList.py_tSM       = t1p4.Py();
+	varList.pz_tSM       = t1p4.Pz();
+	varList.energy_tSM   = t1p4.E();
+	varList.pt_tSM       = t1p4.Pt();
+	varList.eta_tSM      = std::fabs(t1p4.Eta());
+	varList.phi_tSM      = std::fabs(t1p4.Phi());
+	// top : BSM
+	varList.px_tBSM      = t2p4.Px();
+	varList.py_tBSM      = t2p4.Py();
+	varList.pz_tBSM      = t2p4.Pz();
+	varList.energy_tBSM  = t2p4.E();
+	varList.pt_tBSM      = t2p4.Pt();
+	varList.eta_tBSM     = std::fabs(t2p4.Eta());
+	varList.phi_tBSM     = std::fabs(t2p4.Phi());
 	// from one leg
 	varList.invm_wj1_wj2    = InvM_Wj1Wj2;
 	varList.dr_wj1_wj2      = DR_Wj1Wj2;
@@ -1367,18 +1447,26 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
 	varList.dr_wj2_leadbj   = DR_wj2_leadbj;
 	varList.dphi_wj2_leadbj = std::fabs(DPhi_wj2_leadbj);
 	varList.invm_w_leadbj   = InvM_w_leadbj;
+	varList.dphi_met_leadbj = std::fabs(DPhi_met_leadbj);//new
+	varList.dphi_met_wj1    = std::fabs(DPhi_met_wj1);   //new
+	varList.dphi_met_wj2    = std::fabs(DPhi_met_wj2);   //new
+	varList.dphi_met_w      = std::fabs(DPhi_met_w);     //new
+
 	// from other leg
 	varList.m_coll_x          = M_coll_Xlep;
-	varList.m_coll_xtest      = M_coll_test;
-	varList.invm_x_leadlj     = InvM_Xleadlj;
-	varList.dr_xlep_leadlj    = DR_Xlep_leadlj;
-	varList.dphi_xlep_leadlj  = std::fabs(DPhi_Xlep_leadlj);
-	varList.dr_tauh_leadlj    = DR_Xtauh_leadlj;
-	varList.dphi_tauh_leadlj  = std::fabs(DPhi_Xtauh_leadlj);
-	varList.dr_x_leadlj       = DR_X_leadlj;
-	varList.dphi_x_leadlj     = std::fabs(DPhi_X_leadlj);
+	varList.invm_x_toplj      = InvM_Xtoplj;
+	varList.dr_xlep_toplj     = DR_Xlep_toplj;
+	varList.dphi_xlep_toplj   = std::fabs(DPhi_Xlep_toplj);
+	varList.dr_tauh_toplj     = DR_Xtauh_toplj;
+	varList.dphi_tauh_toplj   = std::fabs(DPhi_Xtauh_toplj);
+	varList.dr_x_toplj        = DR_X_toplj;
+	varList.dphi_x_toplj      = std::fabs(DPhi_X_toplj);
 	varList.dr_xlep_tauh      = DR_Xlep_Xtau;
 	varList.dphi_xlep_tauh    = std::fabs(DPhi_Xlep_Xtau);
+	varList.dphi_met_toplj    = std::fabs(DPhi_met_toplj); // new
+	varList.dphi_met_xlep     = std::fabs(DPhi_met_xlep);  // new
+	varList.dphi_met_tauh     = std::fabs(DPhi_met_tauh);  // new
+
 	// from both leg
 	varList.dr_xlep_wj1      = DR_Xlep_wj1;
 	varList.dphi_xlep_wj1    = std::fabs(DPhi_Xlep_wj1);
@@ -1401,12 +1489,12 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
 	varList.dr_tauh_leadbj    = DR_Xtau_leadbj;
 	varList.dphi_tauh_leadbj  = std::fabs(DPhi_Xtau_leadbj);
 	varList.deta_tauh_leadbj  = std::fabs(DEta_Xtau_leadbj);
-	varList.dr_leadbj_leadlj  = DR_leadbj_leadlj;
-	varList.dphi_leadbj_leadlj  = std::fabs(DPhi_leadbj_leadlj);
-	varList.deta_leadbj_leadlj  = std::fabs(DEta_leadbj_leadlj);
-	varList.dr_w_leadlj       = DR_w_leadlj;
-	varList.dphi_w_leadlj     = std::fabs(DPhi_w_leadlj);
-	varList.deta_w_leadlj     = std::fabs(DEta_w_leadlj);
+	varList.dr_leadbj_toplj       = DR_leadbj_toplj;
+	varList.dphi_leadbj_toplj     = std::fabs(DPhi_leadbj_toplj);
+	varList.deta_leadbj_toplj     = std::fabs(DEta_leadbj_toplj);
+	varList.dr_w_toplj       = DR_w_toplj;
+	varList.dphi_w_toplj     = std::fabs(DPhi_w_toplj);
+	varList.deta_w_toplj     = std::fabs(DEta_w_toplj);
 	varList.dr_x_leadbj       = DR_X_leadbj;
 	varList.dphi_x_leadbj     = std::fabs(DPhi_X_leadbj);
 	varList.deta_x_leadbj     = std::fabs(DEta_X_leadbj);
@@ -1419,14 +1507,18 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
 	varList.total_mass       = Total_mass; 
 	varList.total_vector_pt  = Total_vector_pt;
 	varList.total_scalar_pt  = Total_scalar_pt;
-	varList.dphi_xlep_met    = std::fabs(TVector2::Phi_mpi_pi(XLepP4.Phi() - metp4.Phi()));
 	varList.mt_xlep_met      = Calculate_MT(XLepP4, metp4);
 	// di-jets variables
 	varList.dr_min_jets      = minDR;
 	varList.dr_max_jets      = maxDR;
 	varList.ht_jets          = HT_jets;
 	varList.smin             = smin;
-	
+	//varList.clusterMT        = clusterMT;
+	varList.costhetaS_xlep_tau  = costhetaS_xlep_tau;
+	varList.costhetaS_xlep_tauh = costhetaS_xlep_tauh;
+	varList.minDr_XlepJets      = minDr_XlepJets;
+	varList.maxDr_XlepJets      = maxDr_XlepJets;
+
 	skimObj_->fill(varList);
       }       
       histf->cd();
@@ -1484,7 +1576,7 @@ void ExoAnalysis::endJob() {
 	"NLightJet >= 3",
 	"nBJets == 1",
 	"has probable 2 W jets",
-	"|w reco mass - mW| < 40 GeV"
+	"|w reco mass - mW| < 30 GeV"
       };
   
   AnaUtil::SetEvtCutFlowBinLabels("evtCutFlow",evLabels);
@@ -1573,6 +1665,19 @@ float ExoAnalysis::comp_clusterMT(const TLorentzVector &lep1p4,
   float part2 = std::pow(cluster_met_p4.Pt(), 2);
   return TMath::Sqrt(part1 - part2);
 }
+
+float ExoAnalysis::comp_cosThetaStar(const TLorentzVector & daughterP4_lead, const TLorentzVector & daughterP4_sublead) {
+  // compute "helicity angle" between momentum vectors of daughter and mother particle
+  // in the rest-frame of the mother particle
+  // (cf. Section 2.6.2 and Fig. 59 of AN-2015/001)
+  const TLorentzVector motherP4 = daughterP4_lead + daughterP4_sublead;
+  TLorentzVector daughterBoost; 
+  // can be subleading, too, doesn't matter
+  daughterBoost.SetPtEtaPhiM(daughterP4_lead.Pt(), daughterP4_lead.Eta(), daughterP4_lead.Phi(), daughterP4_lead.M());
+  daughterBoost.Boost(-motherP4.BoostVector());
+  return std::fabs(daughterBoost.CosTheta());
+}
+
 
 void ExoAnalysis::closeHistFiles(){
   histf->cd();

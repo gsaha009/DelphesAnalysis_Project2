@@ -246,38 +246,38 @@ void HistBooker::bookBasicHistograms() {
 }
 
 void HistBooker::bookDLHistograms () {
-  bookHist1D("evtCutFlow",        "Event Weight Sum",    10, -0.5, 9.5);
-  bookHist1D("evtCutFlowWt",      "HepMCEvent Weight",   10, -0.5, 9.5);
+  bookHist1D("evtCutFlow",                "Event Weight Sum",    10, -0.5, 9.5);
+  bookHist1D("evtCutFlowWt",              "HepMCEvent Weight",   10, -0.5, 9.5);
 
-  bookHist1D("XlepPt",           "p_{T} [#mu from #chi] (GeV)", 50, 0., 200.);
-  bookHist1D("XlepEta",          "#chi lepton #eta",        25, -2.5, 2.5);
-  bookHist1D("MET_along_tauh",   "#slash{E}_{T} along #tau_{h}",                 50, 0., 300.);
-  bookHist1D("FracMetAlongTauh", "#slash{E}_{T} along #tau_{h}/#slash{E}_{T}", 50, 0, 1);
-  bookHist1D("DR_xlep_tauh",     "#DeltaR [#mu from #chi, #tau_{h}]",          25, 0, 5);
-  bookHist1D("DPhi_xlep_tauh",   "#Delta#phi [#mu from #chi, #tau_{h}]",       32, -3.2, 3.2);
-  bookHist1D("DEta_xlep_tauh",   "#Delta#eta [#mu from #chi, #tau_{h}]",       50, -5, 5);
-  bookHist1D("DR_xlep_leadlj",   "#DeltaR [#mu from #chi, lead light-Jet]",         25, 0, 5);
-  bookHist1D("DPhi_xlep_leadlj", "#Delta#phi [#mu from #chi, lead light-Jet]",      32, -3.2, 3.2);
-  bookHist1D("DEta_xlep_leadlj", "#Delta#eta [#mu from #chi, lead light-Jet]",      50, -5, 5);
-  bookHist1D("DR_xlep_leadj",    "#DeltaR [#mu from #chi, lead Jet]",         25, 0, 5);
-  bookHist1D("DPhi_xlep_leadj",  "#Delta#phi [#mu from #chi, lead Jet]",      32, -3.2, 3.2);
-  bookHist1D("DEta_xlep_leadj",  "#Delta#eta [#mu from #chi, lead Jet]",      50, -5, 5);
-  bookHist1D("DPhi_xlep_met",    "#Delta#phi [#mu from #chi, #slash{E}_{T}]", 32, -3.2, 3.2);
-  bookHist1D("EffectiveMass_t1", "Effective mass of top (GeV)",               50, 0, 500);
-  bookHist1D("InvMass_X_test",   "Invariant mass of #chi (GeV) : improper",   50, 0, 200);
-  bookHist1D("MT_X",             "Transverse mass of #chi (GeV)",             50, 0, 500);
-  bookHist1D("InvM_coln_XlepTauh", "Collinear mass (GeV)",                    50, 0, 200);
-  bookHist1D("InvM_coln_XlepTauh_MuMu", "Collinear mass (GeV) : #mu#mu",      50, 0, 200);
-  bookHist1D("InvM_coln_XlepTauh_EleMu", "Collinear mass (GeV) : ele#mu",     50, 0, 200);
-  bookHist1D("DR_XlepTauh_MuMu",      "DR_XlepTauh_MuMu",           25, 0, 5);
-  bookHist1D("DR_XlepTauh_EleMu",      "DR_XlepTauh_EleMu",           25, 0, 5);
-  bookHist1D("DR_WlepTauh_MuMu",      "DR_WlepTauh_MuMu",           25, 0, 5);
-  bookHist1D("DR_WlepTauh_EleMu",      "DR_WlepTauh_EleMu",           25, 0, 5);
+  bookHist1D("XlepPt",                    "p_{T} [#mu from #chi] (GeV)", 50, 0., 200.);
+  bookHist1D("XlepEta",                   "#chi lepton #eta",        25, -2.5, 2.5);
+  bookHist1D("MET_along_tauh",            "#slash{E}_{T} along #tau_{h}",                 50, 0., 300.);
+  bookHist1D("FracMetAlongTauh",          "Projection of #slash{E}_{T} along #tau_{h}", 50, 0, 1);
+  bookHist1D("DR_xlep_tauh",              "#DeltaR [#mu from #chi, #tau_{h}]",          25, 0, 5);
+  bookHist1D("DPhi_xlep_tauh",            "#Delta#phi [#mu from #chi, #tau_{h}]",       32, -3.2, 3.2);
+  bookHist1D("DEta_xlep_tauh",            "#Delta#eta [#mu from #chi, #tau_{h}]",       50, -5, 5);
+  bookHist1D("DR_xlep_leadlj",            "#DeltaR [#mu from #chi, lead light-Jet]",         25, 0, 5);
+  bookHist1D("DPhi_xlep_leadlj",          "#Delta#phi [#mu from #chi, lead light-Jet]",      32, -3.2, 3.2);
+  bookHist1D("DEta_xlep_leadlj",          "#Delta#eta [#mu from #chi, lead light-Jet]",      50, -5, 5);
+  bookHist1D("DR_xlep_leadj",             "#DeltaR [#mu from #chi, lead Jet]",         25, 0, 5);
+  bookHist1D("DPhi_xlep_leadj",           "#Delta#phi [#mu from #chi, lead Jet]",      32, -3.2, 3.2);
+  bookHist1D("DEta_xlep_leadj",           "#Delta#eta [#mu from #chi, lead Jet]",      50, -5, 5);
+  bookHist1D("DPhi_xlep_met",             "#Delta#phi [#mu from #chi, #slash{E}_{T}]", 32, -3.2, 3.2);
+  bookHist1D("EffectiveMass_t1",          "Effective mass of top (GeV)",               50, 0, 500);
+  bookHist1D("InvMass_X_test",            "Invariant mass of #chi (GeV) : improper",   50, 0, 200);
+  bookHist1D("MT_X",                      "Transverse mass of #chi (GeV)",             50, 0, 500);
+  bookHist1D("InvM_coln_XlepTauh",        "Collinear mass (GeV)",                    50, 0, 200);
+  bookHist1D("InvM_coln_XlepTauh_MuMu",   "Collinear mass (GeV) : #mu#mu",      50, 0, 200);
+  bookHist1D("InvM_coln_XlepTauh_EleMu",  "Collinear mass (GeV) : ele#mu",     50, 0, 200);
+  bookHist1D("DR_XlepTauh_MuMu",          "#DeltaR [#chi_{#mu}, #tau_{h}] : #mu#mu channel",    25, 0, 5);
+  bookHist1D("DR_XlepTauh_EleMu",         "#DeltaR [#chi_{#mu}, #tau_{h}] : e#mu channel",      25, 0, 5);
+  bookHist1D("DR_WlepTauh_MuMu",          "#DeltaR [W_{lep}, #tau_{h}] : #mu#mu",               25, 0, 5);
+  bookHist1D("DR_WlepTauh_EleMu",         "#DeltaR [W_{lep}, #tau_{h}] : e#mu",                 25, 0, 5);
 
-  bookHist1D("DPhi_XlepTauh_MuMu",      "DPhi_XlepTauh_MuMu",           16, 0, 3.2);
-  bookHist1D("DPhi_XlepTauh_EleMu",     "DPhi_XlepTauh_EleMu",          16, 0, 3.2);
-  bookHist1D("DPhi_WlepTauh_MuMu",      "DPhi_WlepTauh_MuMu",           16, 0, 3.2);
-  bookHist1D("DPhi_WlepTauh_EleMu",     "DPhi_WlepTauh_EleMu",          16, 0, 3.2);
+  bookHist1D("DPhi_XlepTauh_MuMu",        "DPhi_XlepTauh_MuMu",           32, -3.2, 3.2);
+  bookHist1D("DPhi_XlepTauh_EleMu",       "DPhi_XlepTauh_EleMu",          32, -3.2, 3.2);
+  bookHist1D("DPhi_WlepTauh_MuMu",        "DPhi_WlepTauh_MuMu",           32, -3.2, 3.2);
+  bookHist1D("DPhi_WlepTauh_EleMu",       "DPhi_WlepTauh_EleMu",          32, -3.2, 3.2);
 
   bookHist2D("DR_XlepTauh_Vs_WlepTauh_MuMu", "DR_XlepTauh_Vs_WlepTauh_MuMu", 25, 0, 5, 25, 0, 5);
   bookHist2D("DR_XlepTauh_Vs_WlepTauh_EleMu", "DR_XlepTauh_Vs_WlepTauh_EleMu", 25, 0, 5, 25, 0, 5);
@@ -288,7 +288,7 @@ void HistBooker::bookDLHistograms () {
   bookHist2D("IsOppCharge_DR_XlepTauh_EleMu", "", 2, -0.5, 1.5, 25, 0, 5);
   bookHist2D("IsOppCharge_DR_WlepTauh_EleMu", "", 2, -0.5, 1.5, 25, 0, 5);
 
-  bookHist1D("MT_xlep_met", "Transverse mass (#mu from #chi, #slash{E}_{T}) (GeV)", 50, 0, 500);
+  bookHist1D("MT_xlep_met", "m_{T} (#mu_{#chi}, #slash{E}_{T}) (GeV)", 50, 0, 500);
 
   bookHist1D("WlepPt",  "p_{T} [lepton from W^{#pm}] (GeV)", 50, 0., 200.);
   bookHist1D("WlepEta", "W#pm lepton #eta",        25, -2.5, 2.5);
@@ -327,7 +327,7 @@ void HistBooker::bookDLHistograms () {
   bookHist1D("maxDr_WlepJets",    "maximum #Delta R [lepton from W, all jets]",    25, 0, 5.0);
   bookHist1D("minDphi_WlepJets",  "minimum #Delta #Phi [lepton from W, all jets]", 32, 0, 3.2);
   bookHist1D("maxDphi_WlepJets",  "maximum #Delta #Phi [lepton from W, all jets]", 32, 0, 3.2);
-  bookHist1D("smin",              "#sqrt{#wedge{s}_{min}}",                      100, 0, 1600);
+  bookHist1D("smin",              "#sqrt{#hat{s}_{min}}",                        100, 0, 1600);
   bookHist1D("clusterMT",         "Cluster m_{T} (GeV)",                         100, 0, 1600);
 }
 
@@ -340,6 +340,7 @@ void HistBooker::bookSLHistograms () {
   bookHist1D("Wj1Pt",         "p_{T} (GeV) of leading-jet from W",     20, 0, 300);
   bookHist1D("Wj2Pt",         "p_{T} (GeV) of subleading-jet from W",  20, 0, 300);
   bookHist1D("WPt",           "p_{T} (GeV) of W",                      20, 0, 300);
+  bookHist1D("Pt_topSM",      "p_{T} (GeV) of t/#bar{t} : SM leg",     20, 0, 300);
   bookHist1D("InvM_Wj1Wj2",   "Invariant mass [W-jet1, W-jet2] (GeV)", 50, 0, 200);
   bookHist1D("DR_Wj1Wj2",     "#Delta R [W_{j1}, W_{j2}]",             25, 0, 5);
   bookHist1D("DPhi_Wj1Wj2",   "#Delta #Phi [W_{j1}, W_{j2}]",          32, -3.2, 3.2);
@@ -351,20 +352,27 @@ void HistBooker::bookSLHistograms () {
   bookHist1D("DR_wj2_leadb",  "#Delta R [W_{j2}, leading b-jet]",     25, 0, 5);
   bookHist1D("DPhi_wj2_leadb","#Delta #Phi [W_{j2}, leading b-jet]",  32, -3.2, 3.2);
   bookHist1D("InvM_w_leadbj", "Invariant Mass [W, leading b-jet] (GeV)", 50, 0, 500);
+  bookHist1D("DPhi_met_wj1",  "#Delta #Phi [#slash{E}_{T}, W_{j1}]",  32, -3.2, 3.2);
+  bookHist1D("DPhi_met_wj2",  "#Delta #Phi [#slash{E}_{T}, W_{j2}]",  32, -3.2, 3.2);
+  bookHist1D("DPhi_met_w",    "#Delta #Phi [#slash{E}_{T}, W^{#pm}]", 32, -3.2, 3.2);
   // book histograms for another leg
   bookHist1D("XlepPt",          "p_{T} of #mu from #chi",         50, 0, 200);
   bookHist1D("XlepEta",         "#eta of #mu from #chi",          32, -3.2, 3.2);
   bookHist1D("M_coll_Xlep",     "M_{coll} (GeV)",                 50, 0, 200);
   bookHist1D("M_coll_test",     "M_{coll} (GeV)",                 200, 0, 1000);
-  bookHist1D("InvM_Xleadlj",    "Invariant mass [#chi, leading light-jet] (GeV)",  100, 0, 1000);
-  bookHist1D("DR_Xlep_leadlj",  "#Delta R [#mu from #chi, leading light-jet]",     25, 0, 5);
-  bookHist1D("DPhi_Xlep_leadlj","#Delta #Phi [#mu from #chi, leading light-jet]",  32, -3.2, 3.2);
-  bookHist1D("DR_Xtauh_leadlj", "#Delta R [#tau_{h} from #chi, leading light-jet]", 25, 0, 5);
-  bookHist1D("DPhi_Xtauh_leadlj","#Delta #Phi [#tau_{h} from #chi, leading light-jet]", 32, -3.2, 3.2);
-  bookHist1D("DR_X_leadlj",     "#Delta R [#chi, leading light-jet]",        25, 0, 5);
-  bookHist1D("DPhi_X_leadlj",   "#Delta #Phi [#chi, leading light-jet]",     32, -3.2, 3.2);
+  bookHist1D("InvM_Xtoplj",     "Invariant mass [#chi, leading light-jet] (GeV)",  100, 0, 1000);
+  bookHist1D("Pt_topBSM",       "p_{T} (GeV) of t/#bar{t} : BSM leg",              20, 0, 300);
+  bookHist1D("DR_Xlep_toplj",   "#Delta R [#mu from #chi, leading light-jet]",     25, 0, 5);
+  bookHist1D("DPhi_Xlep_toplj", "#Delta #Phi [#mu from #chi, leading light-jet]",  32, -3.2, 3.2);
+  bookHist1D("DR_Xtauh_toplj",  "#Delta R [#tau_{h} from #chi, leading light-jet]", 25, 0, 5);
+  bookHist1D("DPhi_Xtauh_toplj","#Delta #Phi [#tau_{h} from #chi, leading light-jet]", 32, -3.2, 3.2);
+  bookHist1D("DR_X_toplj",      "#Delta R [#chi, leading light-jet]",        25, 0, 5);
+  bookHist1D("DPhi_X_toplj",    "#Delta #Phi [#chi, leading light-jet]",     32, -3.2, 3.2);
   bookHist1D("DR_Xlep_Xtau",    "#Delta R [(#mu, #tau) form #chi]",          25, 0, 5);
   bookHist1D("DPhi_Xlep_Xtau",  "#Delta #Phi [(#mu, #tau) form #chi]",       32, -3.2, 3.2);
+  bookHist1D("DPhi_met_toplj",  "#Delta #Phi [#slash{E}_{T}, light jet from t/#bar{t}]", 32, -3.2, 3.2);
+  bookHist1D("DPhi_met_xlep",   "#Delta #Phi [#slash{E}_{T}, #mu from #chi]", 32, -3.2, 3.2);
+
   // communication between 2 legs
   bookHist1D("DR_Xlep_wj1",     "#Delta R",             25, 0, 5);     
   bookHist1D("DPhi_Xlep_wj1",   "#Delta #Phi",          32, -3.2, 3.2);
@@ -390,12 +398,12 @@ void HistBooker::bookSLHistograms () {
   bookHist1D("DR_Xtau_leadbj",       "#Delta R",             25, 0, 5);
   bookHist1D("DPhi_Xtau_leadbj",     "#Delta #Phi",          32, -3.2, 3.2); 
   bookHist1D("DEta_Xtau_leadbj",     "#Delta #eta",          32, -3.2, 3.2); 
-  //bookHist1D("DR_leadbj_leadlj",       "#Delta R",             25, 0, 5);
-  //bookHist1D("DPhi_leadbj_leadlj",     "#Delta #Phi",          32, -3.2, 3.2); 
-  //bookHist1D("DEta_leadbj_leadlj",     "#Delta #eta",          32, -3.2, 3.2); 
-  bookHist1D("DR_w_leadlj",       "#Delta R",             25, 0, 5);
-  bookHist1D("DPhi_w_leadlj",     "#Delta #Phi",          32, -3.2, 3.2); 
-  bookHist1D("DEta_w_leadlj",     "#Delta #eta",          32, -3.2, 3.2); 
+  bookHist1D("DR_leadbj_toplj",       "#Delta R",             25, 0, 5);
+  bookHist1D("DPhi_leadbj_toplj",     "#Delta #Phi",          32, -3.2, 3.2); 
+  bookHist1D("DEta_leadbj_toplj",     "#Delta #eta",          32, -3.2, 3.2); 
+  bookHist1D("DR_w_toplj",       "#Delta R",             25, 0, 5);
+  bookHist1D("DPhi_w_toplj",     "#Delta #Phi",          32, -3.2, 3.2); 
+  bookHist1D("DEta_w_toplj",     "#Delta #eta",          32, -3.2, 3.2); 
   bookHist1D("DR_X_leadbj",          "#Delta R",             25, 0, 5);
   bookHist1D("DPhi_X_leadbj",        "#Delta #Phi",          32, -3.2, 3.2); 
   bookHist1D("DEta_X_leadbj",        "#Delta #eta",          32, -3.2, 3.2); 
@@ -415,6 +423,8 @@ void HistBooker::bookSLHistograms () {
   bookHist1D("minDphi_XlepJets","minDphi_XlepJets",           32, 0, 3.2);
   bookHist1D("maxDphi_XlepJets", "maxDphi_XlepJets",          32, 0, 3.2);
 
-  bookHist1D("smin",            "#sqrt{#wedge{s}_{min}}",   100, 0, 1600);
-  bookHist1D("clusterMT",       "Cluster m_{T} (GeV)",      100, 0, 1600);
+  bookHist1D("smin",                "#sqrt{#hat{s}_{min}} (GeV)",   100, 0, 1600);
+  bookHist1D("clusterMT",           "Cluster m_{T} (GeV)",      100, 0, 1600);
+  bookHist1D("costhetaS_xlep_tau",  "#cos#theta#star",          25,  0., 1.0);
+  bookHist1D("costhetaS_xlep_tauh", "#cos#theta#star",          25,  0., 1.0);
 }
