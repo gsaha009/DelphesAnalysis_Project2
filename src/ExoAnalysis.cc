@@ -446,6 +446,24 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
     //                                                  Basic histogramming [end]                                           //
     // -------------------------------------------------------------------------------------------------------------------- //
 
+    std::vector<float>jets_px;
+    std::vector<float>jets_py;
+    std::vector<float>jets_pz;
+    std::vector<float>jets_energy;
+    std::vector<float>jets_mass;
+    std::vector<float>jets_pt;
+    std::vector<float>jets_eta;
+
+    for(auto &jet : JetColl) {
+      TLorentzVector jp4 = jet.P4();
+      jets_px.push_back(jp4.Px());
+      jets_py.push_back(jp4.Py());
+      jets_pz.push_back(jp4.Pz());
+      jets_energy.push_back(jp4.E());
+      jets_mass.push_back(jp4.M());
+      jets_pt.push_back(jp4.Pt());
+      jets_eta.push_back(std::fabs(jp4.Eta()));
+    }
     
     // -------------------------------------------------------------------------------------------------------------------- //
     //                                                Pre-selection cuts [start]                                            //
@@ -864,6 +882,55 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
 	varList.nljets        = nGoodlJet;
 	varList.ntauh         = nGoodTauh;
 	// --------- Low level variables ---------- //
+	// ==> jets
+	varList.px_jet1       = (jets_px.size() > 0) ? jets_px[0] : 0.0;
+	varList.py_jet1       = (jets_py.size() > 0) ? jets_py[0] : 0.0;
+	varList.pz_jet1       = (jets_pz.size() > 0) ? jets_pz[0] : 0.0;
+	varList.energy_jet1   = (jets_energy.size() > 0) ? jets_energy[0] : 0.0;
+	varList.mass_jet1     = (jets_mass.size() > 0)   ? jets_mass[0] : 0.0;
+	varList.pt_jet1       = (jets_pt.size() > 0)     ? jets_pt[0] : 0.0;
+	varList.eta_jet1      = (jets_eta.size() > 0)    ? jets_eta[0] : 0.0;
+
+	varList.px_jet2       = (jets_px.size() > 1) ? jets_px[1] : 0.0;
+	varList.py_jet2       = (jets_py.size() > 1) ? jets_py[1] : 0.0;
+	varList.pz_jet2       = (jets_pz.size() > 1) ? jets_pz[1] : 0.0;
+	varList.energy_jet2   = (jets_energy.size() > 1) ? jets_energy[1] : 0.0;
+	varList.mass_jet2     = (jets_mass.size() > 1)   ? jets_mass[1] : 0.0;
+	varList.pt_jet2       = (jets_pt.size() > 1)     ? jets_pt[1] : 0.0;
+	varList.eta_jet2      = (jets_eta.size() > 1)    ? jets_eta[1] : 0.0;
+
+	varList.px_jet3       = (jets_px.size() > 2) ? jets_px[2] : 0.0;
+	varList.py_jet3       = (jets_py.size() > 2) ? jets_py[2] : 0.0;
+	varList.pz_jet3       = (jets_pz.size() > 2) ? jets_pz[2] : 0.0;
+	varList.energy_jet3   = (jets_energy.size() > 2) ? jets_energy[2] : 0.0;
+	varList.mass_jet3     = (jets_mass.size() > 2)   ? jets_mass[2] : 0.0;
+	varList.pt_jet3       = (jets_pt.size() > 2)     ? jets_pt[2] : 0.0;
+	varList.eta_jet3      = (jets_eta.size() > 2)    ? jets_eta[2] : 0.0;
+
+	varList.px_jet4       = (jets_px.size() > 3) ? jets_px[3] : 0.0;
+	varList.py_jet4       = (jets_py.size() > 3) ? jets_py[3] : 0.0;
+	varList.pz_jet4       = (jets_pz.size() > 3) ? jets_pz[3] : 0.0;
+	varList.energy_jet4   = (jets_energy.size() > 3) ? jets_energy[3] : 0.0;
+	varList.mass_jet4     = (jets_mass.size() > 3)   ? jets_mass[3] : 0.0;
+	varList.pt_jet4       = (jets_pt.size() > 3)     ? jets_pt[3] : 0.0;
+	varList.eta_jet4      = (jets_eta.size() > 3)    ? jets_eta[3] : 0.0;
+
+	varList.px_jet5       = (jets_px.size() > 4) ? jets_px[4] : 0.0;
+	varList.py_jet5       = (jets_py.size() > 4) ? jets_py[4] : 0.0;
+	varList.pz_jet5       = (jets_pz.size() > 4) ? jets_pz[4] : 0.0;
+	varList.energy_jet5   = (jets_energy.size() > 4) ? jets_energy[4] : 0.0;
+	varList.mass_jet5     = (jets_mass.size() > 4)   ? jets_mass[4] : 0.0;
+	varList.pt_jet5       = (jets_pt.size() > 4)     ? jets_pt[4] : 0.0;
+	varList.eta_jet5      = (jets_eta.size() > 4)    ? jets_eta[4] : 0.0;
+
+	varList.px_jet6       = (jets_px.size() > 5) ? jets_px[5] : 0.0;
+	varList.py_jet6       = (jets_py.size() > 5) ? jets_py[5] : 0.0;
+	varList.pz_jet6       = (jets_pz.size() > 5) ? jets_pz[5] : 0.0;
+	varList.energy_jet6   = (jets_energy.size() > 5) ? jets_energy[5] : 0.0;
+	varList.mass_jet6     = (jets_mass.size() > 5)   ? jets_mass[5] : 0.0;
+	varList.pt_jet6       = (jets_pt.size() > 5)     ? jets_pt[5] : 0.0;
+	varList.eta_jet6      = (jets_eta.size() > 5)    ? jets_eta[5] : 0.0;
+
 	// ==> Tauh
 	varList.px_tauh       = tauhp4.Px();
 	varList.py_tauh       = tauhp4.Py();
@@ -1330,6 +1397,55 @@ void ExoAnalysis::eventLoop(ExRootTreeReader *treeReader)
 	varList.nljets        = nGoodlJet;
 	varList.ntauh         = nGoodTauh;
 	// --------- Low level variables ---------- //
+	// ==> jets
+	varList.px_jet1       = (jets_px.size() > 0) ? jets_px[0] : 0.0;
+	varList.py_jet1       = (jets_py.size() > 0) ? jets_py[0] : 0.0;
+	varList.pz_jet1       = (jets_pz.size() > 0) ? jets_pz[0] : 0.0;
+	varList.energy_jet1   = (jets_energy.size() > 0) ? jets_energy[0] : 0.0;
+	varList.mass_jet1     = (jets_mass.size() > 0)   ? jets_mass[0] : 0.0;
+	varList.pt_jet1       = (jets_pt.size() > 0)     ? jets_pt[0] : 0.0;
+	varList.eta_jet1      = (jets_eta.size() > 0)    ? jets_eta[0] : 0.0;
+
+	varList.px_jet2       = (jets_px.size() > 1) ? jets_px[1] : 0.0;
+	varList.py_jet2       = (jets_py.size() > 1) ? jets_py[1] : 0.0;
+	varList.pz_jet2       = (jets_pz.size() > 1) ? jets_pz[1] : 0.0;
+	varList.energy_jet2   = (jets_energy.size() > 1) ? jets_energy[1] : 0.0;
+	varList.mass_jet2     = (jets_mass.size() > 1)   ? jets_mass[1] : 0.0;
+	varList.pt_jet2       = (jets_pt.size() > 1)     ? jets_pt[1] : 0.0;
+	varList.eta_jet2      = (jets_eta.size() > 1)    ? jets_eta[1] : 0.0;
+
+	varList.px_jet3       = (jets_px.size() > 2) ? jets_px[2] : 0.0;
+	varList.py_jet3       = (jets_py.size() > 2) ? jets_py[2] : 0.0;
+	varList.pz_jet3       = (jets_pz.size() > 2) ? jets_pz[2] : 0.0;
+	varList.energy_jet3   = (jets_energy.size() > 2) ? jets_energy[2] : 0.0;
+	varList.mass_jet3     = (jets_mass.size() > 2)   ? jets_mass[2] : 0.0;
+	varList.pt_jet3       = (jets_pt.size() > 2)     ? jets_pt[2] : 0.0;
+	varList.eta_jet3      = (jets_eta.size() > 2)    ? jets_eta[2] : 0.0;
+
+	varList.px_jet4       = (jets_px.size() > 3) ? jets_px[3] : 0.0;
+	varList.py_jet4       = (jets_py.size() > 3) ? jets_py[3] : 0.0;
+	varList.pz_jet4       = (jets_pz.size() > 3) ? jets_pz[3] : 0.0;
+	varList.energy_jet4   = (jets_energy.size() > 3) ? jets_energy[3] : 0.0;
+	varList.mass_jet4     = (jets_mass.size() > 3)   ? jets_mass[3] : 0.0;
+	varList.pt_jet4       = (jets_pt.size() > 3)     ? jets_pt[3] : 0.0;
+	varList.eta_jet4      = (jets_eta.size() > 3)    ? jets_eta[3] : 0.0;
+
+	varList.px_jet5       = (jets_px.size() > 4) ? jets_px[4] : 0.0;
+	varList.py_jet5       = (jets_py.size() > 4) ? jets_py[4] : 0.0;
+	varList.pz_jet5       = (jets_pz.size() > 4) ? jets_pz[4] : 0.0;
+	varList.energy_jet5   = (jets_energy.size() > 4) ? jets_energy[4] : 0.0;
+	varList.mass_jet5     = (jets_mass.size() > 4)   ? jets_mass[4] : 0.0;
+	varList.pt_jet5       = (jets_pt.size() > 4)     ? jets_pt[4] : 0.0;
+	varList.eta_jet5      = (jets_eta.size() > 4)    ? jets_eta[4] : 0.0;
+
+	varList.px_jet6       = (jets_px.size() > 5) ? jets_px[5] : 0.0;
+	varList.py_jet6       = (jets_py.size() > 5) ? jets_py[5] : 0.0;
+	varList.pz_jet6       = (jets_pz.size() > 5) ? jets_pz[5] : 0.0;
+	varList.energy_jet6   = (jets_energy.size() > 5) ? jets_energy[5] : 0.0;
+	varList.mass_jet6     = (jets_mass.size() > 5)   ? jets_mass[5] : 0.0;
+	varList.pt_jet6       = (jets_pt.size() > 5)     ? jets_pt[5] : 0.0;
+	varList.eta_jet6      = (jets_eta.size() > 5)    ? jets_eta[5] : 0.0;
+
 	// ==> Tauh vars
 	varList.px_tauh       = tauhp4.Px();
 	varList.py_tauh       = tauhp4.Py();

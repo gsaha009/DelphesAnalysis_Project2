@@ -18,6 +18,54 @@ typedef struct
   int nljets;
   int ntauh;
 
+  float px_jet1;
+  float py_jet1;
+  float pz_jet1;
+  float energy_jet1;
+  float mass_jet1;
+  float pt_jet1;
+  float eta_jet1;
+
+  float px_jet2;
+  float py_jet2;
+  float pz_jet2;
+  float energy_jet2;
+  float mass_jet2;
+  float pt_jet2;
+  float eta_jet2;
+
+  float px_jet3;
+  float py_jet3;
+  float pz_jet3;
+  float energy_jet3;
+  float mass_jet3;
+  float pt_jet3;
+  float eta_jet3;
+
+  float px_jet4;
+  float py_jet4;
+  float pz_jet4;
+  float energy_jet4;
+  float mass_jet4;
+  float pt_jet4;
+  float eta_jet4;
+
+  float px_jet5;
+  float py_jet5;
+  float pz_jet5;
+  float energy_jet5;
+  float mass_jet5;
+  float pt_jet5;
+  float eta_jet5;
+
+  float px_jet6;
+  float py_jet6;
+  float pz_jet6;
+  float energy_jet6;
+  float mass_jet6;
+  float pt_jet6;
+  float eta_jet6;
+
   float px_tauh;
   float py_tauh;
   float pz_tauh;
@@ -169,6 +217,54 @@ typedef struct
   int nbjets;
   int nljets;
   int ntauh;
+
+  float px_jet1;
+  float py_jet1;
+  float pz_jet1;
+  float energy_jet1;
+  float mass_jet1;
+  float pt_jet1;
+  float eta_jet1;
+
+  float px_jet2;
+  float py_jet2;
+  float pz_jet2;
+  float energy_jet2;
+  float mass_jet2;
+  float pt_jet2;
+  float eta_jet2;
+
+  float px_jet3;
+  float py_jet3;
+  float pz_jet3;
+  float energy_jet3;
+  float mass_jet3;
+  float pt_jet3;
+  float eta_jet3;
+
+  float px_jet4;
+  float py_jet4;
+  float pz_jet4;
+  float energy_jet4;
+  float mass_jet4;
+  float pt_jet4;
+  float eta_jet4;
+
+  float px_jet5;
+  float py_jet5;
+  float pz_jet5;
+  float energy_jet5;
+  float mass_jet5;
+  float pt_jet5;
+  float eta_jet5;
+
+  float px_jet6;
+  float py_jet6;
+  float pz_jet6;
+  float energy_jet6;
+  float mass_jet6;
+  float pt_jet6;
+  float eta_jet6;
 
   float px_tauh;
   float py_tauh;

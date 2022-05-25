@@ -1,0 +1,83 @@
+Tag: DL_MX_20_Final
+
+Lumi: 3000000
+
+infiles:
+  Signal :
+    muta_lnu : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_20/results/Sig_MX_20_MH_160_DL_mvaIn.root, 0.0225, 1300000, 'signal']
+  Background :
+    TTJets2L    : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_TTJets_DiLep_Set_New_DL_BDTD_mvaIn.root, 107.65, 18975410, 'TT + Jets']
+    TTJets1L    : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_TTJets_SingleLep_DL_BDTD_mvaIn.root, 437.14, 18632564, 'TT + Jets']
+    TTWJetsLNu  : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_TTWJetsToLNu_DL_BDTD_mvaIn.root, 0.25, 4765526, 'TTV + Jets']
+    TTZJetsLL   : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_TTZJetsToLL_DL_BDTD_mvaIn.root, 0.24, 2584012, 'TTV + Jets']
+    WZTo3LNu    : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_WZTo3LNu_012Jets_DL_BDTD_mvaIn.root, 2.273, 9947106, 'VV(V) + Jets']
+    WZTo2L2Q    : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_WZTo2L2Q_012Jets_DL_BDTD_mvaIn.root, 4.504, 2477920, 'VV(V) + Jets']
+    ZZTo4L      : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_ZZTo4L_012Jets_DL_BDTD_mvaIn.root, 0.187, 2500000, 'VV(V) + Jets']
+    TTWQQ       : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_TTWToQQ_DL_BDTD_mvaIn.root, 0.103, 3900000, 'TTV + Jets']
+    bbtata      : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_bbtautau_DL_BDTD_mvaIn.root, 0.114, 4450000, 'Rares']
+    TTH         : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_TTHnojetsToTauTau_DL_BDTD_mvaIn.root, 0.006, 3750000, 'TTV + Jets']
+    TTZToQQ     : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_TTZnojetsToQQ_DL_BDTD_mvaIn.root, 0.206, 4900000, 'TTV + Jets']
+    #TW1L        : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_tWTo1L1Nu2J_DL_BDTD_mvaIn.root, 165.35, 11077329, 'Rares']
+    #TW2L        : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_tWTo2L2Nu_DL_BDTD_mvaIn.root, 47.78, 12788028, 'Rares']
+    ST_TW       : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_TJ/Bkg_ST_tW_TJ_DL_BDTD_mvaIn.root, 35.0, 25713490, 'Rares']
+    #RestBackground:
+    WWW      : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_WWW_DL_BDTD_mvaIn.root, 0.236, 240000, 'VV(V) + Jets']
+    WWZ      : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_WWZ_DL_BDTD_mvaIn.root, 0.189, 250000, 'VV(V) + Jets']
+    WZZ      : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_WZZ_DL_BDTD_mvaIn.root, 0.064, 246800, 'VV(V) + Jets']
+    ZZZ      : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_ZZZ_DL_BDTD_mvaIn.root, 0.016, 249237, 'VV(V) + Jets']
+    DY       : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_TJ/JobOutput_BKG_DL_MVA/Bkg_DY_mvaIn.root, 803.0, 9756273, 'Rares']
+
+intree: EventsDL
+
+features:
+  pt_tauh                   : [50, 0.0, 400.0]
+  eta_tauh                  : [25, 0.0, 2.5] ## new
+  met                       : [50, 0.0, 400.0]
+  pt_leadbj                 : [50, 0.0, 400.0]
+  eta_leadbj                : [50, 0.0, 5.0] ## new
+  pt_leadlj                 : [50, 0.0, 400.0]
+  eta_leadlj                : [50, 0.0, 5.0] ## new
+  pt_xlep                   : [50, 0.0, 400.0]
+  eta_xlep                  : [25, 0.0, 2.5] ## new
+  pt_wlep                   : [50, 0.0, 400.0]
+  eta_wlep                  : [25, 0.0, 2.5] ## new
+  vectorsumpt_xlep_wlep     : [50, 0.0, 400.0]
+  dr_xlep_wlep              : [50, 0.0, 5.0]
+  dphi_wlep_tauh            : [32, 0.0, 3.2]
+  dphi_wlep_leadbj          : [32, 0.0, 3.2]
+  ht_jets                   : [100, 0.0, 1200.0]
+  dr_min_xlep_jets          : [50, 0.0, 5.0]
+  dr_min_wlep_jets          : [50, 0.0, 5.0]
+  dphi_xlep_tauh            : [32, 0.0, 3.2]
+  dr_min_jets               : [50, 0.0, 5.0]
+  mt_wlep_met               : [50, 0.0, 400.0]
+  dphi_tauh_leadbj          : [32, 0.0, 3.2]
+  dphi_met_xlep             : [32, 0.0, 3.2]
+  dphi_met_wlep             : [32, 0.0, 3.2]
+  dphi_leadbj_leadlj        : [32, 0.0, 3.2]
+  dr_tauh_leadlj            : [50, 0.0, 5.0]
+  met_along_tauh            : [50, 0.0, 400.0] 
+  costhetaS_xlep_tau        : [50, 0.0, 1.0]
+  smin                      : [100, 0.0, 2000.0]
+
+DoScaling : yes
+UseNormForPlots : yes
+DoTrain : yes
+
+# For binary classification
+# Final activation : softmax
+modelParams:
+  Layers:     [512, 256, 128, 54, 8]
+  BatchNorms: [True, True, True, True, True]
+  Dropout:    [0.2,  0.2,  0.2,  0.2,  0.2]
+  L2:         [0.01, 0.01, 0.01, 0.01, 0.01]
+  activ:      ['relu','relu','relu','relu','relu']
+
+trainingParams:
+  Loss: 'binary_crossentropy'
+  LR: 0.0001
+  Metrics: ['accuracy','auc','precision','recall']
+  trainTestSplit: 0.80
+  valSplit: 0.20
+  BatchSize: 3000
+  epoch: 1000

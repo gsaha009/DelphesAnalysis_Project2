@@ -27,6 +27,54 @@ MVASkim::MVASkim(const string& filename, bool SL, bool DL) {
     _treeDL->Branch("nljets",         &_varListDL.nljets,        "nljets/I");
     _treeDL->Branch("ntauh",          &_varListDL.ntauh,         "ntauh/I");
     
+    _treeDL->Branch("px_jet1",        &_varListDL.px_jet1,       "px_jet1/F");
+    _treeDL->Branch("py_jet1",        &_varListDL.py_jet1,       "py_jet1/F");
+    _treeDL->Branch("pz_jet1",        &_varListDL.pz_jet1,       "pz_jet1/F");
+    _treeDL->Branch("energy_jet1",    &_varListDL.energy_jet1,   "energy_jet1/F");
+    _treeDL->Branch("mass_jet1",      &_varListDL.mass_jet1,     "mass_jet1/F");
+    _treeDL->Branch("pt_jet1",        &_varListDL.pt_jet1,       "pt_jet1/F");
+    _treeDL->Branch("eta_jet1",       &_varListDL.eta_jet1,      "eta_jet1/F");
+
+    _treeDL->Branch("px_jet2",        &_varListDL.px_jet2,       "px_jet2/F");
+    _treeDL->Branch("py_jet2",        &_varListDL.py_jet2,       "py_jet2/F");
+    _treeDL->Branch("pz_jet2",        &_varListDL.pz_jet2,       "pz_jet2/F");
+    _treeDL->Branch("energy_jet2",    &_varListDL.energy_jet2,   "energy_jet2/F");
+    _treeDL->Branch("mass_jet2",      &_varListDL.mass_jet2,     "mass_jet2/F");
+    _treeDL->Branch("pt_jet2",        &_varListDL.pt_jet2,       "pt_jet2/F");
+    _treeDL->Branch("eta_jet2",       &_varListDL.eta_jet2,      "eta_jet2/F");
+
+    _treeDL->Branch("px_jet3",        &_varListDL.px_jet3,       "px_jet3/F");
+    _treeDL->Branch("py_jet3",        &_varListDL.py_jet3,       "py_jet3/F");
+    _treeDL->Branch("pz_jet3",        &_varListDL.pz_jet3,       "pz_jet3/F");
+    _treeDL->Branch("energy_jet3",    &_varListDL.energy_jet3,   "energy_jet3/F");
+    _treeDL->Branch("mass_jet3",      &_varListDL.mass_jet3,     "mass_jet3/F");
+    _treeDL->Branch("pt_jet3",        &_varListDL.pt_jet3,       "pt_jet3/F");
+    _treeDL->Branch("eta_jet3",       &_varListDL.eta_jet3,      "eta_jet3/F");
+
+    _treeDL->Branch("px_jet4",        &_varListDL.px_jet4,       "px_jet4/F");
+    _treeDL->Branch("py_jet4",        &_varListDL.py_jet4,       "py_jet4/F");
+    _treeDL->Branch("pz_jet4",        &_varListDL.pz_jet4,       "pz_jet4/F");
+    _treeDL->Branch("energy_jet4",    &_varListDL.energy_jet4,   "energy_jet4/F");
+    _treeDL->Branch("mass_jet4",      &_varListDL.mass_jet4,     "mass_jet4/F");
+    _treeDL->Branch("pt_jet4",        &_varListDL.pt_jet4,       "pt_jet4/F");
+    _treeDL->Branch("eta_jet4",       &_varListDL.eta_jet4,      "eta_jet4/F");
+
+    _treeDL->Branch("px_jet5",        &_varListDL.px_jet5,       "px_jet5/F");
+    _treeDL->Branch("py_jet5",        &_varListDL.py_jet5,       "py_jet5/F");
+    _treeDL->Branch("pz_jet5",        &_varListDL.pz_jet5,       "pz_jet5/F");
+    _treeDL->Branch("energy_jet5",    &_varListDL.energy_jet5,   "energy_jet5/F");
+    _treeDL->Branch("mass_jet5",      &_varListDL.mass_jet5,     "mass_jet5/F");
+    _treeDL->Branch("pt_jet5",        &_varListDL.pt_jet5,       "pt_jet5/F");
+    _treeDL->Branch("eta_jet5",       &_varListDL.eta_jet5,      "eta_jet5/F");
+
+    _treeDL->Branch("px_jet6",        &_varListDL.px_jet6,       "px_jet6/F");
+    _treeDL->Branch("py_jet6",        &_varListDL.py_jet6,       "py_jet6/F");
+    _treeDL->Branch("pz_jet6",        &_varListDL.pz_jet6,       "pz_jet6/F");
+    _treeDL->Branch("energy_jet6",    &_varListDL.energy_jet6,   "energy_jet6/F");
+    _treeDL->Branch("mass_jet6",      &_varListDL.mass_jet6,     "mass_jet6/F");
+    _treeDL->Branch("pt_jet6",        &_varListDL.pt_jet6,       "pt_jet6/F");
+    _treeDL->Branch("eta_jet6",       &_varListDL.eta_jet6,      "eta_jet6/F");
+
     _treeDL->Branch("px_tauh",        &_varListDL.px_tauh,       "px_tauh/F");
     _treeDL->Branch("py_tauh",        &_varListDL.py_tauh,       "py_tauh/F");
     _treeDL->Branch("pz_tauh",        &_varListDL.pz_tauh,       "pz_tauh/F");
@@ -183,6 +231,54 @@ MVASkim::MVASkim(const string& filename, bool SL, bool DL) {
     _treeSL->Branch("nbjets",         &_varListSL.nbjets,        "nbjets/I");
     _treeSL->Branch("nljets",         &_varListSL.nljets,        "nljets/I");
     _treeSL->Branch("ntauh",          &_varListSL.ntauh,         "ntauh/I");
+
+    _treeSL->Branch("px_jet1",        &_varListSL.px_jet1,       "px_jet1/F");
+    _treeSL->Branch("py_jet1",        &_varListSL.py_jet1,       "py_jet1/F");
+    _treeSL->Branch("pz_jet1",        &_varListSL.pz_jet1,       "pz_jet1/F");
+    _treeSL->Branch("energy_jet1",    &_varListSL.energy_jet1,   "energy_jet1/F");
+    _treeSL->Branch("mass_jet1",      &_varListSL.mass_jet1,     "mass_jet1/F");
+    _treeSL->Branch("pt_jet1",        &_varListSL.pt_jet1,       "pt_jet1/F");
+    _treeSL->Branch("eta_jet1",       &_varListSL.eta_jet1,      "eta_jet1/F");
+
+    _treeSL->Branch("px_jet2",        &_varListSL.px_jet2,       "px_jet2/F");
+    _treeSL->Branch("py_jet2",        &_varListSL.py_jet2,       "py_jet2/F");
+    _treeSL->Branch("pz_jet2",        &_varListSL.pz_jet2,       "pz_jet2/F");
+    _treeSL->Branch("energy_jet2",    &_varListSL.energy_jet2,   "energy_jet2/F");
+    _treeSL->Branch("mass_jet2",      &_varListSL.mass_jet2,     "mass_jet2/F");
+    _treeSL->Branch("pt_jet2",        &_varListSL.pt_jet2,       "pt_jet2/F");
+    _treeSL->Branch("eta_jet2",       &_varListSL.eta_jet2,      "eta_jet2/F");
+
+    _treeSL->Branch("px_jet3",        &_varListSL.px_jet3,       "px_jet3/F");
+    _treeSL->Branch("py_jet3",        &_varListSL.py_jet3,       "py_jet3/F");
+    _treeSL->Branch("pz_jet3",        &_varListSL.pz_jet3,       "pz_jet3/F");
+    _treeSL->Branch("energy_jet3",    &_varListSL.energy_jet3,   "energy_jet3/F");
+    _treeSL->Branch("mass_jet3",      &_varListSL.mass_jet3,     "mass_jet3/F");
+    _treeSL->Branch("pt_jet3",        &_varListSL.pt_jet3,       "pt_jet3/F");
+    _treeSL->Branch("eta_jet3",       &_varListSL.eta_jet3,      "eta_jet3/F");
+
+    _treeSL->Branch("px_jet4",        &_varListSL.px_jet4,       "px_jet4/F");
+    _treeSL->Branch("py_jet4",        &_varListSL.py_jet4,       "py_jet4/F");
+    _treeSL->Branch("pz_jet4",        &_varListSL.pz_jet4,       "pz_jet4/F");
+    _treeSL->Branch("energy_jet4",    &_varListSL.energy_jet4,   "energy_jet4/F");
+    _treeSL->Branch("mass_jet4",      &_varListSL.mass_jet4,     "mass_jet4/F");
+    _treeSL->Branch("pt_jet4",        &_varListSL.pt_jet4,       "pt_jet4/F");
+    _treeSL->Branch("eta_jet4",       &_varListSL.eta_jet4,      "eta_jet4/F");
+
+    _treeSL->Branch("px_jet5",        &_varListSL.px_jet5,       "px_jet5/F");
+    _treeSL->Branch("py_jet5",        &_varListSL.py_jet5,       "py_jet5/F");
+    _treeSL->Branch("pz_jet5",        &_varListSL.pz_jet5,       "pz_jet5/F");
+    _treeSL->Branch("energy_jet5",    &_varListSL.energy_jet5,   "energy_jet5/F");
+    _treeSL->Branch("mass_jet5",      &_varListSL.mass_jet5,     "mass_jet5/F");
+    _treeSL->Branch("pt_jet5",        &_varListSL.pt_jet5,       "pt_jet5/F");
+    _treeSL->Branch("eta_jet5",       &_varListSL.eta_jet5,      "eta_jet5/F");
+
+    _treeSL->Branch("px_jet6",        &_varListSL.px_jet6,       "px_jet6/F");
+    _treeSL->Branch("py_jet6",        &_varListSL.py_jet6,       "py_jet6/F");
+    _treeSL->Branch("pz_jet6",        &_varListSL.pz_jet6,       "pz_jet6/F");
+    _treeSL->Branch("energy_jet6",    &_varListSL.energy_jet6,   "energy_jet6/F");
+    _treeSL->Branch("mass_jet6",      &_varListSL.mass_jet6,     "mass_jet6/F");
+    _treeSL->Branch("pt_jet6",        &_varListSL.pt_jet6,       "pt_jet6/F");
+    _treeSL->Branch("eta_jet6",       &_varListSL.eta_jet6,      "eta_jet6/F");
 
     _treeSL->Branch("px_tauh",        &_varListSL.px_tauh,       "px_tauh/F");
     _treeSL->Branch("py_tauh",        &_varListSL.py_tauh,       "py_tauh/F");

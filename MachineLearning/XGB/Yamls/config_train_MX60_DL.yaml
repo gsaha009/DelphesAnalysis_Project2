@@ -1,0 +1,86 @@
+Tag: DL_MX_60_Final
+
+Lumi: 3000000
+
+infiles:
+  Signal :
+    muta_lnu : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Sig_MX_60_MH_160_DL_mvaIn.root, 0.0225, 700000, 'signal']
+  Background :
+    TTJets2L    : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_TTJets_DiLep_Set_New_DL_BDTD_mvaIn.root, 107.65, 18975410, 'TT + Jets']
+    TTJets1L    : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_TTJets_SingleLep_DL_BDTD_mvaIn.root, 437.14, 18632564, 'TT + Jets']
+    TTWJetsLNu  : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_TTWJetsToLNu_DL_BDTD_mvaIn.root, 0.25, 4765526, 'TTV + Jets']
+    TTZJetsLL   : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_TTZJetsToLL_DL_BDTD_mvaIn.root, 0.24, 2584012, 'TTV + Jets']
+    WZTo3LNu    : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_WZTo3LNu_012Jets_DL_BDTD_mvaIn.root, 2.273, 9947106, 'VV(V) + Jets']
+    WZTo2L2Q    : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_WZTo2L2Q_012Jets_DL_BDTD_mvaIn.root, 4.504, 2477920, 'VV(V) + Jets']
+    ZZTo4L      : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_ZZTo4L_012Jets_DL_BDTD_mvaIn.root, 0.187, 2500000, 'VV(V) + Jets']
+    TTWQQ       : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_TTWToQQ_DL_BDTD_mvaIn.root, 0.103, 3900000, 'TTV + Jets']
+    bbtata      : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_bbtautau_DL_BDTD_mvaIn.root, 0.114, 4450000, 'Rares']
+    TTH         : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_TTHnojetsToTauTau_DL_BDTD_mvaIn.root, 0.006, 3750000, 'TTV + Jets']
+    TTZToQQ     : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_TTZnojetsToQQ_DL_BDTD_mvaIn.root, 0.206, 4900000, 'TTV + Jets']
+    #TW1L        : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_tWTo1L1Nu2J_DL_BDTD_mvaIn.root, 165.35, 11077329, 'Rares']
+    #TW2L        : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_tWTo2L2Nu_DL_BDTD_mvaIn.root, 47.78, 12788028, 'Rares']
+    ST_TW       : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_TJ/Bkg_ST_tW_TJ_DL_BDTD_mvaIn.root, 35.0, 25713490, 'Rares']
+    #RestBackground:
+    WWW      : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_WWW_DL_BDTD_mvaIn.root, 0.236, 240000, 'VV(V) + Jets']
+    WWZ      : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_WWZ_DL_BDTD_mvaIn.root, 0.189, 250000, 'VV(V) + Jets']
+    WZZ      : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_WZZ_DL_BDTD_mvaIn.root, 0.064, 246800, 'VV(V) + Jets']
+    ZZZ      : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_MX_60/results/Bkg_ZZZ_DL_BDTD_mvaIn.root, 0.016, 249237, 'VV(V) + Jets']
+    DY       : [/home/gsaha/Work/Delphes_Analyses/Project_FCNC_TTbar/JobOutput_TJ/JobOutput_BKG_DL_MVA/Bkg_DY_mvaIn.root, 803.0, 9756273, 'Rares']
+
+intree: EventsDL
+
+features:
+  #- pt_tauh
+  #- met
+  #- pt_leadbj
+  #- pt_xlep
+  #- pt_wlep
+  #- vectorsumpt_xlep_wlep
+  #- dr_xlep_wlep
+  #- dphi_wlep_tauh
+  #- dphi_wlep_leadbj
+  #- ht_jets
+  #- dr_min_xlep_jets
+  #- dr_min_wlep_jets
+  #- dphi_xlep_tauh
+  ##- effectivemass
+  #- effectiveMass_t1
+  #- effectiveMass_t2
+  #- dr_min_jets
+  #- mt_wlep_met
+  #- dphi_tauh_leadbj
+  #- dphi_met_xlep
+  #- dphi_met_wlep
+  #- dphi_leadbj_leadlj
+  #- smin
+  - pt_tauh
+  - eta_tauh
+  - met
+  - pt_leadbj
+  - eta_leadbj
+  - pt_leadlj
+  - eta_leadlj
+  - pt_xlep
+  - eta_xlep
+  - pt_wlep
+  - eta_wlep
+  - vectorsumpt_xlep_wlep
+  - dr_xlep_wlep
+  - dphi_wlep_tauh
+  - dphi_wlep_leadbj
+  - ht_jets
+  - dr_min_xlep_jets
+  - dr_min_wlep_jets
+  - dphi_xlep_tauh
+  - dr_min_jets
+  - mt_wlep_met
+  - dphi_tauh_leadbj
+  - dphi_met_xlep
+  - dphi_met_wlep
+  - dphi_leadbj_leadlj
+  - dr_tauh_leadlj
+  - met_along_tauh
+  - costhetaS_xlep_tau
+  - smin
+
+UseNormForPlots : yes

@@ -37,7 +37,7 @@ def main():
     parser.add_argument('-c',  '--channel',     type=str, action='store',      required=True,                       help='DL | SL')
     parser.add_argument('-t',  '--tag',         type=str, action='store',      required=True,                       help='CUT | BDTD | BDTG')
     parser.add_argument('-s',  '--skim',                  action='store_true', required=False,                      help='need to skim?')
-    parser.add_argument('-so', '--SignalOnly',            action='store_true', required=False,                      help='jobs only for signal samples')
+    parser.add_argument('-so', '--SigOnly',               action='store_true', required=False,                      help='jobs only for signal samples')
     parser.add_argument('-bo', '--BkgOnly',               action='store_true', required=False,                      help='jobs only for bkg samples')
     parser.add_argument('-mj', '--makejobs',              action='store_true', required=False,                      help='make job cards only')
     parser.add_argument('-pr', '--postprocess',           action='store_true', required=False,                      help='hadd output root files')
@@ -55,7 +55,7 @@ def main():
     else:
         raise RuntimeError('mention either makejobs or postprocess ... !')
 
-    if args.SignalOnly and args.BkgOnly:
+    if args.SigOnly and args.BkgOnly:
         raise RuntimeError ('Do not mention both of -so and -bo. Use none or either one of them. none will take care of the bkg samples with the signals')
 
     mx      = args.MX
@@ -74,7 +74,13 @@ def main():
         'Sig_Xmuta_0p005_Xct_0p005_Xuc_0p005'  : [0.001, f'/store/user/gsaha/Data/FCNC_TTbar_Signals/S3_Xmuta_{subtag}_MX_{mx}_MH_{mh}_gXmuta_0p005_gXct_0p005_gXuc_0p005_DelphesRootFiles'],
         'Sig_Xmuta_0p007_Xct_0p003_Xuc_0p005'  : [0.001, f'/store/user/gsaha/Data/FCNC_TTbar_Signals/S3_Xmuta_{subtag}_MX_{mx}_MH_{mh}_gXmuta_0p007_gXct_0p003_gXuc_0p005_DelphesRootFiles'],
         'Sig_Xmuta_0p007_Xct_0p007_Xuc_0p005'  : [0.001, f'/store/user/gsaha/Data/FCNC_TTbar_Signals/S3_Xmuta_{subtag}_MX_{mx}_MH_{mh}_gXmuta_0p007_gXct_0p007_gXuc_0p005_DelphesRootFiles'],
-        ##'Bkg_TTJets_DiLep_Set_Old'             : [109.84, '/store/user/gsaha/Data/Backgrounds/TTJets_DiLept'],
+        'Sig_Xmuta_0p001_Xct_0p005_Xuc_0p005'  : [0.001, f'/store/user/gsaha/Data/FCNC_TTbar_Signals/S3_Xmuta_{subtag}_MX_{mx}_MH_{mh}_gXmuta_0p001_gXct_0p005_gXuc_0p005_DelphesRootFiles'],
+        'Sig_Xmuta_0p005_Xct_0p001_Xuc_0p005'  : [0.001, f'/store/user/gsaha/Data/FCNC_TTbar_Signals/S3_Xmuta_{subtag}_MX_{mx}_MH_{mh}_gXmuta_0p005_gXct_0p001_gXuc_0p005_DelphesRootFiles'],
+        'Sig_Xmuta_0p005_Xct_0p01_Xuc_0p005'   : [0.001, f'/store/user/gsaha/Data/FCNC_TTbar_Signals/S3_Xmuta_{subtag}_MX_{mx}_MH_{mh}_gXmuta_0p005_gXct_0p01_gXuc_0p005_DelphesRootFiles'],
+        'Sig_Xmuta_0p01_Xct_0p005_Xuc_0p005'   : [0.001, f'/store/user/gsaha/Data/FCNC_TTbar_Signals/S3_Xmuta_{subtag}_MX_{mx}_MH_{mh}_gXmuta_0p01_gXct_0p005_gXuc_0p005_DelphesRootFiles'],
+        'Sig_Xmuta_0p005_Xct_0p009_Xuc_0p005'  : [0.001, f'/store/user/gsaha/Data/FCNC_TTbar_Signals/S3_Xmuta_{subtag}_MX_{mx}_MH_{mh}_gXmuta_0p005_gXct_0p009_gXuc_0p005_DelphesRootFiles'],
+        'Sig_Xmuta_0p009_Xct_0p005_Xuc_0p005'  : [0.001, f'/store/user/gsaha/Data/FCNC_TTbar_Signals/S3_Xmuta_{subtag}_MX_{mx}_MH_{mh}_gXmuta_0p009_gXct_0p005_gXuc_0p005_DelphesRootFiles'],
+        #### 'Bkg_TTJets_DiLep_Set_Old'             : [109.84, '/store/user/gsaha/Data/Backgrounds/TTJets_DiLept'],
         'Bkg_TTJets_DiLep_Set_New'             : [107.65, '/store/user/gsaha/Data/Backgrounds/TTbarDL_elmuta_012Jets_LO_MLM_DelphesRootFiles'],
         'Bkg_TTJets_SingleLep'                 : [437.14, '/store/user/gsaha/Data/Backgrounds/TTbarSL_elmuta_012Jets_LO_MLM_DelphesRootFiles'],
         'Bkg_TTWJetsToLNu'                     : [0.254,  '/store/user/gsaha/Data/Backgrounds/TTWJetsToLNu'],
@@ -89,7 +95,10 @@ def main():
         'Bkg_ZZZ'                              : [0.0158, '/store/user/gsaha/Data/Backgrounds/ZZZ'],
         'Bkg_bbtautau'                         : [0.114,  '/store/user/gsaha/Data/Backgrounds/bbtautau_QCD_QED_LO_DelphesRootFiles'],
         'Bkg_TTHnojetsToTauTau'                : [0.006,  '/store/user/gsaha/Data/Backgrounds/TTHnojetsToTauTau_LO_DelphesRootFiles'],
-        'Bkg_TTZnojetsToQQ'                    : [0.206,  '/store/user/gsaha/Data/Backgrounds/TTZnojetsToQQ_LO_DelphesRootFiles']
+        'Bkg_TTZnojetsToQQ'                    : [0.206,  '/store/user/gsaha/Data/Backgrounds/TTZnojetsToQQ_LO_DelphesRootFiles'],
+        'Bkg_tWTo1L1Nu2J'                      : [165.35, '/store/user/gsaha/Data/Backgrounds/ST_tWTo1L1Nu2J_01Jets_LO_MLM_DelphesRootFiles'], # LO xsec
+        'Bkg_tWTo2L2Nu'                        : [47.78,  '/store/user/gsaha/Data/Backgrounds/ST_tWTo2L2Nu_01Jets_LO_MLM_DelphesRootFiles']    # LO xsec
+        #'Bkg_Zh'                              : [0.00,   ''] need to generate
     }
     nodes = ['compute-0-1', 'compute-0-2', 'compute-0-3', 'compute-0-4', 'compute-0-6', 'compute-0-7', 'compute-0-8', 'compute-0-9', 'compute-0-10']
     #'compute-0-5', 'compute-0-15', 'compute-0-16', 'compute-0-17', 'compute-0-18', 'compute-0-19','compute-0-20','compute-0-21']
@@ -126,7 +135,11 @@ def main():
     for key, valList in SampleDict.items():
         print(f'process : {key}')
         handle = f'{key}_MX_{mx}_MH_{mh}_{chan}_{tag}' if 'Sig_' in key else f'{key}_{chan}_{tag}'
-        
+        if args.SigOnly and 'Bkg_' in key:
+            continue
+        elif args.BkgOnly and 'Sig_' in key:
+            continue
+
         xsec           = valList[0]
         filepath       = valList[1]
         files          = glob.glob(os.path.join(filepath, '*.root'))
