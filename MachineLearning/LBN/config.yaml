@@ -1,0 +1,71 @@
+Tag: MX_60
+
+Lumi: 300000
+
+infiles:
+  Signal :
+    muta_lnu : [/home/gsaha/Work/DelphesAnalysis_Project2/JobOutput_XmutauWlnu_ChiMass_60/Signal_xmutau_Wlnu_mvaIn_mx60_mutap01_ctp01.root, 0.05, 400000, 'signal']
+  Background : 
+    TTJets2L : [/home/gsaha/Work/DelphesAnalysis_Project2/JobOutput_XmutauWlnu_ChiMass_60/TTJets_DiLep_mvaIn.root, 109.8, 10855428, 'TT + Jets']
+    TTWJets  : [/home/gsaha/Work/DelphesAnalysis_Project2/JobOutput_XmutauWlnu_ChiMass_60/TTWJetsToLNu_mvaIn.root, 0.25, 4765526, 'TTV + Jets']
+    TTZJets  : [/home/gsaha/Work/DelphesAnalysis_Project2/JobOutput_XmutauWlnu_ChiMass_60/TTZJetsToLL_mvaIn.root, 0.24, 2584012, 'TTV + Jets']
+  RestBackground:
+    WZTo3LNu : [/home/gsaha/Work/DelphesAnalysis_Project2/JobOutput_XmutauWlnu_ChiMass_60/WZTo3LNu_012Jets_mvaIn.root, 2.273, 9947106, 'VV(V) + Jets']
+    ZZTo4L   : [/home/gsaha/Work/DelphesAnalysis_Project2/JobOutput_XmutauWlnu_ChiMass_60/ZZTo4L_012Jets_mvaIn.root, 0.187, 2500000, 'VV(V) + Jets']
+    WWW      : [/home/gsaha/Work/DelphesAnalysis_Project2/JobOutput_XmutauWlnu_ChiMass_60/WWW_mvaIn.root, 0.236, 240000, 'VV(V) + Jets']
+    WWZ      : [/home/gsaha/Work/DelphesAnalysis_Project2/JobOutput_XmutauWlnu_ChiMass_60/WWZ_mvaIn.root, 0.189, 250000, 'VV(V) + Jets']
+    WZZ      : [/home/gsaha/Work/DelphesAnalysis_Project2/JobOutput_XmutauWlnu_ChiMass_60/WZZ_mvaIn.root, 0.064, 246800, 'VV(V) + Jets']
+    ZZZ      : [/home/gsaha/Work/DelphesAnalysis_Project2/JobOutput_XmutauWlnu_ChiMass_60/ZZZ_mvaIn.root, 0.016, 249237, 'VV(V) + Jets']
+
+intree: Events
+
+lbnfeatures: [px_tauh1, py_tauh1, pz_tauh1, energy_tauh1,
+              px_bjet1, py_bjet1, pz_bjet1, energy_bjet1,
+              px_ljet1, py_ljet1, pz_ljet1, energy_ljet1,
+              px_Xlep,  py_Xlep,  pz_Xlep,  energy_Xlep,
+              px_Wlep,  py_Wlep,  pz_Wlep,  energy_Wlep,
+              px_met,   py_met,   pz_met,   energy_met]
+
+features:
+  pt_tauh1             : [100, 0.0, 400.0]
+  met                  : [100, 0.0, 400.0]
+  pt_bjet1             : [100, 0.0, 400.0]
+  pt_Xlep              : [100, 0.0, 400.0]
+  pt_Wlep              : [100, 0.0, 400.0]
+  vectorSumpt_XlwpWlep : [100, 0.0, 400.0]
+  dr_XlepWlep          : [100, 0.0, 5.0]
+  dphi_Wleptauh        : [64, 0.0, 3.2]
+  dphi_Wlepbjet        : [64, 0.0, 3.2]
+  HT_Jets              : [100, 0.0, 1200.0]
+  dr_min_Xlepjets      : [100, 0.0, 5.0]
+  dr_min_Wlepjets      : [100, 0.0, 5.0]
+  dphi_Xleptauh        : [64, 0.0, 3.2]
+  effectiveMass        : [100, 0.0, 2000.0]
+  dr_min_jets          : [100, 0.0, 5.0]
+  mt_Wlepmet           : [100, 0.0, 400.0]
+  #dphi_tauhbjet        : [32, 0.0, 3.2]
+  dphi_Xlepmet         : [64, 0.0, 3.2]
+  dphi_Wlepmet         : [64, 0.0, 3.2]
+  dphi_bjetljet        : [64, 0.0, 3.2]
+
+DoScaling : yes
+UseNormForPlots : yes
+DoTrain : yes
+
+# For binary classification
+# Final activation : softmax
+modelParams:
+  Layers: [512,128,64,32,16,4]
+  BatchNorms: [True,True,True,True,True,True]
+  Dropout: [0.2,0.2,0.2,0.1,0.0,0.0]
+  L2: [0.001,0.001,0.001,0.001,0.001,0.001]
+  activ: ['relu','relu','relu','relu','relu','relu']
+
+trainingParams:
+  Loss: 'binary_crossentropy'
+  LR: 0.01
+  Metrics: ['accuracy','auc','precision','recall']
+  trainTestSplit: 0.80
+  valSplit: 0.20
+  BatchSize: 2000
+  epoch: 1000
